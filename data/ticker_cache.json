@@ -1,0 +1,614 @@
+{
+  "UBER": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "CHPT": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "OXY": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "AAL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "NCLH": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "IBN": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "IN"
+  },
+  "C": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "INTC": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "UAL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "GRPN": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "BMBL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "DUK": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "GM": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "UAA": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "EXEL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "ERJ": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "BR"
+  },
+  "KO": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "GOOGL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "BRK.B": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "GME": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "HTZ": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "VICI": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "AAPL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "DAL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "DHER": {
+    "type": "stock",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "DE"
+  },
+  "ZAL": {
+    "type": "stock",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "DE"
+  },
+  "MBG": {
+    "type": "stock",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "DE"
+  },
+  "QDVY": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "CVS": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "36BZ": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "BABA": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "CN"
+  },
+  "CMCSA": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "JD": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "CN"
+  },
+  "VOW3": {
+    "type": "stock",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "DE"
+  },
+  "V": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "MSFT": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "NKE": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "IBCC": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "CBLAQ": {
+    "type": "stock",
+    "currency": "USD",
+    "active": false,
+    "merged_into": "CBL",
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "CBL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "HTZGQ": {
+    "type": "stock",
+    "currency": "USD",
+    "active": false,
+    "merged_into": "HTZ",
+    "conversion_ratio": 0.09044939,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "HTZZW": {
+    "type": "stock",
+    "currency": "USD",
+    "active": false,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "DBX": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "TWTR": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "AMC": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "CLDR": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "PLUG": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "GDDY": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "COUR": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "STZ": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "EUNA": {
+    "type": "etf",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "IQQC": {
+    "type": "etf",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "ASML": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "NL"
+  },
+  "DUOL": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "SPGI": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "IS3K": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "AMEM": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "DBXJ": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "XUCD": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "IS3Q": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "EXW1": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "EXI2": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "XDWT": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "IUSU": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "IBCD": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "VWCE": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "TSLA": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "NVDA": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  }
+}

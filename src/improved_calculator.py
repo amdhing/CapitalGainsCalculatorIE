@@ -9,10 +9,9 @@ Features:
 - FIFO (First In, First Out) cost basis calculation
 - Loss carry forward (indefinite for stocks)
 - Multi-year processing with proper tax calculations
-- ETF exit tax (41%) vs stock CGT (33%) classification
+- ETF exit tax (41% up to 2025, 38% from 2026) vs stock CGT (33%) classification
 - Dividend income tax with withholding tax credits
 - CSV export for tax filing
-- Merger and corporate action handling
 
 Author: Built for Irish tax compliance
 License: Educational and personal use
@@ -30,7 +29,8 @@ import re
 from ticker_utils import add_missing_ticker_to_cache
 from tax_calculations import (
     apply_cgt_with_loss_carry_forward,
-    calculate_etf_exit_tax, 
+    calculate_etf_exit_tax,
+    get_etf_exit_tax_rate,
     calculate_dividend_income_tax,
     format_currency_display,
     get_exemption_applied
@@ -164,7 +164,10 @@ class ImprovedCapitalGainsCalculator:
                 })
                 total_taxable_gain += taxable_gain
         
-        tax_liability = total_taxable_gain * 0.41  # 41% exit tax
+        # Use current year's rate for deemed disposal (assessed at today's rate)
+        current_year = current_date.year
+        exit_tax_rate = get_etf_exit_tax_rate(current_year)
+        tax_liability = total_taxable_gain * exit_tax_rate
         return total_taxable_gain, tax_liability, deemed_disposals
     
     def classify_transaction_type(self, type_str):
@@ -584,7 +587,7 @@ class ImprovedCapitalGainsCalculator:
             stock_dividends_irish = results['summary']['stocks']['dividends_irish'][year]
             stock_dividends_foreign = results['summary']['stocks']['dividends_foreign'][year]
             
-            # ETF dividends are subject to 41% exit tax, NOT income tax at marginal rates
+            # ETF dividends are subject to exit tax (41% up to 2025, 38% from 2026), NOT income tax at marginal rates
             # Only stock dividends are subject to income tax at marginal rates
             
             # Total dividend income (STOCKS ONLY - ETFs handled in exit tax section)
@@ -668,9 +671,10 @@ class ImprovedCapitalGainsCalculator:
             stock_taxable_gains, stock_cgt_liability, carry_forward_used, accumulated_losses = \
                 apply_cgt_with_loss_carry_forward(stock_realized, accumulated_losses, cgt_exemption)
             
-            # Calculate ETF exit tax
+            # Calculate ETF exit tax with year-appropriate rate
+            exit_tax_rate = get_etf_exit_tax_rate(year)
             etf_total_taxable, etf_exit_tax_liability = \
-                calculate_etf_exit_tax(etf_realized, etf_dividends, etf_deemed)
+                calculate_etf_exit_tax(etf_realized, etf_dividends, etf_deemed, year)
             
             print(f"\nIRISH TAX SUMMARY FOR {year}:")
             print(f"\n--- STOCKS (Capital Gains Tax @ 33%) ---")
@@ -685,12 +689,13 @@ class ImprovedCapitalGainsCalculator:
             print(f"  Dividends (Irish):          €{stock_dividends_irish:8.2f}")
             print(f"  Dividends (Foreign):        €{stock_dividends_foreign:8.2f}")
             
-            print(f"\n--- ETFs (Exit Tax @ 41%) ---")
+            exit_tax_rate_pct = int(exit_tax_rate * 100)
+            print(f"\n--- ETFs (Exit Tax @ {exit_tax_rate_pct}%) ---")
             print(f"  Realized Gains:             €{etf_realized:8.2f}")
             print(f"  Dividends:                  €{etf_dividends:8.2f}")
             print(f"  Deemed Disposal Gains:      €{etf_deemed:8.2f}")
             print(f"  Total Taxable (ETF):        €{etf_realized + etf_dividends + etf_deemed:8.2f}")
-            print(f"  Exit Tax Liability (41%):   €{etf_exit_tax_liability:8.2f}")
+            print(f"  Exit Tax Liability ({exit_tax_rate_pct}%):   €{etf_exit_tax_liability:8.2f}")
             
             print(f"\n--- TOTAL TAX LIABILITY ---")
             print(f"  Total Tax Due:              €{stock_cgt_liability + etf_exit_tax_liability:8.2f}")
@@ -751,7 +756,8 @@ class ImprovedCapitalGainsCalculator:
             if etfs_with_activity:
                 print("\nETFs:")
                 for ticker_info in sorted(etfs_with_activity, key=lambda x: x['realized'], reverse=True):
-                    print(f"  {ticker_info['ticker']:8} | Realized: €{ticker_info['realized']:8.2f} | Dividends: €{ticker_info['dividends']:6.2f} | Exit Tax: €{(ticker_info['realized'] + ticker_info['dividends']) * 0.41:.2f}")
+                    exit_tax_rate = get_etf_exit_tax_rate(year)
+                    print(f"  {ticker_info['ticker']:8} | Realized: €{ticker_info['realized']:8.2f} | Dividends: €{ticker_info['dividends']:6.2f} | Exit Tax: €{(ticker_info['realized'] + ticker_info['dividends']) * exit_tax_rate:.2f}")
             
             if not stocks_with_activity and not etfs_with_activity:
                 print("No trading activity for this year.")
@@ -787,7 +793,8 @@ class ImprovedCapitalGainsCalculator:
                 print(f"  {holding['ticker']:8} | Shares: {holding['shares']:8.2f} | Avg Cost: {currency_symbol}{holding['avg_cost']:6.2f}")
         
         if current_etfs:
-            print("\nCURRENT ETF HOLDINGS (Subject to Exit Tax @ 41%):")
+            current_etf_rate = int(get_etf_exit_tax_rate(datetime.now().year) * 100)
+            print(f"\nCURRENT ETF HOLDINGS (Subject to Exit Tax @ {current_etf_rate}%):")
             for holding in current_etfs:
                 currency_symbol = '€' if results['ticker_detail'][holding['ticker']].get('currency', 'EUR') == 'EUR' else '$'
                 deemed_status = f" | Deemed Liability: €{holding['deemed_liability']:.2f}" if holding['deemed_liability'] > 0 else ""
@@ -838,8 +845,10 @@ class ImprovedCapitalGainsCalculator:
             etf_dividends = results['summary']['etfs']['dividends'][year]
             etf_deemed = results['summary']['etfs']['deemed_disposal_gains'][year]
             etf_total_taxable = etf_realized + etf_dividends + etf_deemed
-            etf_exit_tax_liability = etf_total_taxable * 0.41
+            etf_exit_tax_rate = get_etf_exit_tax_rate(year)
+            etf_exit_tax_liability = etf_total_taxable * etf_exit_tax_rate
             
+            exit_tax_rate_pct = int(etf_exit_tax_rate * 100)
             summary_rows.extend([
                 {
                     'Year': year,
@@ -862,7 +871,7 @@ class ImprovedCapitalGainsCalculator:
                     'Dividends_EUR': round(etf_dividends, 2),
                     'Deemed_Disposal_Gains_EUR': round(etf_deemed, 2),
                     'Total_Taxable_EUR': round(etf_total_taxable, 2),
-                    'Tax_Rate': '41%',
+                    'Tax_Rate': f'{exit_tax_rate_pct}%',
                     'Exit_Tax_Liability_EUR': round(etf_exit_tax_liability, 2)
                 }
             ])

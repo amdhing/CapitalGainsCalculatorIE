@@ -41,20 +41,44 @@ def apply_cgt_with_loss_carry_forward(stock_realized, accumulated_losses, cgt_ex
     return taxable_gains, cgt_liability, carry_forward_used, accumulated_losses
 
 
-def calculate_etf_exit_tax(etf_realized, etf_dividends, etf_deemed):
+def get_etf_exit_tax_rate(year):
     """
-    Calculate Irish ETF exit tax (41% on all gains and dividends).
+    Get the Irish ETF exit tax rate for a given year.
+    
+    Until 31 Dec 2025: 41%
+    From 1 Jan 2026 onward: 38%
+    
+    Args:
+        year (int): The tax year
+        
+    Returns:
+        float: The applicable exit tax rate
+    """
+    if year >= 2026:
+        return 0.38  # 38% from 2026 onward
+    return 0.41  # 41% up to and including 2025
+
+
+def calculate_etf_exit_tax(etf_realized, etf_dividends, etf_deemed, year=2025):
+    """
+    Calculate Irish ETF exit tax with year-appropriate rate.
+    
+    Tax rate changes:
+    - Until 31 Dec 2025: 41% on all gains and dividends
+    - From 1 Jan 2026 onward: 38% on all gains and dividends
     
     Args:
         etf_realized (float): Realized gains from ETF sales
         etf_dividends (float): ETF dividend income
         etf_deemed (float): Deemed disposal gains (8-year rule)
+        year (int): The tax year to determine the applicable rate
         
     Returns:
         tuple: (total_taxable, exit_tax_liability)
     """
     total_taxable = etf_realized + etf_dividends + etf_deemed
-    exit_tax_liability = total_taxable * 0.41  # 41% exit tax rate
+    rate = get_etf_exit_tax_rate(year)
+    exit_tax_liability = total_taxable * rate
     return total_taxable, exit_tax_liability
 
 

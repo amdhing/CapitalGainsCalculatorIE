@@ -610,5 +610,167 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
     "domicile": "US"
+  },
+  "MELI": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "BKNG": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "TCOM": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "NFLX": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
+  },
+  "AMEL": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "79U0": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "LEMA": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "LYP6": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "PRAJ": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "EBUY": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "LYMS": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "XDWI": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "2B72": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "WELK": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "LYP5": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "UBUD": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "LGQK": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE"
+  },
+  "VSNT": {
+    "type": "stock",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": true,
+    "domicile": "US"
   }
 }

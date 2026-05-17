@@ -34,11 +34,9 @@ IRISH TAX SUMMARY FOR 2023:
   Dividends (Foreign):        €   28.45
 
 --- ETFs (Exit Tax @ 41%) ---
-  Realized Gains:             €    0.00
-  Dividends:                  €    0.00
-  Deemed Disposal Gains:      €    0.00
-  Total Taxable (ETF):        €    0.00
-  Exit Tax Liability (41%):   €    0.00
+  IS3K     | Gain: €    0.00 | Div: €  0.00 | Deemed: €  0.00 | Taxable: €    0.00 | Exit Tax: €    0.00
+  ------------------------------------------------------------------------
+  TOTAL    |                   |        |        | Total Taxable: €    0.00 | Exit Tax: €    0.00
 
 --- TOTAL TAX LIABILITY ---
   Total Tax Due:              €    0.00
@@ -85,11 +83,11 @@ IRISH TAX SUMMARY FOR 2024:
   Dividends (Foreign):        €   92.34
 
 --- ETFs (Exit Tax @ 41%) ---
-  Realized Gains:             €  234.56
-  Dividends:                  €   45.78
-  Deemed Disposal Gains:      €    0.00
-  Total Taxable (ETF):        €  280.34
-  Exit Tax Liability (41%):   €  114.94
+  VWCE     | Gain: €  156.78 | Div: € 23.45 | Deemed: €  0.00 | Taxable: €  180.23 | Exit Tax: €   73.89
+  IWDA     | Gain: €   78.45 | Div: € 12.67 | Deemed: €  0.00 | Taxable: €   91.12 | Exit Tax: €   37.36
+  EUNL     | Gain: €   -0.67 | Div: €  9.66 | Deemed: €  0.00 | Taxable: €    8.99 | Exit Tax: €    3.69
+  ------------------------------------------------------------------------
+  TOTAL    |                   |        |        | Total Taxable: €  280.34 | Exit Tax: €  114.94
 
 --- TOTAL TAX LIABILITY ---
   Total Tax Due:              €  267.12

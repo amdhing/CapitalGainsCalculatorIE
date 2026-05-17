@@ -7,7 +7,7 @@ Calculates Irish capital gains tax and dividend income tax from trading spreadsh
 - **FIFO cost basis** across multiple years
 - **Loss carry forward** (indefinite, as per Irish law)
 - **Stock CGT** at 33% with €1,270 annual exemption
-- **ETF exit tax** at 41% (gains + dividends + 8-year deemed disposal)
+- **ETF exit tax** at 41%/38% (gains + dividends + 8-year deemed disposal)
 - **Dividend income tax** at your marginal rate (20%/40%/45%)
 - **Multi-currency** support with EUR conversion
 - **Smart ticker detection** using yfinance API with local caching

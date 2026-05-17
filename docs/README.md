@@ -9,7 +9,7 @@ Calculate capital gains and dividend taxes for Irish tax compliance from trading
 
 ## What it does
 
-- **Calculates Irish taxes**: 33% CGT on stocks, 41% exit tax on ETFs, income tax on dividends
+- **Calculates Irish taxes**: 33% CGT on stocks, 41%/38% exit tax on ETFs, income tax on dividends
 - **FIFO accounting**: Proper cost basis calculation across multiple years
 - **Loss carry forward**: Indefinite carry forward for stock losses (Irish law compliant)
 - **Smart classification**: Auto-detects stocks vs ETFs using yfinance API
@@ -57,7 +57,7 @@ Your Excel/CSV needs these columns:
 - **Dividends**: Income tax at your marginal rate (20%/40%/45%)
 
 ### ETFs (Exit Tax)
-- **Rate**: 41% on everything (gains + dividends)
+- **Rate**: 41% (up to 2025) / 38% (from 2026) on everything (gains + dividends)
 - **No exemption**: No annual exemption
 - **Deemed disposal**: 8-year rule applies
 - **No loss relief**: Losses can't be carried forward

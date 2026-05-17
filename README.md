@@ -8,7 +8,7 @@ Perfect for Irish tax residents who need to calculate their annual tax obligatio
 
 Irish tax law is complex for investors:
 - **Stocks**: 33% capital gains tax with €1,270 exemption and indefinite loss carry forward
-- **ETFs**: 41% exit tax on everything (gains + dividends) with 8-year deemed disposal
+- **ETFs**: 41% exit tax (up to 2025) / 38% (from 2026) on gains + dividends with 8-year deemed disposal
 - **Dividends**: Income tax at marginal rate with withholding tax credits
 - **Multi-currency**: FX conversions required for EUR reporting
 
@@ -60,7 +60,7 @@ CapitalGainsCalculatorIE/
 
 ## ✨ Key Features
 
-- **Irish Tax Compliance**: 33% CGT on stocks, 41% exit tax on ETFs
+- **Irish Tax Compliance**: 33% CGT on stocks, 41%/38% exit tax on ETFs
 - **FIFO Accounting**: Proper cost basis calculation across multiple years
 - **Loss Carry Forward**: Indefinite carry forward for stock losses
 - **Smart Classification**: Auto-detects stocks vs ETFs using yfinance API
@@ -103,7 +103,7 @@ Your Revolut Excel/CSV export needs these columns:
 ## 🇮🇪 Irish Tax Rules Implemented
 
 - **Stock CGT**: 33% rate with €1,270 annual exemption and indefinite loss carry forward
-- **ETF Exit Tax**: 41% rate on gains and dividends, 8-year deemed disposal rule
+- **ETF Exit Tax**: 41% (up to 2025) / 38% (from 2026) on gains and dividends, 8-year deemed disposal rule
 - **Dividend Tax**: Income tax at marginal rate with withholding tax credits
 
 ## 📋 Requirements

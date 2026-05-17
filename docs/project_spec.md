@@ -29,10 +29,14 @@ Ignores: CASH TOP-UP, CASH WITHDRAWAL, CUSTODY FEE
 3. Calculate 33% tax on remaining gains
 4. Carry forward any net losses to future years
 
-### ETFs (Exit Tax @ 41%)
-- 41% tax on all gains, dividends, and deemed disposals
+### ETFs (Exit Tax - Per-Ticker)
+- **41%** on gains, dividends, and deemed disposals (up to 31 Dec 2025)
+- **38%** from 1 Jan 2026 onward
 - 8-year deemed disposal rule applies
 - No annual exemption, no loss relief
+- **CRITICAL: Losses on one ETF cannot offset gains on another ETF** — each ticker taxed independently
+  - e.g., ETF_A +€5,000 and ETF_B -€2,000 → tax on €5,000 not €3,000
+  - ETF losses are forfeited, not carried forward
 
 ### Dividends (Income Tax @ Marginal Rate)
 - **Stock dividends**: Income tax at 20%/40%/45% with withholding credits

@@ -67,6 +67,10 @@ def calculate_etf_exit_tax(etf_realized, etf_dividends, etf_deemed, year=2025):
     - Until 31 Dec 2025: 41% on all gains and dividends
     - From 1 Jan 2026 onward: 38% on all gains and dividends
     
+    NOTE: This function aggregates gains/dividends/deemed across all ETFs.
+    For per-ticker calculation (where losses on one ETF cannot offset
+    gains on another), use calculate_etf_exit_tax_per_ticker() instead.
+    
     Args:
         etf_realized (float): Realized gains from ETF sales
         etf_dividends (float): ETF dividend income
@@ -80,6 +84,68 @@ def calculate_etf_exit_tax(etf_realized, etf_dividends, etf_deemed, year=2025):
     rate = get_etf_exit_tax_rate(year)
     exit_tax_liability = total_taxable * rate
     return total_taxable, exit_tax_liability
+
+
+def calculate_etf_exit_tax_per_ticker(per_ticker_etf_data, year):
+    """
+    Calculate Irish ETF exit tax respecting that losses on one ETF
+    cannot offset gains on another ETF.
+    
+    Irish tax rule: "Any losses on other ETFs are not available for offset.
+    So if you make a loss of €5,000 on one ETF over 8 years – but make a
+    gain of €10,000 on another over the same period – you will be liable
+    for 38% tax on €10,000." - MoneyGuideIreland
+    
+    Each ETF ticker is taxed independently. Losses are forfeited (no loss
+    carry forward or offset between different ETFs).
+    
+    Args:
+        per_ticker_etf_data (dict): Dictionary mapping ticker -> dict with keys:
+            'realized_gains' (float), 'dividends' (float), 'deemed_gains' (float)
+        year (int): The tax year to determine the applicable rate
+        
+    Returns:
+        dict: {
+            'per_ticker': {ticker: {total_taxable, exit_tax}},
+            'total_taxable': float,
+            'total_exit_tax': float
+        }
+    """
+    rate = get_etf_exit_tax_rate(year)
+    per_ticker = {}
+    total_taxable = 0.0
+    total_exit_tax = 0.0
+    
+    for ticker, data in per_ticker_etf_data.items():
+        realized = data.get('realized_gains', 0)
+        dividends = data.get('dividends', 0)
+        deemed = data.get('deemed_gains', 0)
+        
+        # Each ticker's taxable amount is the sum of its components
+        ticker_taxable = realized + dividends + deemed
+        
+        # CRITICAL: Only positive amounts are taxable.
+        # If a ticker has a net loss (negative total), the loss is forfeited.
+        # It does NOT offset gains from other tickers.
+        ticker_exit_tax = max(0, ticker_taxable) * rate
+        
+        per_ticker[ticker] = {
+            'realized': realized,
+            'dividends': dividends,
+            'deemed': deemed,
+            'total_taxable': ticker_taxable,
+            'forfeited_loss': min(0, ticker_taxable),  # negative = loss, 0 = no loss
+            'exit_tax': ticker_exit_tax
+        }
+        total_taxable += max(0, ticker_taxable)  # Only gains count toward total
+        total_exit_tax += ticker_exit_tax
+    
+    return {
+        'per_ticker': per_ticker,
+        'total_taxable': total_taxable,
+        'total_exit_tax': total_exit_tax,
+        'rate': rate
+    }
 
 
 def calculate_dividend_income_tax(dividend_income, margin_rate, irish_dividends, foreign_dividends):

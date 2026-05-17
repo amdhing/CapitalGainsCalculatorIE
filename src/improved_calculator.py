@@ -33,7 +33,8 @@ from tax_calculations import (
     get_etf_exit_tax_rate,
     calculate_dividend_income_tax,
     format_currency_display,
-    get_exemption_applied
+    get_exemption_applied,
+    calculate_etf_exit_tax_per_ticker
 )
 
 class ImprovedCapitalGainsCalculator:
@@ -671,10 +672,36 @@ class ImprovedCapitalGainsCalculator:
             stock_taxable_gains, stock_cgt_liability, carry_forward_used, accumulated_losses = \
                 apply_cgt_with_loss_carry_forward(stock_realized, accumulated_losses, cgt_exemption)
             
-            # Calculate ETF exit tax with year-appropriate rate
+            # Calculate ETF exit tax using per-ticker, per-year method
+            # CRITICAL: Losses on one ETF cannot offset gains on another ETF.
+            # Each ETF ticker is taxed independently per year.
             exit_tax_rate = get_etf_exit_tax_rate(year)
-            etf_total_taxable, etf_exit_tax_liability = \
-                calculate_etf_exit_tax(etf_realized, etf_dividends, etf_deemed, year)
+            
+            # Build per-ticker ETF data for this specific year.
+            # Deemed disposal is tracked as a lump sum per-year in summary
+            # and doesn't have per-ticker attribution yet.
+            per_ticker_etf_data = {}
+            for ticker, ticker_data in results['ticker_detail'].items():
+                if ticker_data['asset_type'] == 'etfs':
+                    yr_realized = ticker_data['realized_gains'].get(year, 0)
+                    yr_dividends = ticker_data['dividends'].get(year, 0)
+                    if yr_realized != 0 or yr_dividends != 0:
+                        per_ticker_etf_data[ticker] = {
+                            'realized_gains': yr_realized,
+                            'dividends': yr_dividends,
+                            'deemed_gains': 0  # Deemed disposal tracked separately per-year, not per-ticker yet
+                        }
+            
+            # Use the per-ticker calculation function
+            etf_tax_results = calculate_etf_exit_tax_per_ticker(per_ticker_etf_data, year)
+            etf_total_taxable = etf_tax_results['total_taxable']
+            etf_exit_tax_liability = etf_tax_results['total_exit_tax']
+            
+            # Collect forfeited losses across tickers for display
+            forfeited_losses = 0
+            for ticker, ticker_result in etf_tax_results['per_ticker'].items():
+                if ticker_result['forfeited_loss'] < 0:
+                    forfeited_losses += abs(ticker_result['forfeited_loss'])
             
             print(f"\nIRISH TAX SUMMARY FOR {year}:")
             print(f"\n--- STOCKS (Capital Gains Tax @ 33%) ---")
@@ -691,11 +718,17 @@ class ImprovedCapitalGainsCalculator:
             
             exit_tax_rate_pct = int(exit_tax_rate * 100)
             print(f"\n--- ETFs (Exit Tax @ {exit_tax_rate_pct}%) ---")
-            print(f"  Realized Gains:             €{etf_realized:8.2f}")
-            print(f"  Dividends:                  €{etf_dividends:8.2f}")
-            print(f"  Deemed Disposal Gains:      €{etf_deemed:8.2f}")
-            print(f"  Total Taxable (ETF):        €{etf_realized + etf_dividends + etf_deemed:8.2f}")
-            print(f"  Exit Tax Liability ({exit_tax_rate_pct}%):   €{etf_exit_tax_liability:8.2f}")
+            
+            # Print per-ticker ETF breakdown
+            for ticker, ticker_result in sorted(etf_tax_results['per_ticker'].items()):
+                t = ticker_result
+                loss_note = f" (loss forfeited: €{abs(t['forfeited_loss']):.2f})" if t['forfeited_loss'] < 0 else ""
+                print(f"  {ticker:8} | Gain: €{t['realized']:8.2f} | Div: €{t['dividends']:6.2f} | Deemed: €{t['deemed']:6.2f} | Taxable: €{t['total_taxable']:8.2f} | Exit Tax: €{t['exit_tax']:7.2f}{loss_note}")
+            
+            print(f"  {'-'*72}")
+            print(f"  {'TOTAL':8} |{'':>10}|{'':>8}|{'':>8}| Total Taxable: €{etf_total_taxable:8.2f} | Exit Tax: €{etf_exit_tax_liability:7.2f}")
+            if forfeited_losses > 0:
+                print(f"  (Forfeited ETF losses: €{forfeited_losses:.2f} - per Irish law, no loss relief between different ETFs)")
             
             print(f"\n--- TOTAL TAX LIABILITY ---")
             print(f"  Total Tax Due:              €{stock_cgt_liability + etf_exit_tax_liability:8.2f}")
@@ -840,13 +873,33 @@ class ImprovedCapitalGainsCalculator:
             if after_exemption < 0:
                 accumulated_losses += abs(after_exemption)
             
-            # ETF calculations
+            # ETF calculations using per-ticker method
             etf_realized = results['summary']['etfs']['realized_gains'][year]
             etf_dividends = results['summary']['etfs']['dividends'][year]
             etf_deemed = results['summary']['etfs']['deemed_disposal_gains'][year]
-            etf_total_taxable = etf_realized + etf_dividends + etf_deemed
             etf_exit_tax_rate = get_etf_exit_tax_rate(year)
-            etf_exit_tax_liability = etf_total_taxable * etf_exit_tax_rate
+            
+            # Build per-ticker ETF data for this specific year
+            per_ticker_etf_data = {}
+            for ticker, ticker_data in results['ticker_detail'].items():
+                if ticker_data['asset_type'] == 'etfs':
+                    yr_realized = ticker_data['realized_gains'].get(year, 0)
+                    yr_dividends = ticker_data['dividends'].get(year, 0)
+                    if yr_realized != 0 or yr_dividends != 0:
+                        per_ticker_etf_data[ticker] = {
+                            'realized_gains': yr_realized,
+                            'dividends': yr_dividends,
+                            'deemed_gains': 0
+                        }
+            
+            etf_tax_results = calculate_etf_exit_tax_per_ticker(per_ticker_etf_data, year)
+            etf_total_taxable = etf_tax_results['total_taxable']
+            etf_exit_tax_liability = etf_tax_results['total_exit_tax']
+            
+            # Add deemed disposal gains
+            if etf_deemed > 0:
+                etf_total_taxable += etf_deemed
+                etf_exit_tax_liability += etf_deemed * etf_exit_tax_rate
             
             exit_tax_rate_pct = int(etf_exit_tax_rate * 100)
             summary_rows.extend([
@@ -872,7 +925,10 @@ class ImprovedCapitalGainsCalculator:
                     'Deemed_Disposal_Gains_EUR': round(etf_deemed, 2),
                     'Total_Taxable_EUR': round(etf_total_taxable, 2),
                     'Tax_Rate': f'{exit_tax_rate_pct}%',
-                    'Exit_Tax_Liability_EUR': round(etf_exit_tax_liability, 2)
+                    'Exit_Tax_Liability_EUR': round(etf_exit_tax_liability, 2),
+                    'Forfeited_ETF_Losses_EUR': round(
+                        sum(abs(v['forfeited_loss']) for v in etf_tax_results['per_ticker'].values() if v['forfeited_loss'] < 0), 2
+                    )
                 }
             ])
         

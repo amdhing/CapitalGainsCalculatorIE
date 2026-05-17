@@ -789,8 +789,13 @@ class ImprovedCapitalGainsCalculator:
             if etfs_with_activity:
                 print("\nETFs:")
                 for ticker_info in sorted(etfs_with_activity, key=lambda x: x['realized'], reverse=True):
-                    exit_tax_rate = get_etf_exit_tax_rate(year)
-                    print(f"  {ticker_info['ticker']:8} | Realized: €{ticker_info['realized']:8.2f} | Dividends: €{ticker_info['dividends']:6.2f} | Exit Tax: €{(ticker_info['realized'] + ticker_info['dividends']) * exit_tax_rate:.2f}")
+                    ticker = ticker_info['ticker']
+                    ticker_result = etf_tax_results['per_ticker'].get(ticker)
+                    if ticker_result:
+                        exit_tax_display = ticker_result['exit_tax']
+                    else:
+                        exit_tax_display = 0.0
+                    print(f"  {ticker:8} | Realized: €{ticker_info['realized']:8.2f} | Dividends: €{ticker_info['dividends']:6.2f} | Exit Tax: €{exit_tax_display:7.2f}")
             
             if not stocks_with_activity and not etfs_with_activity:
                 print("No trading activity for this year.")

@@ -6,7 +6,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Uber Technologies, Inc."
   },
   "CHPT": {
     "type": "stock",
@@ -15,7 +16,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "ChargePoint Holdings, Inc."
   },
   "OXY": {
     "type": "stock",
@@ -24,7 +26,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Occidental Petroleum Corporation"
   },
   "AAL": {
     "type": "stock",
@@ -33,7 +36,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "American Airlines Group Inc."
   },
   "NCLH": {
     "type": "stock",
@@ -42,7 +46,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Norwegian Cruise Line Holdings Ltd."
   },
   "IBN": {
     "type": "stock",
@@ -51,7 +56,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "IN"
+    "domicile": "IN",
+    "long_name": "ICICI Bank Limited"
   },
   "C": {
     "type": "stock",
@@ -60,7 +66,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Citigroup Inc."
   },
   "INTC": {
     "type": "stock",
@@ -69,7 +76,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Intel Corporation"
   },
   "UAL": {
     "type": "stock",
@@ -78,7 +86,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "United Airlines Holdings, Inc."
   },
   "GRPN": {
     "type": "stock",
@@ -87,7 +96,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Groupon, Inc."
   },
   "BMBL": {
     "type": "stock",
@@ -96,7 +106,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Bumble Inc."
   },
   "DUK": {
     "type": "stock",
@@ -105,7 +116,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Duke Energy Corporation"
   },
   "GM": {
     "type": "stock",
@@ -114,7 +126,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "General Motors Company"
   },
   "UAA": {
     "type": "stock",
@@ -123,7 +136,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Under Armour, Inc."
   },
   "EXEL": {
     "type": "stock",
@@ -132,7 +146,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Exelixis, Inc."
   },
   "ERJ": {
     "type": "stock",
@@ -141,7 +156,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "BR"
+    "domicile": "BR",
+    "long_name": ""
   },
   "KO": {
     "type": "stock",
@@ -150,7 +166,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "The Coca-Cola Company"
   },
   "GOOGL": {
     "type": "stock",
@@ -159,7 +176,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Alphabet Inc."
   },
   "BRK.B": {
     "type": "stock",
@@ -168,7 +186,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": ""
   },
   "GME": {
     "type": "stock",
@@ -177,7 +196,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "GameStop Corp."
   },
   "HTZ": {
     "type": "stock",
@@ -186,7 +206,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Hertz Global Holdings, Inc."
   },
   "VICI": {
     "type": "stock",
@@ -195,7 +216,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "VICI Properties Inc."
   },
   "AAPL": {
     "type": "stock",
@@ -204,7 +226,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Apple Inc."
   },
   "DAL": {
     "type": "stock",
@@ -213,7 +236,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Delta Air Lines, Inc."
   },
   "DHER": {
     "type": "stock",
@@ -222,7 +246,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "DE"
+    "domicile": "DE",
+    "long_name": ""
   },
   "ZAL": {
     "type": "stock",
@@ -231,7 +256,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "DE"
+    "domicile": "DE",
+    "long_name": ""
   },
   "MBG": {
     "type": "stock",
@@ -240,7 +266,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "DE"
+    "domicile": "DE",
+    "long_name": "SPDR Bloomberg Barclays Mortgage Backed Bond ETF"
   },
   "QDVY": {
     "type": "etf",
@@ -249,7 +276,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "CVS": {
     "type": "stock",
@@ -258,7 +286,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "CVS Health Corporation"
   },
   "36BZ": {
     "type": "etf",
@@ -267,7 +296,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "BABA": {
     "type": "stock",
@@ -276,7 +306,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "CN"
+    "domicile": "CN",
+    "long_name": "Alibaba Group Holding Limited"
   },
   "CMCSA": {
     "type": "stock",
@@ -285,7 +316,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Comcast Corporation"
   },
   "JD": {
     "type": "stock",
@@ -294,7 +326,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "CN"
+    "domicile": "CN",
+    "long_name": "JD.com, Inc."
   },
   "VOW3": {
     "type": "stock",
@@ -303,7 +336,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "DE"
+    "domicile": "DE",
+    "long_name": ""
   },
   "V": {
     "type": "stock",
@@ -312,7 +346,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Visa Inc."
   },
   "MSFT": {
     "type": "stock",
@@ -321,7 +356,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Microsoft Corporation"
   },
   "NKE": {
     "type": "stock",
@@ -330,7 +366,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "NIKE, Inc."
   },
   "IBCC": {
     "type": "etf",
@@ -339,7 +376,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": "iShares iBonds Mar 2018 Term Corporate ex-Financials ETF"
   },
   "CBLAQ": {
     "type": "stock",
@@ -348,7 +386,8 @@
     "merged_into": "CBL",
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": ""
   },
   "CBL": {
     "type": "stock",
@@ -357,7 +396,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "CBL & Associates Properties, Inc."
   },
   "HTZGQ": {
     "type": "stock",
@@ -366,7 +406,8 @@
     "merged_into": "HTZ",
     "conversion_ratio": 0.09044939,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": ""
   },
   "HTZZW": {
     "type": "stock",
@@ -375,7 +416,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": ""
   },
   "DBX": {
     "type": "stock",
@@ -384,7 +426,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Dropbox, Inc."
   },
   "TWTR": {
     "type": "stock",
@@ -393,7 +436,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": ""
   },
   "AMC": {
     "type": "stock",
@@ -402,7 +446,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "AMC Entertainment Holdings, Inc."
   },
   "CLDR": {
     "type": "stock",
@@ -411,7 +456,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": ""
   },
   "PLUG": {
     "type": "stock",
@@ -420,7 +466,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Plug Power Inc."
   },
   "GDDY": {
     "type": "stock",
@@ -429,7 +476,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "GoDaddy Inc."
   },
   "COUR": {
     "type": "stock",
@@ -438,7 +486,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Coursera, Inc."
   },
   "STZ": {
     "type": "stock",
@@ -447,7 +496,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Constellation Brands, Inc."
   },
   "EUNA": {
     "type": "etf",
@@ -456,7 +506,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": "iShares STOXX Europe 50 ETF EUR Dist"
   },
   "IQQC": {
     "type": "etf",
@@ -465,7 +516,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": "iShares China Large Cap ETF USD Dist"
   },
   "ASML": {
     "type": "stock",
@@ -474,7 +526,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "NL"
+    "domicile": "NL",
+    "long_name": "ASML Holding N.V."
   },
   "DUOL": {
     "type": "stock",
@@ -483,7 +536,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Duolingo, Inc."
   },
   "SPGI": {
     "type": "stock",
@@ -492,7 +546,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "S&P Global Inc."
   },
   "IS3K": {
     "type": "etf",
@@ -501,7 +556,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "AMEM": {
     "type": "etf",
@@ -510,7 +566,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "DBXJ": {
     "type": "etf",
@@ -519,7 +576,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "XUCD": {
     "type": "etf",
@@ -528,7 +586,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "IS3Q": {
     "type": "etf",
@@ -537,7 +596,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "EXW1": {
     "type": "etf",
@@ -546,7 +606,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": "iShares EURO STOXX 50 (DE)"
   },
   "EXI2": {
     "type": "etf",
@@ -555,7 +616,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "XDWT": {
     "type": "etf",
@@ -564,7 +626,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "IUSU": {
     "type": "etf",
@@ -573,7 +636,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "IBCD": {
     "type": "etf",
@@ -582,7 +646,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": "iShares iBonds Mar 2020 Term Corporate ex-Financials ETF"
   },
   "VWCE": {
     "type": "etf",
@@ -591,7 +656,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "TSLA": {
     "type": "stock",
@@ -600,7 +666,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Tesla, Inc."
   },
   "NVDA": {
     "type": "stock",
@@ -609,7 +676,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "NVIDIA Corporation"
   },
   "MELI": {
     "type": "stock",
@@ -618,7 +686,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "MercadoLibre, Inc."
   },
   "BKNG": {
     "type": "stock",
@@ -627,7 +696,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Booking Holdings Inc."
   },
   "TCOM": {
     "type": "stock",
@@ -636,7 +706,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "CN"
+    "domicile": "CN",
+    "long_name": "Trip.com Group Limited"
   },
   "NFLX": {
     "type": "stock",
@@ -645,7 +716,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Netflix, Inc."
   },
   "AMEL": {
     "type": "etf",
@@ -654,7 +726,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "79U0": {
     "type": "etf",
@@ -663,7 +736,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "LEMA": {
     "type": "etf",
@@ -672,7 +746,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "LYP6": {
     "type": "etf",
@@ -681,7 +756,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "PRAJ": {
     "type": "etf",
@@ -690,7 +766,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "EBUY": {
     "type": "etf",
@@ -699,7 +776,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "LYMS": {
     "type": "etf",
@@ -708,7 +786,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "XDWI": {
     "type": "etf",
@@ -717,7 +796,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "2B72": {
     "type": "etf",
@@ -726,7 +806,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "WELK": {
     "type": "etf",
@@ -735,7 +816,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "LYP5": {
     "type": "etf",
@@ -744,7 +826,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "UBUD": {
     "type": "etf",
@@ -753,7 +836,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "LGQK": {
     "type": "etf",
@@ -762,7 +846,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE"
+    "domicile": "IE",
+    "long_name": ""
   },
   "VSNT": {
     "type": "stock",
@@ -771,6 +856,7 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
-    "domicile": "US"
+    "domicile": "US",
+    "long_name": "Versant Media Group, Inc."
   }
 }

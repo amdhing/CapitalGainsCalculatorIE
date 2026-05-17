@@ -39,23 +39,27 @@ python improved_calculator.py samples/sample_revolut_transactions.csv
 
 ```
 CapitalGainsCalculatorIE/
-├── 📄 README.md                     # This file
-├── 🧮 improved_calculator.py        # Main entry point
-├── 📦 requirements.txt              # Python dependencies
-├── 📄 LICENSE                       # CC BY-NC-SA 4.0 License
-├── 🚫 .gitignore                    # Git ignore patterns
-├── 📁 src/                          # Source code
-│   ├── improved_calculator.py       # Core calculator logic
-│   ├── tax_calculations.py          # Irish tax functions
-│   └── ticker_utils.py              # Ticker utilities
-├── 📁 data/                         # Data files
-│   └── ticker_cache.json            # Ticker classification cache
-├── 📁 docs/                         # Documentation
-│   ├── README.md                    # Full user guide
-│   ├── project_spec.md              # Technical specification
-│   └── SAMPLE_OUTPUT.md             # Example output
-└── 📁 samples/                      # Sample transaction files
-    └── sample_revolut_transactions.csv  # Anonymized demo data
+├── improved_calculator.py        # Main entry point (CLI)
+├── requirements.txt              # Python dependencies
+├── LICENSE                       # CC BY-NC-SA 4.0 License
+├── .gitignore                    # Git ignore patterns
+├── scripts/                      # Utility scripts
+│   └── backfill_long_names.py    # Backfill ticker names from yfinance
+├── src/                          # Source code
+│   ├── improved_calculator.py    # Core calculator logic
+│   ├── tax_calculations.py       # Irish tax functions
+│   └── ticker_utils.py           # Ticker utilities (cache + yfinance)
+├── data/                         # Data files
+│   └── ticker_cache.json         # Ticker classification cache
+├── docs/                         # Documentation
+│   ├── README.md                 # Full user guide
+│   ├── project_spec.md           # Technical specification
+│   └── SAMPLE_OUTPUT.md          # Example output
+├── samples/                      # Sample transaction files
+│   └── sample_revolut_transactions.csv  # Anonymized demo data
+└── tests/                        # Unit tests
+    ├── test_tax_rules.py
+    └── test_calculator_integration.py
 ```
 
 ## ✨ Key Features
@@ -118,12 +122,6 @@ Contributions are welcome! This project uses the Creative Commons BY-NC-SA 4.0 l
 - ✅ Contributions and improvements
 - ✅ Personal and educational use
 - ❌ Commercial use
-
-Please feel free to:
-- Report bugs and issues
-- Suggest new features
-- Submit pull requests
-- Improve documentation
 
 ## 📜 License
 

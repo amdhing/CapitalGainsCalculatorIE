@@ -24,8 +24,8 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Basic calculation
-python improved_calculator.py samples/revolut_fy23.xlsx
+# Basic calculation (CLI)
+python improved_calculator.py samples/sample_revolut_transactions.csv
 
 # Multiple years with CSV export
 python improved_calculator.py samples/revolut_fy23.xlsx samples/revolut_fy24.xlsx --csv
@@ -155,6 +155,8 @@ Building a web version where you can:
 - Get instant tax calculations
 - Download tax reports
 - No local setup required
+
+See [Future Direction](design/future_direction.md) for the full product roadmap.
 
 ## Legal note
 

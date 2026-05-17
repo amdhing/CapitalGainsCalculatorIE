@@ -26,8 +26,8 @@ import os
 import argparse
 import json
 import re
-from ticker_utils import add_missing_ticker_to_cache
-from tax_calculations import (
+from src.ticker_utils import add_missing_ticker_to_cache
+from src.tax_calculations import (
     apply_cgt_with_loss_carry_forward,
     calculate_etf_exit_tax,
     get_etf_exit_tax_rate,
@@ -259,7 +259,10 @@ class ImprovedCapitalGainsCalculator:
     def process_transactions(self, df, store_transactions=False):
         """Process transactions and calculate realized/unrealized gains"""
         df = df.copy()
-        df['Date'] = pd.to_datetime(df['Date'], format='mixed')
+        # Normalize ISO dates: strip 'Z' suffix for compat across pandas versions
+        if df['Date'].dtype == 'object':
+            df['Date'] = df['Date'].astype(str).str.replace('Z', '', regex=False)
+        df['Date'] = pd.to_datetime(df['Date'], utc=True, errors='coerce')
         df['Year'] = df['Date'].dt.year
         df['TransactionType'] = df['Type'].apply(self.classify_transaction_type)
         # Identify tickers that had merger transactions
@@ -325,6 +328,7 @@ class ImprovedCapitalGainsCalculator:
             self.transaction_history = df  # Store full df with all calculated fields
         
         results = {
+            'skipped_rows': [],
             'summary': {
                 'stocks': {
                     'realized_gains': defaultdict(float), 
@@ -373,6 +377,13 @@ class ImprovedCapitalGainsCalculator:
             
             for _, transaction in ticker_data.iterrows():
                 year = transaction['Year']
+                if pd.isna(year):
+                    results['skipped_rows'].append(dict(
+                        transaction.to_dict(),
+                        _skip_reason='unparseable_date',
+                    ))
+                    continue
+                year = int(year)
                 trans_type = transaction['TransactionType']
                 quantity = transaction['Quantity']
                 amount_eur = transaction['TotalAmountEUR']

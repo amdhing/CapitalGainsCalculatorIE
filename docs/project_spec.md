@@ -71,12 +71,36 @@ python improved_calculator.py transactions.xlsx --ticker AAPL
 - **CSV**: Tax summary and ticker-level data for tax filing
 - **Ticker detail**: Transaction history and FIFO matching
 
-## Future scope
-Web application where users can:
-- Create accounts
-- Upload transaction files
-- Get automated tax calculations
-- Download tax reports
+## Project structure
+
+```
+CapitalGainsCalculatorIE/
+├── improved_calculator.py        # Main entry point (CLI)
+├── requirements.txt              # Python dependencies
+├── LICENSE                       # CC BY-NC-SA 4.0 License
+├── .gitignore                    # Git ignore patterns
+├── scripts/                      # Utility scripts
+│   └── backfill_long_names.py    # Backfill ticker names from yfinance
+├── src/                          # Source code
+│   ├── improved_calculator.py    # Core calculator logic
+│   ├── tax_calculations.py       # Irish tax functions
+│   └── ticker_utils.py           # Ticker utilities (cache + yfinance)
+├── data/                         # Data files
+│   └── ticker_cache.json         # Ticker classification cache
+├── docs/                         # Documentation
+│   ├── README.md                 # Full user guide
+│   ├── project_spec.md           # Technical specification
+│   ├── SAMPLE_OUTPUT.md          # Example output
+│   ├── design/                   # Design docs
+│   │   └── future_direction.md   # Product roadmap
+│   └── runbooks/                 # Operations runbooks
+│       └── runbook_backlog.md    # Ticker triage runbook
+├── samples/                      # Sample transaction files
+│   └── sample_revolut_transactions.csv  # Anonymized demo data
+└── tests/                        # Unit tests
+    ├── test_tax_rules.py
+    └── test_calculator_integration.py
+```
 
 ## Dependencies
 - pandas, openpyxl, numpy, yfinance

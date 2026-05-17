@@ -6,6 +6,15 @@ __pycache__/
 # OS
 .DS_Store
 
+# IDE
+.vscode/
+
+# Node / Frontend (web app) — ignore dependencies only
+frontend/node_modules/
+
+# Duplicate / stray files
+ticker_cache.json
+
 # Generated files
 irish_tax_report_*.csv
 .python-version

@@ -157,7 +157,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "BR",
-    "long_name": ""
+    "long_name": "Embraer S.A."
   },
   "KO": {
     "type": "stock",
@@ -187,7 +187,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
     "domicile": "US",
-    "long_name": ""
+    "long_name": "Berkshire Hathaway Inc."
   },
   "GME": {
     "type": "stock",
@@ -247,7 +247,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "DE",
-    "long_name": ""
+    "long_name": "Delivery Hero SE"
   },
   "ZAL": {
     "type": "stock",
@@ -257,7 +257,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "DE",
-    "long_name": ""
+    "long_name": "Zalando SE"
   },
   "MBG": {
     "type": "stock",
@@ -267,7 +267,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "DE",
-    "long_name": "SPDR Bloomberg Barclays Mortgage Backed Bond ETF"
+    "long_name": "Mercedes-Benz Group AG"
   },
   "QDVY": {
     "type": "etf",
@@ -277,7 +277,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "iShares $ Floating Rate Bond UCITS ETF USD Dist"
   },
   "CVS": {
     "type": "stock",
@@ -297,7 +297,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "iShares MSCI China A UCITS ETF USD (Acc)"
   },
   "BABA": {
     "type": "stock",
@@ -337,7 +337,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "DE",
-    "long_name": ""
+    "long_name": "Volkswagen AG (Vorzugsaktien)"
   },
   "V": {
     "type": "stock",
@@ -377,7 +377,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": "iShares iBonds Mar 2018 Term Corporate ex-Financials ETF"
+    "long_name": "iShares iBonds Mar 2018 Term Corporate ex-Financials UCITS ETF"
   },
   "CBLAQ": {
     "type": "stock",
@@ -387,7 +387,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
     "domicile": "US",
-    "long_name": ""
+    "long_name": "CBL & Associates Properties, Inc."
   },
   "CBL": {
     "type": "stock",
@@ -407,7 +407,7 @@
     "conversion_ratio": 0.09044939,
     "withholding_tax_deducted": true,
     "domicile": "US",
-    "long_name": ""
+    "long_name": "Hertz Global Holdings, Inc."
   },
   "HTZZW": {
     "type": "stock",
@@ -417,7 +417,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
     "domicile": "US",
-    "long_name": ""
+    "long_name": "Hertz Global Holdings, Inc. Warrants"
   },
   "DBX": {
     "type": "stock",
@@ -437,7 +437,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
     "domicile": "US",
-    "long_name": ""
+    "long_name": "Twitter, Inc."
   },
   "AMC": {
     "type": "stock",
@@ -457,7 +457,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": true,
     "domicile": "US",
-    "long_name": ""
+    "long_name": "Cloudera, Inc."
   },
   "PLUG": {
     "type": "stock",
@@ -507,7 +507,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": "iShares STOXX Europe 50 ETF EUR Dist"
+    "long_name": "iShares STOXX Europe 50 UCITS ETF EUR Dist"
   },
   "IQQC": {
     "type": "etf",
@@ -517,7 +517,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": "iShares China Large Cap ETF USD Dist"
+    "long_name": "iShares China Large Cap UCITS ETF USD Dist"
   },
   "ASML": {
     "type": "stock",
@@ -557,7 +557,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "iShares $ Short Duration High Yield Corp Bond UCITS ETF USD (Dist)"
   },
   "AMEM": {
     "type": "etf",
@@ -566,8 +566,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Amundi MSCI Emerging Markets Swap UCITS ETF EUR Acc"
   },
   "DBXJ": {
     "type": "etf",
@@ -576,8 +576,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Xtrackers MSCI Japan UCITS ETF 1C"
   },
   "XUCD": {
     "type": "etf",
@@ -587,7 +587,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "Xtrackers MSCI USA Consumer Discretionary UCITS ETF 1D"
   },
   "IS3Q": {
     "type": "etf",
@@ -597,7 +597,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "iShares Edge MSCI World Quality Factor UCITS ETF USD (Acc)"
   },
   "EXW1": {
     "type": "etf",
@@ -607,7 +607,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": "iShares EURO STOXX 50 (DE)"
+    "long_name": "iShares EURO STOXX 50 UCITS ETF (DE)"
   },
   "EXI2": {
     "type": "etf",
@@ -616,8 +616,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "DE",
+    "long_name": "iShares Dow Jones Global Titans 50 UCITS ETF (DE)"
   },
   "XDWT": {
     "type": "etf",
@@ -627,7 +627,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "Xtrackers MSCI World Information Technology UCITS ETF 1C"
   },
   "IUSU": {
     "type": "etf",
@@ -637,7 +637,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "iShares S&P 500 Utilities Sector UCITS ETF USD (Acc)"
   },
   "IBCD": {
     "type": "etf",
@@ -647,7 +647,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": "iShares iBonds Mar 2020 Term Corporate ex-Financials ETF"
+    "long_name": "iShares iBonds Mar 2020 Term Corporate ex-Financials UCITS ETF"
   },
   "VWCE": {
     "type": "etf",
@@ -657,7 +657,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "Vanguard FTSE All-World UCITS ETF (USD) Accumulating"
   },
   "TSLA": {
     "type": "stock",
@@ -726,8 +726,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Amundi MSCI Emerging Markets Latin America UCITS ETF EUR (C)"
   },
   "79U0": {
     "type": "etf",
@@ -737,7 +737,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "iShares Core MSCI World UCITS ETF USD (Acc)"
   },
   "LEMA": {
     "type": "etf",
@@ -746,8 +746,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Amundi Core MSCI Emerging Markets Swap UCITS ETF Acc"
   },
   "LYP6": {
     "type": "etf",
@@ -756,8 +756,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Amundi Core Stoxx Europe 600 UCITS ETF Acc"
   },
   "PRAJ": {
     "type": "etf",
@@ -766,8 +766,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Amundi Prime Japan UCITS ETF DR (C)"
   },
   "EBUY": {
     "type": "etf",
@@ -776,8 +776,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Amundi MSCI Digital Economy UCITS ETF Acc"
   },
   "LYMS": {
     "type": "etf",
@@ -786,8 +786,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Amundi Core Nasdaq-100 Swap UCITS ETF Acc"
   },
   "XDWI": {
     "type": "etf",
@@ -797,7 +797,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "Xtrackers MSCI World Industrials UCITS ETF 1C"
   },
   "2B72": {
     "type": "etf",
@@ -807,7 +807,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "iShares MSCI Europe Mid Cap UCITS ETF EUR (Acc)"
   },
   "WELK": {
     "type": "etf",
@@ -817,7 +817,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "Amundi S&P World Financials Screened UCITS ETF Acc"
   },
   "LYP5": {
     "type": "etf",
@@ -826,8 +826,8 @@
     "merged_into": null,
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": ""
+    "domicile": "LU",
+    "long_name": "Amundi Core S&P 500 Swap UCITS ETF Acc"
   },
   "UBUD": {
     "type": "etf",
@@ -837,7 +837,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "UBS Solactive Global Pure Gold Miners UCITS ETF USD Dis"
   },
   "LGQK": {
     "type": "etf",
@@ -847,7 +847,7 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": ""
+    "long_name": "iShares MSCI World SRI UCITS ETF EUR (Acc)"
   },
   "VSNT": {
     "type": "stock",

@@ -1,71 +1,91 @@
-#!/usr/bin/env python3
-"""Backfill long_name for all existing tickers in data/ticker_cache.json.
+"""Backfill long_name and correct domicile for all unresolvable tickers.
 
-Run this once to augment all current cache entries with long_name.
-Usage: python scripts/backfill_long_names.py
+Based on web research conducted 17 May 2026.
+Run from project root: python scripts/backfill_long_names.py
 """
-
 import json
-import os
-import sys
-import time
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+CACHE_PATH = "data/ticker_cache.json"
 
-import yfinance as yf
+# Ticker resolutions: (long_name, domicile correction if needed)
+# None for domicile means keep existing
+RESOLUTIONS = {
+    # --- Stocks with empty long_name ---
+    "ERJ": ("Embraer S.A.", None),
+    "BRK.B": ("Berkshire Hathaway Inc.", None),
+    "DHER": ("Delivery Hero SE", None),
+    "ZAL": ("Zalando SE", None),
+    "MBG": ("Mercedes-Benz Group AG", None),
+    "VOW3": ("Volkswagen AG (Vorzugsaktien)", None),
+    "TWTR": ("Twitter, Inc.", None),
+    "CLDR": ("Cloudera, Inc.", None),
+    "CBLAQ": ("CBL & Associates Properties, Inc.", None),
+    "HTZGQ": ("Hertz Global Holdings, Inc.", None),
+    "HTZZW": ("Hertz Global Holdings, Inc. Warrants", None),
 
-CACHE_FILE = "data/ticker_cache.json"
-
-
-def load_cache():
-    if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE) as f:
-            return json.load(f)
-    return {}
-
-
-def save_cache(cache):
-    with open(CACHE_FILE, "w") as f:
-        json.dump(cache, f, indent=2)
+    # --- ETFs with empty long_name ---
+    "QDVY": ("iShares $ Floating Rate Bond UCITS ETF USD Dist", None),
+    "36BZ": ("iShares MSCI China A UCITS ETF USD (Acc)", None),
+    "IS3K": ("iShares $ Short Duration High Yield Corp Bond UCITS ETF USD (Dist)", None),
+    "AMEM": ("Amundi MSCI Emerging Markets Swap UCITS ETF EUR Acc", "LU"),
+    "DBXJ": ("Xtrackers MSCI Japan UCITS ETF 1C", "LU"),
+    "XUCD": ("Xtrackers MSCI USA Consumer Discretionary UCITS ETF 1D", None),
+    "IS3Q": ("iShares Edge MSCI World Quality Factor UCITS ETF USD (Acc)", None),
+    "XDWT": ("Xtrackers MSCI World Information Technology UCITS ETF 1C", None),
+    "IUSU": ("iShares S&P 500 Utilities Sector UCITS ETF USD (Acc)", None),
+    "VWCE": ("Vanguard FTSE All-World UCITS ETF (USD) Accumulating", None),
+    "AMEL": ("Amundi MSCI Emerging Markets Latin America UCITS ETF EUR (C)", "LU"),
+    "79U0": ("iShares Core MSCI World UCITS ETF USD (Acc)", None),
+    "LEMA": ("Amundi Core MSCI Emerging Markets Swap UCITS ETF Acc", "LU"),
+    "LYP6": ("Amundi Core Stoxx Europe 600 UCITS ETF Acc", "LU"),
+    "PRAJ": ("Amundi Prime Japan UCITS ETF DR (C)", "LU"),
+    "EBUY": ("Amundi MSCI Digital Economy UCITS ETF Acc", "LU"),
+    "LYMS": ("Amundi Core Nasdaq-100 Swap UCITS ETF Acc", "LU"),
+    "XDWI": ("Xtrackers MSCI World Industrials UCITS ETF 1C", None),
+    "2B72": ("iShares MSCI Europe Mid Cap UCITS ETF EUR (Acc)", None),
+    "WELK": ("Amundi S&P World Financials Screened UCITS ETF Acc", None),
+    "LYP5": ("Amundi Core S&P 500 Swap UCITS ETF Acc", "LU"),
+    "UBUD": ("UBS Solactive Global Pure Gold Miners UCITS ETF USD Dis", None),
+    "LGQK": ("iShares MSCI World SRI UCITS ETF EUR (Acc)", None),
+    "EXI2": ("iShares Dow Jones Global Titans 50 UCITS ETF (DE)", "DE"),
+    "EUNA": ("iShares STOXX Europe 50 UCITS ETF EUR Dist", None),
+    "IQQC": ("iShares China Large Cap UCITS ETF USD Dist", None),
+    "EXW1": ("iShares EURO STOXX 50 UCITS ETF (DE)", None),
+    "IBCD": ("iShares iBonds Mar 2020 Term Corporate ex-Financials UCITS ETF", None),
+    "IBCC": ("iShares iBonds Mar 2018 Term Corporate ex-Financials UCITS ETF", None),
+}
 
 
 def main():
-    cache = load_cache()
-    if not cache:
-        print("No cache entries found.")
-        return
+    with open(CACHE_PATH) as f:
+        cache = json.load(f)
 
-    updated = 0
-    skipped = 0
-    errors = 0
+    updated = []
+    for ticker, (long_name, new_domicile) in sorted(RESOLUTIONS.items()):
+        if ticker in cache:
+            entry = cache[ticker]
+            old_name = entry.get("long_name", "")
+            old_dom = entry.get("domicile", "")
+            entry["long_name"] = long_name
+            if new_domicile:
+                entry["domicile"] = new_domicile
+            updated.append((ticker, old_name, old_dom, long_name, new_domicile or old_dom))
+        else:
+            print(f"  WARNING: {ticker} not found in cache!")
 
-    for symbol, info in cache.items():
-        # Skip if long_name already present
-        if info.get("long_name"):
-            skipped += 1
-            continue
+    with open(CACHE_PATH, "w") as f:
+        json.dump(cache, f, indent=2)
+        f.write("\n")
 
-        print(f"Fetching long name for {symbol}...", end=" ")
-        try:
-            yf_ticker = yf.Ticker(symbol)
-            yf_info = yf_ticker.info
-            long_name = yf_info.get("longName") or yf_info.get("shortName") or ""
-            if long_name:
-                cache[symbol]["long_name"] = long_name
-                updated += 1
-                print(long_name)
-            else:
-                cache[symbol]["long_name"] = ""
-                print("(empty)")
-                updated += 1
-            # Be nice to yfinance rate limits
-            time.sleep(0.5)
-        except Exception as e:
-            print(f"Error: {e}")
-            errors += 1
-
-    save_cache(cache)
-    print(f"\nDone. Updated: {updated}, Skipped: {skipped}, Errors: {errors}")
+    print(f"Updated {len(updated)} tickers in {CACHE_PATH}")
+    print()
+    for ticker, old_name, old_dom, new_name, new_dom in updated:
+        changed = []
+        if old_name != new_name:
+            changed.append(f"name: '{old_name}' → '{new_name}'")
+        if old_dom != new_dom:
+            changed.append(f"domicile: {old_dom} → {new_dom}")
+        print(f"  {ticker}: {'; '.join(changed)}")
 
 
 if __name__ == "__main__":

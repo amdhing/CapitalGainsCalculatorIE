@@ -248,9 +248,10 @@ class TestFix2DeemedDisposalAwareness:
         
         # Deemed disposal gains should appear in summary
         dd_gains = results['summary']['etfs']['deemed_disposal_gains']
-        current_year = datetime.now().year
-        assert current_year in dd_gains
-        assert dd_gains[current_year] > 0
+        # 2016-01-01 purchase -> 8-year anniversary is 2024
+        assert 2024 in dd_gains
+        assert dd_gains[2024] > 0
+        assert dd_gains[2024] == 2000.0
     
     def test_final_sale_after_deemed_disposal(self):
         """

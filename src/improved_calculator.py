@@ -127,7 +127,13 @@ class ImprovedCapitalGainsCalculator:
         return ticker_info.get('domicile', 'Unknown')
     
     def calculate_deemed_disposal_liability(self, ticker, buy_transactions, current_date=None):
-        """Calculate deemed disposal tax liability for ETFs (8-year rule)"""
+        """Calculate deemed disposal tax liability for ETFs (8-year rule)
+        
+        Returns:
+            total_taxable_gain (float): Total deemed gain across all triggers
+            tax_liability (float): Total tax due on deemed gains (at current year rate)
+            deemed_disposals (list): Each entry includes taxable_gain and deemed_year
+        """
         if not self.is_etf(ticker):
             return 0, 0, []
         
@@ -155,13 +161,21 @@ class ImprovedCapitalGainsCalculator:
                 estimated_current_value = cost_basis * 1.2
                 taxable_gain = estimated_current_value - cost_basis
                 
+                # Calculate the most recent 8-year anniversary year for this buy.
+                # Deemed disposal is a chargeable event every 8 years on the anniversary.
+                # We attribute the gain to that specific year so it stays fixed,
+                # rather than floating to the current year each time.
+                cycles_completed = int(years_held // 8)
+                deemed_year = purchase_date.year + cycles_completed * 8
+                
                 deemed_disposals.append({
                     'ticker': ticker,
                     'purchase_date': purchase_date,
                     'years_held': years_held,
                     'cost_basis': cost_basis,
                     'estimated_value': estimated_current_value,
-                    'taxable_gain': taxable_gain
+                    'taxable_gain': taxable_gain,
+                    'deemed_year': deemed_year
                 })
                 total_taxable_gain += taxable_gain
         
@@ -527,9 +541,14 @@ class ImprovedCapitalGainsCalculator:
             # Calculate deemed disposal liability for ETFs
             if is_etf and results['ticker_detail'][ticker]['buy_transactions']:
                 buy_df = pd.DataFrame(results['ticker_detail'][ticker]['buy_transactions'])
-                taxable_gain, tax_liability, _ = self.calculate_deemed_disposal_liability(ticker, buy_df)
+                taxable_gain, tax_liability, deemed_disposals = self.calculate_deemed_disposal_liability(ticker, buy_df)
                 results['ticker_detail'][ticker]['deemed_disposal_liability'] = tax_liability
-                if taxable_gain > 0:
+                # Attribute each deemed disposal to its 8-year anniversary year
+                for dd in deemed_disposals:
+                    deemed_year = dd['deemed_year']
+                    results['summary']['etfs']['deemed_disposal_gains'][deemed_year] += dd['taxable_gain']
+                # Fallback for backward compatibility if deemed_disposals is empty but taxable_gain > 0
+                if taxable_gain > 0 and not deemed_disposals:
                     current_year = datetime.now().year
                     results['summary']['etfs']['deemed_disposal_gains'][current_year] += taxable_gain
             

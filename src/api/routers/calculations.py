@@ -107,6 +107,8 @@ async def calculate(request: CalculateRequest):
         all_years = set()
         for asset_type in results["summary"].values():
             all_years.update(asset_type["realized_gains"].keys())
+            all_years.update(asset_type["dividends"].keys())
+            all_years.update(asset_type.get("deemed_disposal_gains", {}).keys())
 
         accumulated_losses = 0
         tax_summary = []
@@ -170,10 +172,10 @@ async def calculate(request: CalculateRequest):
         for ptp in request.prior_tax_paid:
             prior_lookup[(ptp.year, ptp.asset_type)] = ptp.amount_eur
 
-        # Convert to ordered list
         for year in sorted(tax_lines):
             sl = tax_lines[year]["stock"]
             stock_already = prior_lookup.get((year, "Stocks"), 0.0)
+            stock_net_due = sl["tax"] - stock_already
             tax_summary.append(
                 TaxLine(
                     year=year,
@@ -185,7 +187,7 @@ async def calculate(request: CalculateRequest):
                     tax_rate="33%",
                     tax_liability_eur=sl["tax"],
                     already_paid_eur=stock_already,
-                    net_due_eur=max(0, sl["tax"] - stock_already),
+                    net_due_eur=stock_net_due,
                     losses_carried_forward_eur=sl["loss_cf"],
                     dividends_irish_eur=sl["div_irish"],
                     dividends_foreign_eur=sl["div_foreign"],
@@ -195,6 +197,7 @@ async def calculate(request: CalculateRequest):
             etf_already = prior_lookup.get((year, "ETFs"), 0.0)
             exit_rate = get_etf_exit_tax_rate(year)
             etf_rate_display = f"{int(exit_rate * 100)}%"
+            etf_net_due = el["tax"] - etf_already
             tax_summary.append(
                 TaxLine(
                     year=year,
@@ -204,9 +207,12 @@ async def calculate(request: CalculateRequest):
                     tax_rate=etf_rate_display,
                     tax_liability_eur=el["tax"],
                     already_paid_eur=etf_already,
-                    net_due_eur=max(0, el["tax"] - etf_already),
+                    net_due_eur=etf_net_due,
+                    deemed_disposal_eur=float(etf_deemed),
+                    deemed_already_paid_eur=0.0,
                 )
             )
+
 
         # Per-ticker breakdown
         ticker_breakdown = []
@@ -226,7 +232,9 @@ async def calculate(request: CalculateRequest):
                     "currency": ticker_cache.get(ticker, {}).get("currency", "EUR"),
                 }
             info = resolved_info[ticker]
-            for yr in td["realized_gains"]:
+            # Collect years from realized gains AND dividends (dividends-only years were being missed)
+            ticker_years = set(td["realized_gains"].keys()) | set(td["dividends"].keys())
+            for yr in sorted(ticker_years):
                 ticker_breakdown.append(
                     TickerBreakdown(
                         year=yr,

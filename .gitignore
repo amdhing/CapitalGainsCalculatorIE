@@ -19,5 +19,9 @@ ticker_cache.json
 irish_tax_report_*.csv
 .python-version
 
+# Frontend build output
+frontend/dist/
+
+
 # Personal sample files (keep local, don't commit)
 samples/revolut_*

@@ -191,6 +191,7 @@ def calculate_dividend_income_tax(dividend_income, margin_rate, irish_dividends,
 
 
 def format_currency_display(amount, currency):
+
     """Format amount with appropriate currency symbol."""
     if currency == 'EUR':
         return f"€{amount:.2f}"

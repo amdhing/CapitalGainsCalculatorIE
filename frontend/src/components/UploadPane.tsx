@@ -77,7 +77,27 @@ export default function UploadPane({ onResults, onLoading, onError }: Props) {
 
   return (
     <Stack>
+      {/* How-to instructions card */}
+      <Card withBorder shadow="sm" p="lg" bg="dark.7">
+        <Stack gap="xs">
+          <Text fw={600} size="lg">How to use this calculator</Text>
+          <Text size="sm">
+            <strong>1.</strong> Export your transaction history from your broker (e.g. Revolut, Trading 212, Degiro) as CSV or Excel.
+          </Text>
+          <Text size="sm">
+            <strong>2.</strong> Upload the file below. The calculator will process buys, sells, and dividends automatically.
+          </Text>
+          <Text size="sm">
+            <strong>3.</strong> Set your marginal income tax rate (20%, 40%, or 45%) — this is used for dividend tax calculations.
+          </Text>
+          <Text size="sm">
+            <strong>4.</strong> Review the results: Stock CGT (33%), ETF exit tax (41% up to 2025, 38% from 2026), and dividend tax. You can adjust "Already Paid" amounts per year and recalculate.
+          </Text>
+        </Stack>
+      </Card>
+
       {/* Upload card — collapsible after calculation */}
+
       <Card withBorder shadow="sm" p="lg">
         <Group
           justify="space-between"

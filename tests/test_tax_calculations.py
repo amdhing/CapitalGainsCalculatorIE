@@ -29,6 +29,7 @@ from tax_calculations import (
 
 
 # ==============================================================================
+
 # ETF Exit Tax Rate
 # ==============================================================================
 
@@ -347,7 +348,9 @@ class TestCalculateDividendIncomeTax:
 # Formatting helpers
 # ==============================================================================
 
+
 class TestFormatCurrencyDisplay:
+
     def test_eur(self):
         assert format_currency_display(1234.50, "EUR") == "€1234.50"
 

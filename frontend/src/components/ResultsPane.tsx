@@ -3,7 +3,7 @@ import {
   Card, Text, Table, Stack, Title, Group, Badge, Select, Radio,
   Pagination, Tooltip, NumberInput, Button,
 } from '@mantine/core';
-import { IconHelpCircle, IconRefresh } from '@tabler/icons-react';
+import { IconHelpCircle, IconRefresh, IconChevronUp, IconChevronDown } from '@tabler/icons-react';
 import { CalculateResponse, PriorTaxPaid } from '../api/client';
 
 interface Props {
@@ -48,6 +48,19 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
     setPriorAmounts((prev) => ({ ...prev, [key]: value }));
   };
 
+  // --- Deemed disposal paid state (ETF rows only) ---
+  const [deemedPaidAmounts, setDeemedPaidAmounts] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {};
+    for (const row of etfRows) {
+      initial[`${row.year}-ETFs`] = row.deemed_already_paid_eur;
+    }
+    return initial;
+  });
+
+  const handleDeemedPaidChange = (key: string, value: number) => {
+    setDeemedPaidAmounts((prev) => ({ ...prev, [key]: value }));
+  };
+
   const handleRecalculate = async () => {
     const priorTaxPaid: PriorTaxPaid[] = [];
     for (const [key, amount] of Object.entries(priorAmounts)) {
@@ -83,6 +96,20 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
   const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
   const [page, setPage] = useState(1);
 
+  // --- Sort state for per-ticker breakdown ---
+  type SortColumn = 'gain' | 'dividends' | null;
+  const [sortColumn, setSortColumn] = useState<SortColumn>(null);
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+
+  const toggleSort = (col: SortColumn) => {
+    if (sortColumn === col) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortColumn(col);
+      setSortDir('desc');
+    }
+  };
+
   const filteredBreakdown = useMemo(() => {
     let rows = [...ticker_breakdown];
     if (filterMode === 'year' && selectedYear) {
@@ -90,8 +117,14 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
     } else if (filterMode === 'ticker' && selectedTicker) {
       rows = rows.filter((r) => r.ticker === selectedTicker);
     }
+    // Apply sorting
+    if (sortColumn === 'gain') {
+      rows.sort((a, b) => sortDir === 'asc' ? a.realized_gains_eur - b.realized_gains_eur : b.realized_gains_eur - a.realized_gains_eur);
+    } else if (sortColumn === 'dividends') {
+      rows.sort((a, b) => sortDir === 'asc' ? a.dividends_eur - b.dividends_eur : b.dividends_eur - a.dividends_eur);
+    }
     return rows;
-  }, [ticker_breakdown, filterMode, selectedYear, selectedTicker]);
+  }, [ticker_breakdown, filterMode, selectedYear, selectedTicker, sortColumn, sortDir]);
 
   const pageCount = Math.max(1, Math.ceil(filteredBreakdown.length / ROWS_PER_PAGE));
   const paginatedRows = filteredBreakdown.slice(
@@ -128,6 +161,7 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
                 <Table.Th>Already Paid</Table.Th>
                 <Table.Th>Net Due</Table.Th>
                 <Table.Th>Loss CF</Table.Th>
+
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -155,8 +189,10 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
                     </Table.Td>
                     <Table.Td fw={700} c={r.net_due_eur > 0 ? 'red' : 'green'}>
                       {fmt(r.net_due_eur, 'EUR')}
+                      {r.net_due_eur < 0 && <Text span size="xs" c="dimmed" ml={4}>(refund due)</Text>}
                     </Table.Td>
                     <Table.Td>{fmt(r.losses_carried_forward_eur, 'EUR')}</Table.Td>
+
                   </Table.Tr>
                 );
               })}
@@ -167,18 +203,21 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
 
       {etfRows.length > 0 && (
         <Card withBorder shadow="sm" p="lg">
-          <Title order={4}>ETF Exit Tax Summary</Title>
+          <Title order={4}>ETF Tax Summary</Title>
           <Table striped highlightOnHover>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Year</Table.Th>
                 <Table.Th>Gross</Table.Th>
                 <Table.Th>Taxable</Table.Th>
+                <Table.Th>Deemed</Table.Th>
+                <Table.Th>Deemed Pd</Table.Th>
                 <Table.Th>Rate</Table.Th>
                 <Table.Th>Tax Due</Table.Th>
                 <Table.Th>Already Paid</Table.Th>
                 <Table.Th>Net Due</Table.Th>
               </Table.Tr>
+
             </Table.Thead>
             <Table.Tbody>
               {etfRows.map((r, i) => {
@@ -188,6 +227,18 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
                     <Table.Td>{r.year}</Table.Td>
                     <Table.Td>{fmt(r.realized_gains_gross_eur, 'EUR')}</Table.Td>
                     <Table.Td>{fmt(r.taxable_gains_net_eur, 'EUR')}</Table.Td>
+                    <Table.Td>{fmt(r.deemed_disposal_eur, 'EUR')}</Table.Td>
+                    <Table.Td>
+                      <NumberInput
+                        value={deemedPaidAmounts[key] ?? 0}
+                        onChange={(v) => handleDeemedPaidChange(key, Number(v) || 0)}
+                        min={0}
+                        decimalScale={2}
+                        size="xs"
+                        w={90}
+                        hideControls
+                      />
+                    </Table.Td>
                     <Table.Td>{r.tax_rate}</Table.Td>
                     <Table.Td fw={700}>{fmt(r.tax_liability_eur, 'EUR')}</Table.Td>
                     <Table.Td>
@@ -202,8 +253,10 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
                       />
                     </Table.Td>
                     <Table.Td fw={700} c={r.net_due_eur > 0 ? 'red' : 'green'}>
-                      {fmt(r.net_due_eur, 'EUR')}
+                      {fmt(r.net_due_eur - (deemedPaidAmounts[key] ?? 0), 'EUR')}
+                      {(r.net_due_eur - (deemedPaidAmounts[key] ?? 0)) < 0 && <Text span size="xs" c="dimmed" ml={4}>(refund due)</Text>}
                     </Table.Td>
+
                   </Table.Tr>
                 );
               })}
@@ -280,8 +333,28 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
                 <Table.Th>Year</Table.Th>
                 <Table.Th>Ticker</Table.Th>
                 <Table.Th>Type</Table.Th>
-                <Table.Th>Gain</Table.Th>
-                <Table.Th>Div Total</Table.Th>
+                <Table.Th
+                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={() => toggleSort('gain')}
+                >
+                  <Group gap={4} wrap="nowrap">
+                    Gain
+                    {sortColumn === 'gain'
+                      ? (sortDir === 'asc' ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />)
+                      : null}
+                  </Group>
+                </Table.Th>
+                <Table.Th
+                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={() => toggleSort('dividends')}
+                >
+                  <Group gap={4} wrap="nowrap">
+                    Div Total
+                    {sortColumn === 'dividends'
+                      ? (sortDir === 'asc' ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />)
+                      : null}
+                  </Group>
+                </Table.Th>
                 <Table.Th>Div IE</Table.Th>
                 <Table.Th>Div Foreign</Table.Th>
               </Table.Tr>

@@ -35,6 +35,9 @@ export interface TaxLine {
   losses_carried_forward_eur: number;
   dividends_irish_eur: number;
   dividends_foreign_eur: number;
+  deemed_disposal_eur: number;
+  deemed_already_paid_eur: number;
+
 }
 
 export interface TickerBreakdown {

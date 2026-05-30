@@ -62,6 +62,9 @@ class TaxLine(BaseModel):
     losses_carried_forward_eur: float = 0.0
     dividends_irish_eur: float = 0.0
     dividends_foreign_eur: float = 0.0
+    deemed_disposal_eur: float = 0.0
+    deemed_already_paid_eur: float = 0.0
+
 
 
 class TickerBreakdown(BaseModel):

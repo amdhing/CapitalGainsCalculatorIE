@@ -1,141 +1,85 @@
 # 🇮🇪 Irish Capital Gains Calculator
 
-**A comprehensive Python tool for calculating Irish capital gains tax, ETF exit tax, and dividend income tax from Revolut trading transaction data.**
+**Calculate Irish capital gains tax, ETF exit tax, and dividend income tax from Revolut trading transaction data.** Available as a CLI tool and a web app (FastAPI + React).
 
-Perfect for Irish tax residents who need to calculate their annual tax obligations from stock and ETF trading. Handles complex scenarios like loss carry forward, mergers, multi-currency transactions, and the 8-year ETF deemed disposal rule.
-
-## 🎯 Why This Tool?
-
-Irish tax law is complex for investors:
-- **Stocks**: 33% capital gains tax with €1,270 exemption and indefinite loss carry forward
-- **ETFs**: 41% exit tax (up to 2025) / 38% (from 2026) on gains + dividends with 8-year deemed disposal
-- **Dividends**: Income tax at marginal rate with withholding tax credits
-- **Multi-currency**: FX conversions required for EUR reporting
-
-This calculator handles all these complexities automatically using your Revolut transaction exports.
+Handles complex scenarios like loss carry forward, mergers, multi-currency, and the 8-year ETF deemed disposal rule with proper Revenue.ie-compliant calculations.
 
 ## 🚀 Quick Start
 
+### CLI
 ```bash
-# Set up environment (one time only)
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-# Run with your Revolut export file
-python improved_calculator.py revolut_transactions.xlsx
-
-# Try the demo with sample data
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
 python improved_calculator.py samples/sample_revolut_transactions.csv
 ```
 
+### Web App
+```bash
+# Terminal 1 — backend
+cd src/api && uvicorn main:app --reload --port 8000
+# Terminal 2 — frontend
+cd frontend && npm install && npm run dev
+```
+Open `http://localhost:5173`
+
 ## 📚 Documentation
 
-- **📖 [Full Documentation](docs/README.md)** - Complete user guide and features
-- **📊 [Sample Output](docs/SAMPLE_OUTPUT.md)** - See example calculator output
-- **📋 [Technical Specification](docs/project_spec.md)** - Implementation details
+| Document | What it covers |
+|----------|----------------|
+| **[📖 User Guide](docs/README.md)** | Full CLI & web app usage, input format, tax rules, advanced features, troubleshooting |
+| **[📊 Sample Output](docs/SAMPLE_OUTPUT.md)** | Example console output with Deemed/Deemed Pd columns |
+| **[📋 Technical Spec](docs/project_spec.md)** | Architecture, API models, project structure |
+| **[📜 Tax Rules Spec](docs/tax_rules_spec.md)** | ETF exit tax rules, implementation status |
+| **[🔮 Future Direction](docs/design/future_direction.md)** | Product roadmap, design principles |
+| **[🏗️ Contributing](CONTRIBUTING.md)** | How to contribute, dev setup, PR process |
 
 ## 🏗️ Project Structure
 
 ```
 CapitalGainsCalculatorIE/
-├── improved_calculator.py        # Main entry point (CLI)
-├── requirements.txt              # Python dependencies
-├── LICENSE                       # CC BY-NC-SA 4.0 License
-├── .gitignore                    # Git ignore patterns
-├── scripts/                      # Utility scripts
-│   └── backfill_long_names.py    # Backfill ticker names from yfinance
-├── src/                          # Source code
+├── improved_calculator.py        # CLI entry point
+├── src/                          # Python source
 │   ├── improved_calculator.py    # Core calculator logic
 │   ├── tax_calculations.py       # Irish tax functions
-│   └── ticker_utils.py           # Ticker utilities (cache + yfinance)
-├── data/                         # Data files
-│   └── ticker_cache.json         # Ticker classification cache
-├── docs/                         # Documentation
-│   ├── README.md                 # Full user guide
-│   ├── project_spec.md           # Technical specification
-│   └── SAMPLE_OUTPUT.md          # Example output
-├── samples/                      # Sample transaction files
-│   └── sample_revolut_transactions.csv  # Anonymized demo data
-└── tests/                        # Unit tests
-    ├── test_tax_rules.py
-    └── test_calculator_integration.py
+│   ├── ticker_utils.py           # Ticker cache + yfinance
+│   └── api/                      # FastAPI backend
+│       ├── main.py, models.py, db.py
+│       └── routers/calculations.py, tickers.py
+├── frontend/                     # React (Mantine UI) web app
+│   └── src/
+│       ├── App.tsx, main.tsx
+│       ├── api/client.ts
+│       └── components/UploadPane, ResultsPane, HowToGuide
+├── data/ticker_cache.json        # Ticker classification cache
+├── docs/                         # All documentation
+├── samples/                      # Sample Revolut transaction data
+└── tests/                        # 143 unit tests
 ```
 
 ## ✨ Key Features
 
 - **Irish Tax Compliance**: 33% CGT on stocks, 41%/38% exit tax on ETFs
-- **FIFO Accounting**: Proper cost basis calculation across multiple years
-- **Loss Carry Forward**: Indefinite carry forward for stock losses
-- **Smart Classification**: Auto-detects stocks vs ETFs using yfinance API
-- **Multi-currency**: Converts everything to EUR using your FX rates
-- **Complex Scenarios**: Handles mergers, inactive stocks, broker transfers
+- **FIFO Accounting**: Proper cost basis across multiple years
+- **Loss Carry Forward**: Indefinite for stock losses (Irish law compliant)
+- **Deemed Disposal**: 8-year rule with per-anniversary-year attribution
+- **Prior Tax Paid**: Editable inputs for already-paid and deemed-paid amounts
+- **Smart Classification**: Auto-detects stocks vs ETFs via yfinance API
+- **Multi-currency**: Converts to EUR using your FX rates
+- **Web App**: Interactive tax tables, per-ticker filtering, recalculate with prior tax
 
-## 🔧 Usage Examples
+## 🧪 Tests
 
 ```bash
-# Basic calculation (with Revolut export file)
-python improved_calculator.py revolut_transactions.xlsx
-
-# Multiple years with CSV export
-python improved_calculator.py revolut_2022.xlsx revolut_2023.xlsx revolut_2024.xlsx --csv
-
-# With dividend tax at your marginal rate
-python improved_calculator.py revolut_transactions.xlsx --margin-rate 40
-
-# Analyze specific ticker in detail
-python improved_calculator.py revolut_transactions.xlsx --ticker VWCE
-
-# Try with sample Revolut-format data
-python improved_calculator.py samples/sample_revolut_transactions.csv
+python -m pytest tests/ -v
 ```
-
-## 📋 Input Format (Revolut Transaction Export)
-
-**Note**: This calculator is specifically designed and tested with Revolut transaction exports. Other brokers may have different formats.
-
-Your Revolut Excel/CSV export needs these columns:
-- **Date**: Transaction date
-- **Ticker**: Stock/ETF symbol (AAPL, VWCE, etc.)
-- **Type**: BUY, SELL, DIVIDEND, etc.
-- **Quantity**: Number of shares
-- **Price per share**: In original currency
-- **Total Amount**: Total transaction value
-- **Currency**: EUR, USD, etc.
-- **FX Rate**: Exchange rate to EUR
-
-## 🇮🇪 Irish Tax Rules Implemented
-
-- **Stock CGT**: 33% rate with €1,270 annual exemption and indefinite loss carry forward
-- **ETF Exit Tax**: 41% (up to 2025) / 38% (from 2026) on gains and dividends, 8-year deemed disposal rule
-- **Dividend Tax**: Income tax at marginal rate with withholding tax credits
-
-## 📋 Requirements
-
-- Python 3.9+
-- Dependencies: pandas, openpyxl, numpy, yfinance
-- Works on macOS, Linux, Windows
 
 ## 🤝 Contributing
 
-Contributions are welcome! This project uses the Creative Commons BY-NC-SA 4.0 license which allows:
-- ✅ Contributions and improvements
-- ✅ Personal and educational use
-- ❌ Commercial use
+See [CONTRIBUTING.md](CONTRIBUTING.md) for bug reports, feature requests, and pull request guidelines.
 
 ## 📜 License
 
-This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License**.
-
-- ✅ You can use, modify, and share this software
-- ✅ You can contribute improvements back to the project
-- ❌ You cannot use this software for commercial purposes
-- 📄 See [LICENSE](LICENSE) file for full details
+[CC BY-NC-SA 4.0](LICENSE) — personal and educational use permitted, commercial use prohibited.
 
 ## ⚖️ Legal Notice
 
 This tool calculates taxes based on Irish Revenue guidelines. Always verify with a qualified tax advisor before filing. For educational and personal use only.
-
----
-
-Built for Irish residents trading through modern brokers 🇮🇪

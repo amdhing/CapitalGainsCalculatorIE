@@ -50,11 +50,18 @@ Year 10: Sell €13,000 → Remaining gain €1,000 → Tax @ 38% = €380
   - Foreign dividends: 15% withholding credit (US treaty rate)
 - **ETF dividends**: Taxed at exit tax rate (41%/38%), not income tax
 
-## 5. Current Implementation Gaps
+## 5. Current Implementation Status
 
-| Priority | Gap | Impact |
-|----------|-----|--------|
-| 🔴 High | ETF losses offset gains across tickers | Understates tax liability |
-| 🔴 High | No cost basis uplift after deemed disposal | Overstates final sale gain |
-| 🟡 Medium | Deemed disposal uses 20% placeholder gain | Inaccurate liability estimate |
-| 🟡 Medium | No per-lot deemed disposal tracking | Affects partial sells |
+| Priority | Gap | Impact | Status |
+|----------|-----|--------|--------|
+| 🔴 High | ETF losses offset gains across tickers | Understates tax liability | ✅ **FIXED** — Each ticker taxed independently via `calculate_etf_exit_tax_per_ticker()` |
+| 🔴 High | No cost basis uplift after deemed disposal | Overstates final sale gain | ⏳ **Still open** — Deemed disposal calculated but no cost basis uplift on the lots |
+| 🟡 Medium | Deemed disposal uses 20% placeholder gain | Inaccurate liability estimate | ⏳ **Still open** — Needs current market value lookup |
+| 🟡 Medium | No per-lot deemed disposal tracking | Affects partial sells | ⏳ **Still open** — Deemed disposal calculated at ticker level, not per-lot |
+| 🟢 Low | Deemed disposal year attribution | Liability in wrong year | ✅ **FIXED** — Gain attributed to anniversary year (purchase_date.year + cycles_completed × 8) |
+
+### Status Legend
+
+- ✅ **FIXED** — Issue has been resolved in current codebase
+- ⏳ **Still open** — Known limitation, tracked for future improvement
+- 🟢 Low / 🟡 Medium / 🔴 High — Priority for resolution

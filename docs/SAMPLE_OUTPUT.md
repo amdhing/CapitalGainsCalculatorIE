@@ -83,14 +83,14 @@ IRISH TAX SUMMARY FOR 2024:
   Dividends (Foreign):        €   92.34
 
 --- ETFs (Exit Tax @ 41%) ---
-  VWCE     | Gain: €  156.78 | Div: € 23.45 | Deemed: €  0.00 | Taxable: €  180.23 | Exit Tax: €   73.89
-  IWDA     | Gain: €   78.45 | Div: € 12.67 | Deemed: €  0.00 | Taxable: €   91.12 | Exit Tax: €   37.36
-  EUNL     | Gain: €   -0.67 | Div: €  9.66 | Deemed: €  0.00 | Taxable: €    8.99 | Exit Tax: €    3.69
+  VWCE     | Gain: €  156.78 | Div: € 23.45 | Deemed: €   89.34 | Taxable: €  269.57 | Exit Tax: €  110.52
+  IWDA     | Gain: €   78.45 | Div: € 12.67 | Deemed: €    0.00 | Taxable: €   91.12 | Exit Tax: €   37.36
+  EUNL     | Gain: €   -0.67 | Div: €  9.66 | Deemed: €    0.00 | Taxable: €    8.99 | Exit Tax: €    3.69
   ------------------------------------------------------------------------
-  TOTAL    |                   |        |        | Total Taxable: €  280.34 | Exit Tax: €  114.94
+  TOTAL    |                   |        |        | Total Taxable: €  369.68 | Exit Tax: €  151.57
 
 --- TOTAL TAX LIABILITY ---
-  Total Tax Due:              €  267.12
+  Total Tax Due:              €  303.75
 
 --- DIVIDEND INCOME TAX FOR 2024 ---
   Gross Dividend Income:      €   92.34
@@ -124,8 +124,8 @@ STOCKS:
   CRM      | Realized: €  -267.48 | Dividends: €  0.00
 
 ETFs:
-  VWCE     | Realized: €  156.78 | Dividends: € 23.45 | Exit Tax: €73.87
-  IWDA     | Realized: €   78.45 | Dividends: € 12.67 | Exit Tax: €37.32
+  VWCE     | Realized: €  156.78 | Dividends: € 23.45 | Exit Tax: €110.52
+  IWDA     | Realized: €   78.45 | Dividends: € 12.67 | Exit Tax: €37.36
   EUNL     | Realized: €   -0.67 | Dividends: €  9.66 | Exit Tax: €3.69
 
 ==================== CURRENT HOLDINGS & TAX IMPLICATIONS ====================
@@ -145,11 +145,15 @@ CURRENT STOCK HOLDINGS (Subject to CGT @ 33%):
   T        | Shares:    48.90 | Avg Cost: $ 18.67
 
 CURRENT ETF HOLDINGS (Subject to Exit Tax @ 41%):
-  VWCE     | Shares:   125.50 | Avg Cost: € 89.45
+  VWCE     | Shares:   125.50 | Avg Cost: € 89.45 | Deemed Liability: €89.34
   IWDA     | Shares:    89.75 | Avg Cost: € 67.89
   EUNL     | Shares:   156.80 | Avg Cost: € 45.67
   VXUS     | Shares:    78.40 | Avg Cost: $ 56.78
   VTI      | Shares:    45.60 | Avg Cost: $234.56
+
+--- DEEMED DISPOSAL LIABILITY (8-Year Rule) ---
+  Total Deemed Disposal Tax Due: €89.34
+  Note: This applies to ETF holdings over 8 years old
 
 Irish tax summary exported to: irish_tax_report_tax_summary.csv
 Ticker-level exported to: irish_tax_report_by_ticker.csv
@@ -161,12 +165,12 @@ Ticker-level exported to: irish_tax_report_by_ticker.csv
 
 **irish_tax_report_tax_summary.csv:**
 
-| Year | Asset_Type | Realized_Gains_Gross_EUR | CGT_Exemption_Applied_EUR | Carry_Forward_Loss_Used_EUR | Taxable_Gains_Net_EUR | Tax_Rate | Tax_Liability_EUR | Losses_Carried_Forward_EUR | Dividends_Irish_EUR | Dividends_Foreign_EUR |
-|------|------------|-------------------------|--------------------------|----------------------------|---------------------|----------|------------------|--------------------------|-------------------|---------------------|
-| 2023 | Stocks | -425.63 | 0.00 | 0.00 | 0.00 | 33% | 0.00 | 425.63 | 0.00 | 28.45 |
-| 2023 | ETFs | 0.00 | | | 0.00 | 41% | 0.00 | | | |
-| 2024 | Stocks | 2156.78 | 1270.00 | 425.63 | 461.15 | 33% | 152.18 | 0.00 | 0.00 | 92.34 |
-| 2024 | ETFs | 234.56 | | | 280.34 | 41% | 114.94 | | | |
+| Year | Asset_Type | Realized_Gains_Gross_EUR | CGT_Exemption_Applied_EUR | Carry_Forward_Loss_Used_EUR | Taxable_Gains_Net_EUR | Tax_Rate | Tax_Liability_EUR | Losses_Carried_Forward_EUR | Dividends_Irish_EUR | Dividends_Foreign_EUR | Deemed_Disposal_Gains_EUR |
+|------|------------|-------------------------|--------------------------|----------------------------|---------------------|----------|------------------|--------------------------|-------------------|---------------------|--------------------------|
+| 2023 | Stocks | -425.63 | 0.00 | 0.00 | 0.00 | 33% | 0.00 | 425.63 | 0.00 | 28.45 | |
+| 2023 | ETFs | 0.00 | | | 0.00 | 41% | 0.00 | | | | 0.00 |
+| 2024 | Stocks | 2156.78 | 1270.00 | 425.63 | 461.15 | 33% | 152.18 | 0.00 | 0.00 | 92.34 | |
+| 2024 | ETFs | 234.56 | | | 369.68 | 41% | 151.57 | | | | 89.34 |
 
 **irish_tax_report_by_ticker.csv:**
 
@@ -180,6 +184,22 @@ Ticker-level exported to: irish_tax_report_by_ticker.csv
 
 ---
 
+## Web App ETF Table Columns
+
+When using the web application, the ETF tax summary table includes these columns:
+
+| Year | Gross | Taxable | Deemed | Deemed Pd | Rate | Tax Due | Already Paid | Net Due |
+|------|-------|---------|--------|-----------|------|---------|-------------|---------|
+| 2024 | €234.56 | €369.68 | €89.34 | [input] | 41% | €151.57 | [input] | [computed] |
+| 2024 | €0.00 | €0.00 | €0.00 | [input] | 41% | €0.00 | [input] | [computed] |
+
+- **Deemed**: Deemed disposal gain attributed to this year (8-year rule)
+- **Deemed Pd**: Separate input for deemed disposal tax already paid
+- **Already Paid**: Prior exit tax already paid for this year/type
+- **Net Due**: tax_liability_eur - already_paid_eur - deemed_paid_amount
+
+---
+
 ## Key Features Demonstrated
 
 1. **Multi-year Processing**: Shows 2023 and 2024 data with proper FIFO accounting
@@ -188,7 +208,8 @@ Ticker-level exported to: irish_tax_report_by_ticker.csv
    - €1,270 annual CGT exemption applied
    - 33% CGT on stocks, 41% exit tax on ETFs
    - Dividend income tax with withholding credits
-4. **Professional Output**: Clean formatting ready for tax filing
-5. **CSV Export**: Structured data for accountants and tax advisors
+4. **Deemed Disposal**: 8-year rule applied with gain attributed to anniversary year
+5. **Professional Output**: Clean formatting ready for tax filing
+6. **CSV Export**: Structured data for accountants and tax advisors
 
-**Total Tax Due for 2024**: €267.12 (CGT + Exit Tax) + €23.09 (Additional dividend tax) = €290.21
+**Total Tax Due for 2024**: €303.75 (CGT + Exit Tax) + €23.09 (Additional dividend tax) = €326.84

@@ -1,0 +1,41 @@
+# <type>: <subject>
+#
+# Types:
+#   feat     New feature
+#   fix      Bug fix
+#   docs     Documentation only
+#   style    Formatting, whitespace (no code change)
+#   refactor Code change that neither fixes a bug nor adds a feature
+#   perf     Performance improvement
+#   test     Adding or fixing tests
+#   chore    Build, deps, config, CI (no production code change)
+#
+# Subject: imperative, ≤50 chars, lowercase, no period.
+#
+# Examples:
+#   feat: add prior tax paid input to ETF rows
+#   fix: handle timezone-naive datetimes in deemed disposal
+#   docs: add web app quick start to user guide
+#   refactor: extract etf exit tax into per-ticker function
+#   test: add integration test for deemed disposal year attribution
+#
+# ---
+#
+# If needed, add a body explaining what and why (wrap at 72 chars).
+# Use bullet points for multiple changes.
+#
+#   More detailed explanation of the change. Wrap lines at 72
+#   characters. Break logically between paragraphs.
+#
+#   - Bullet points are okay
+#   - Use present tense ("add" not "added")
+#   - Use imperative mood ("fix" not "fixed")
+#
+# ---
+#
+# Footer for breaking changes or issue references:
+#
+#   BREAKING CHANGE: description of what broke
+#   Closes #123, #456
+#   Related to #789
+#

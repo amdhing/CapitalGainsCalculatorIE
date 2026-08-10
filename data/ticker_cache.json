@@ -1,4 +1,37 @@
 {
+  "1N8": {
+    "type": "stock",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "NL",
+    "long_name": "Adyen NV",
+    "yfinance_ticker": "1N8.DE"
+  },
+  "LYTR": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "LU",
+    "long_name": "Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc",
+    "yfinance_ticker": "LYTR.DE"
+  },
+  "EFRW": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE",
+    "long_name": "iShares S&P 500 Equal Weight UCITS ETF EUR Hedged (Acc)",
+    "yfinance_ticker": "EFRW.DE"
+  },
   "UBER": {
     "type": "stock",
     "currency": "USD",
@@ -657,7 +690,8 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": "Vanguard FTSE All-World UCITS ETF (USD) Accumulating"
+    "long_name": "Vanguard FTSE All-World UCITS ETF (USD) Accumulating",
+    "yfinance_ticker": "VWCE.DE"
   },
   "TSLA": {
     "type": "stock",
@@ -867,5 +901,15 @@
     "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE"
+  },
+  "LKOR": {
+    "type": "etf",
+    "currency": "USD",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "US",
+    "long_name": "FlexShares Credit-Scored US Long Corporate Bond Index Fund"
   }
 }

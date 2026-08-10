@@ -50,14 +50,22 @@ Year 10: Sell €13,000 → Remaining gain €1,000 → Tax @ 38% = €380
   - Foreign dividends: 15% withholding credit (US treaty rate)
 - **ETF dividends**: Taxed at exit tax rate (41%/38%), not income tax
 
-## 5. Current Implementation Status
+## 5. Domicile-Based Dividend Classification
+
+The calculator uses ticker domicile to classify dividends:
+- `IE` → Irish dividend (25% DWT credit assumed)
+- All other domiciles → Foreign dividend (15% withholding credit assumed)
+
+**Known simplification:** Luxembourg-domiciled ETFs (domicile `LU`) are treated as Foreign dividends with 15% withholding, but in practice Luxembourg funds are tax-transparent with 0% withholding at fund level. This is a conservative overestimate — the actual tax credit due may be lower.
+
+## 6. Current Implementation Status
 
 | Priority | Gap | Impact | Status |
 |----------|-----|--------|--------|
 | 🔴 High | ETF losses offset gains across tickers | Understates tax liability | ✅ **FIXED** — Each ticker taxed independently via `calculate_etf_exit_tax_per_ticker()` |
-| 🔴 High | No cost basis uplift after deemed disposal | Overstates final sale gain | ⏳ **Still open** — Deemed disposal calculated but no cost basis uplift on the lots |
-| 🟡 Medium | Deemed disposal uses 20% placeholder gain | Inaccurate liability estimate | ⏳ **Still open** — Needs current market value lookup |
-| 🟡 Medium | No per-lot deemed disposal tracking | Affects partial sells | ⏳ **Still open** — Deemed disposal calculated at ticker level, not per-lot |
+| 🔴 High | No cost basis uplift after deemed disposal | Overstates final sale gain | ✅ **FIXED** — Per-lot `uplifted_cost_basis` applied on SELL; historical close prices from yfinance |
+| 🟡 Medium | Deemed disposal uses 20% placeholder gain | Inaccurate liability estimate | ✅ **FIXED** — Uses yfinance historical close on anniversary date; falls back to `.DE` suffix for EUR securities; logs `price_unavailable` to backlog on failure |
+| 🟡 Medium | No per-lot deemed disposal tracking | Affects partial sells | ✅ **FIXED** — Each buy lot tracks `deemed_years_applied` and `uplifted_cost_basis` |
 | 🟢 Low | Deemed disposal year attribution | Liability in wrong year | ✅ **FIXED** — Gain attributed to anniversary year (purchase_date.year + cycles_completed × 8) |
 
 ### Status Legend

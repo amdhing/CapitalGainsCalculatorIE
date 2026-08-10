@@ -7,12 +7,19 @@ export interface UploadResponse {
   preview: Record<string, unknown>[];
 }
 
+export interface DeemedDisposalError {
+  ticker: string;
+  year: number;
+  reason: string;
+}
+
 export interface CalculateResponse {
   calculation_id: string;
   tax_summary: TaxLine[];
   ticker_breakdown: TickerBreakdown[];
   total_tax_due_eur: number;
   console_output: string;
+  deemed_disposal_errors: DeemedDisposalError[];
 }
 
 export interface PriorTaxPaid {

@@ -4,6 +4,7 @@ import uuid
 import tempfile
 import json
 import os
+from datetime import datetime
 from pathlib import Path
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from src.api.models import (
@@ -234,6 +235,13 @@ async def calculate(request: CalculateRequest):
             info = resolved_info[ticker]
             # Collect years from realized gains AND dividends (dividends-only years were being missed)
             ticker_years = set(td["realized_gains"].keys()) | set(td["dividends"].keys())
+            # Also include buy-only tickers that have holdings but no realized gains yet
+            if not ticker_years and td.get("current_holdings", 0) > 0:
+                # Use the most recent buy year as a placeholder.
+                # Raw transaction Series use "Year" (capital Y).
+                buy_years = {int(tx.get("Year")) for tx in td.get("buy_transactions", [])
+                              if tx.get("Year") is not None and not pd.isna(tx.get("Year"))}
+                ticker_years = buy_years or {datetime.now().year}
             for yr in sorted(ticker_years):
                 ticker_breakdown.append(
                     TickerBreakdown(
@@ -267,6 +275,7 @@ async def calculate(request: CalculateRequest):
             ticker_breakdown=ticker_breakdown,
             total_tax_due_eur=total_tax,
             console_output="",
+            deemed_disposal_errors=results.get("deemed_disposal_errors", []),
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Calculation failed: {e}")

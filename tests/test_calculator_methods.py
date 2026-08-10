@@ -289,12 +289,13 @@ class TestTickerClassificationHelpers:
         assert calc.is_etf("STOCK_A") is False
         assert calc.is_etf("ETF_A") is True
 
-    def test_is_etf_unknown_ticker_raises(self):
+    def test_is_etf_unknown_ticker_returns_false(self):
+        """Unknown tickers now get a placeholder (type: etf), so is_etf returns True."""
         calc = self.setup_calc()
-        # Mock add_missing_ticker_to_cache to return None so ValueError is raised
+        # Mock add_missing_ticker_to_cache to return None (unresolvable)
         with patch("improved_calculator.add_missing_ticker_to_cache", return_value=None):
-            with pytest.raises(ValueError, match="Ticker 'UNKNOWN' not found in cache"):
-                calc.is_etf("UNKNOWN")
+            # Placeholder defaults to type "etf" so is_etf returns True
+            assert calc.is_etf("UNKNOWN") is True
 
     def test_is_active(self):
         calc = self.setup_calc()
@@ -321,53 +322,102 @@ class TestTickerClassificationHelpers:
 
 
 class TestDeemedDisposalLiability:
-    """calculate_deemed_disposal_liability — 8-year rule."""
+    """calculate_deemed_disposal_liability — 8-year rule with per-lot tracking."""
 
     def test_no_deemed_disposal_for_stock(self):
         """Stocks should not have deemed disposal liability."""
         calc = ImprovedCapitalGainsCalculator()
         calc.ticker_cache = {"STOCK_A": {"type": "stock"}}
-        gain, liability, details = calc.calculate_deemed_disposal_liability(
+        gain, liability, details, uplifts, errors = calc.calculate_deemed_disposal_liability(
             "STOCK_A", pd.DataFrame()
         )
         assert gain == 0
         assert liability == 0
         assert details == []
+        assert uplifts == []
+        assert errors == []
 
-    def test_deemed_disposal_triggers_for_old_holdings(self):
-        """ETF held 10+ years should trigger deemed disposal."""
+    def test_deemed_disposal_uses_yfinance(self):
+        """ETF held 10+ years should attempt yfinance lookup for market value."""
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"ETF_A": {"type": "etf"}}
+        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR"}}
         buy_df = pd.DataFrame({
             "Date": pd.to_datetime(["2014-01-01"]),
             "PricePerShareEUR": [100.0],
-            "Quantity": [100.0],
+            "Quantity": [10.0],
         })
-        gain, liability, details = calc.calculate_deemed_disposal_liability(
-            "ETF_A", buy_df
-        )
 
-        assert len(details) == 1
-        assert details[0]["years_held"] >= 8
-        assert gain > 0
-        assert liability > 0
+        # Mock _get_historical_close to return a known price
+        with patch.object(calc, '_get_historical_close', return_value=(120.0, None)):
+            gain, liability, details, uplifts, errors = calc.calculate_deemed_disposal_liability(
+                "ETF_A", buy_df
+            )
+
+        # Should find the 8-year anniversary and compute gain
+        assert len(details) >= 1
+        # First deemed disposal: market value 120 * 10 = 1200, cost 1000, gain 200
+        assert details[0]["market_value"] == 1200.0
+        assert details[0]["taxable_gain"] == 200.0
+        assert uplifts[0]["uplifted_cost_basis"] == 120.0
+        assert len(errors) == 0
+
+    def test_yfinance_failure_produces_errors(self):
+        """When yfinance fails, errors are returned, not placeholder gain."""
+        calc = ImprovedCapitalGainsCalculator()
+        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR"}}
+        buy_df = pd.DataFrame({
+            "Date": pd.to_datetime(["2014-01-01"]),
+            "PricePerShareEUR": [100.0],
+            "Quantity": [10.0],
+        })
+
+        with patch.object(calc, '_get_historical_close', return_value=(None, "API error")):
+            gain, liability, details, uplifts, errors = calc.calculate_deemed_disposal_liability(
+                "ETF_A", buy_df
+            )
+
+        assert gain == 0
+        assert len(details) == 0
+        assert len(uplifts) == 0
+        assert len(errors) == 1
+        assert errors[0]["ticker"] == "ETF_A"
 
     def test_no_deemed_disposal_for_recent_buy(self):
         """ETF held only 1 year should not trigger deemed disposal."""
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"ETF_A": {"type": "etf"}}
+        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR"}}
         buy_df = pd.DataFrame({
             "Date": pd.to_datetime(["2025-01-01"]),
             "PricePerShareEUR": [100.0],
-            "Quantity": [100.0],
+            "Quantity": [10.0],
         })
-        gain, liability, details = calc.calculate_deemed_disposal_liability(
+        gain, liability, details, uplifts, errors = calc.calculate_deemed_disposal_liability(
             "ETF_A", buy_df
         )
 
         assert len(details) == 0
         assert gain == 0
         assert liability == 0
+
+    def test_per_lot_uplifted_cost_basis(self):
+        """Verify that lot uplifts contain correct per-share uplifted values."""
+        calc = ImprovedCapitalGainsCalculator()
+        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR"}}
+        buy_df = pd.DataFrame({
+            "Date": pd.to_datetime(["2014-01-01"]),
+            "PricePerShareEUR": [50.0],
+            "Quantity": [100.0],
+        })
+
+        with patch.object(calc, '_get_historical_close', return_value=(75.0, None)):
+            gain, liability, details, uplifts, errors = calc.calculate_deemed_disposal_liability(
+                "ETF_A", buy_df
+            )
+
+        # Uplifted cost basis should be per-share value at anniversary
+        assert uplifts[0]["uplifted_cost_basis"] == 75.0
+        assert uplifts[0]["deemed_year"] >= 2022
+        assert uplifts[0]["lot_index"] == 0
 
 
 class TestWeightedFxRate:

@@ -19,13 +19,14 @@ License: Educational and personal use
 
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import defaultdict, deque
 import sys
 import os
 import argparse
 import json
 import re
+import yfinance as yf
 from src.ticker_utils import add_missing_ticker_to_cache
 from src.tax_calculations import (
     apply_cgt_with_loss_carry_forward,
@@ -68,12 +69,29 @@ class ImprovedCapitalGainsCalculator:
         if ticker_str in ['NONE', 'NAN']:
             return None
         
-        # Check cache first
-        if ticker_str in self.ticker_cache:
+        # Check cache first — but if previously cached as None (unresolvable
+        # before the placeholder fix), fall through to re-create the placeholder.
+        if ticker_str in self.ticker_cache and self.ticker_cache[ticker_str] is not None:
             return self.ticker_cache[ticker_str]
         
         # Auto-add missing ticker
-        ticker_info = add_missing_ticker_to_cache(ticker_str, self.ticker_cache_file)
+        ticker_info, _ = add_missing_ticker_to_cache(ticker_str, self.ticker_cache_file)
+        if ticker_info is None:
+            # Unresolvable: add to DynamoDB backlog so future runs skip yfinance.
+            # Revolut-only EU tickers are almost certainly ETFs (e.g. EUR, IE-domiciled),
+            # so the placeholder defaults to ETF attributes.
+            from src.api.db import add_to_backlog_atomic
+            add_to_backlog_atomic(ticker_str, app_source="revolut")
+            ticker_info = {
+                "type": "etf",
+                "currency": "EUR",
+                "active": True,
+                "merged_into": None,
+                "conversion_ratio": 1.0,
+                "withholding_tax_deducted": False,
+                "domicile": "IE",
+                "long_name": f"Ticker info for {ticker_str} coming soon...",
+            }
         self.ticker_cache[ticker_str] = ticker_info
         return ticker_info
     
@@ -98,92 +116,210 @@ class ImprovedCapitalGainsCalculator:
         """Get conversion ratio for merged tickers"""
         ticker_info = self.get_ticker_info(ticker)
         if ticker_info is None:
-            raise ValueError(f"Ticker '{ticker}' not found in cache")
+            return 1.0
         return ticker_info.get('conversion_ratio', 1.0)
     
     def is_etf(self, ticker):
         """Determine if a ticker is an ETF"""
         ticker_info = self.get_ticker_info(ticker)
         if ticker_info is None:
-            raise ValueError(f"Ticker '{ticker}' not found in cache")
+            return False
         return ticker_info['type'] == 'etf'
     
     def is_active(self, ticker):
         """Check if ticker is active"""
         ticker_info = self.get_ticker_info(ticker)
         if ticker_info is None:
-            raise ValueError(f"Ticker '{ticker}' not found in cache")
+            return True
         return ticker_info.get('active', True)
     
     def has_withholding_tax_deducted(self, ticker):
         """Check if withholding tax is already deducted by broker"""
-        return self.get_ticker_info(ticker).get('withholding_tax_deducted', False)
+        ticker_info = self.get_ticker_info(ticker)
+        if ticker_info is None:
+            return False
+        return ticker_info.get('withholding_tax_deducted', False)
     
     def get_domicile(self, ticker):
         """Get domicile of ticker"""
         ticker_info = self.get_ticker_info(ticker)
         if ticker_info is None:
-            raise ValueError(f"Ticker '{ticker}' not found in cache")
+            return "US"
         return ticker_info.get('domicile', 'Unknown')
     
+    def _try_fetch_price(self, yf_symbol, target_date):
+        """Try to fetch the closing price from yfinance.
+        
+        Returns (close_price, error_message).
+        close_price is None if the fetch failed, error_message describes why.
+        """
+        try:
+            start = target_date - timedelta(days=5)
+            end = target_date + timedelta(days=5)
+            hist = yf.download(yf_symbol, start=start.strftime('%Y-%m-%d'),
+                               end=end.strftime('%Y-%m-%d'), progress=False, auto_adjust=True)
+            if hist.empty:
+                return None, f"No price data for {yf_symbol} near {target_date.date()}"
+            
+            hist = hist.sort_index()
+            before = hist[hist.index <= pd.Timestamp(target_date)]
+            if before.empty:
+                return None, f"No price data before {target_date.date()} for {yf_symbol}"
+            
+            close_price = float(before['Close'].iloc[-1])
+            return close_price, None
+        except Exception as e:
+            return None, f"yfinance error for {yf_symbol}: {str(e)}"
+    
+    def _get_historical_close(self, ticker, target_date):
+        """Fetch the closing price for a ticker on or near a given date using yfinance.
+        
+        Resolution order:
+        1. Use explicit yfinance_ticker from cache if set (e.g. "VWCE.DE")
+        2. Try the bare ticker symbol (works for US-listed securities)
+        3. If bare ticker fails and the security is EUR-denominated, retry
+           with a .DE suffix (Xetra/Deutsche Börse — the primary exchange
+           for European UCITS ETFs)
+        
+        On failure, logs to the ticker backlog with status "price_unavailable"
+        so operators can identify which tickers need a manual yfinance_ticker entry.
+        
+        Returns (price_per_share, error_message).
+        On failure, returns (None, reason_string).
+        """
+        ticker_info = self.get_ticker_info(ticker)
+        if ticker_info is None:
+            return None, f"No cache entry for {ticker}"
+        
+        explicit_yf = ticker_info.get("yfinance_ticker")
+        
+        if explicit_yf:
+            # Explicit override — try it and return result directly
+            price, error = self._try_fetch_price(explicit_yf, target_date)
+            if price is None:
+                from src.api.db import add_to_backlog_atomic
+                add_to_backlog_atomic(ticker, app_source="revolut", status="price_unavailable")
+            return price, error
+        
+        # No explicit yfinance_ticker — try bare symbol first
+        price, error = self._try_fetch_price(ticker, target_date)
+        if price is not None:
+            return price, None
+        
+        # Bare symbol failed. For EUR-denominated securities, try .DE suffix
+        # (covers Xetra-listed ETFs and most European exchange-traded products).
+        if ticker_info.get("currency") == "EUR":
+            de_symbol = f"{ticker}.DE"
+            price2, _ = self._try_fetch_price(de_symbol, target_date)
+            if price2 is not None:
+                return price2, None
+        
+        # All attempts failed — log to backlog for operator triage
+        from src.api.db import add_to_backlog_atomic
+        add_to_backlog_atomic(ticker, app_source="revolut", status="price_unavailable")
+        return None, error
+    
+    def _get_anniversary_dates(self, purchase_date, current_date):
+        """Return all 8-year anniversary dates between purchase and current date."""
+        purchase_date = pd.Timestamp(purchase_date)
+        if hasattr(purchase_date, 'tz_localize'):
+            purchase_date = purchase_date.tz_localize(None) if purchase_date.tz is not None else purchase_date
+        
+        current = pd.Timestamp(current_date)
+        if hasattr(current, 'tz_localize'):
+            current = current.tz_localize(None) if current.tz is not None else current
+        
+        anniversaries = []
+        anniversary = purchase_date + pd.DateOffset(years=8)
+        while anniversary <= current:
+            anniversaries.append(anniversary)
+            anniversary = anniversary + pd.DateOffset(years=8)
+        return anniversaries
+    
     def calculate_deemed_disposal_liability(self, ticker, buy_transactions, current_date=None):
-        """Calculate deemed disposal tax liability for ETFs (8-year rule)
+        """Calculate deemed disposal tax liability for ETFs (8-year rule).
+        
+        For each buy lot, checks 8-year anniversaries and fetches historical
+        close prices from yfinance. On price fetch failure, the lot is skipped
+        and an error is reported rather than using a placeholder.
         
         Returns:
             total_taxable_gain (float): Total deemed gain across all triggers
-            tax_liability (float): Total tax due on deemed gains (at current year rate)
+            tax_liability (float): Total tax due on deemed gains
             deemed_disposals (list): Each entry includes taxable_gain and deemed_year
+            lot_uplifts (list): Uplifted cost bases to apply to buy_queue lots
+            errors (list): [{ticker, year, reason}] for lots where price lookup failed
         """
         if not self.is_etf(ticker):
-            return 0, 0, []
+            return 0, 0, [], [], []
         
         if current_date is None:
             current_date = datetime.now()
         
         deemed_disposals = []
+        lot_uplifts = []  # (lot_index, uplifted_basis, deemed_year)
+        errors = []
         total_taxable_gain = 0
         
-        for _, tx in buy_transactions.iterrows():
+        for lot_idx, (_, tx) in enumerate(buy_transactions.iterrows()):
             purchase_date = tx['Date']
-            # Handle timezone-aware vs naive datetime objects
             if hasattr(purchase_date, 'tz_localize'):
                 purchase_date = purchase_date.tz_localize(None) if purchase_date.tz is not None else purchase_date
             if hasattr(current_date, 'tz_localize'):
-                current_date = current_date.tz_localize(None) if current_date.tz is not None else current_date
-            years_held = (current_date - purchase_date).days / 365.25
+                current_date_clean = current_date.tz_localize(None) if current_date.tz is not None else current_date
+            else:
+                current_date_clean = current_date
             
-            if years_held >= 8:
-                # This holding triggers deemed disposal
-                # For simplicity, assume current value = cost basis + some gain
-                # In practice, you'd need current market value
-                cost_basis = tx['PricePerShareEUR'] * tx['Quantity']
-                # Placeholder: assume 20% gain for deemed disposal calculation
-                estimated_current_value = cost_basis * 1.2
-                taxable_gain = estimated_current_value - cost_basis
+            cost_basis = tx['PricePerShareEUR'] * tx['Quantity']
+            quantity = tx['Quantity']
+            
+            anniversaries = self._get_anniversary_dates(purchase_date, current_date_clean)
+            
+            for anniversary in anniversaries:
+                deemed_year = anniversary.year
                 
-                # Calculate the most recent 8-year anniversary year for this buy.
-                # Deemed disposal is a chargeable event every 8 years on the anniversary.
-                # We attribute the gain to that specific year so it stays fixed,
-                # rather than floating to the current year each time.
-                cycles_completed = int(years_held // 8)
-                deemed_year = purchase_date.year + cycles_completed * 8
+                # Fetch historical close price on the anniversary date
+                close_price, error = self._get_historical_close(ticker, anniversary)
                 
-                deemed_disposals.append({
-                    'ticker': ticker,
-                    'purchase_date': purchase_date,
-                    'years_held': years_held,
-                    'cost_basis': cost_basis,
-                    'estimated_value': estimated_current_value,
-                    'taxable_gain': taxable_gain,
-                    'deemed_year': deemed_year
-                })
-                total_taxable_gain += taxable_gain
+                if error is not None:
+                    errors.append({
+                        "ticker": ticker,
+                        "year": deemed_year,
+                        "reason": error,
+                    })
+                    continue  # skip this lot's deemed disposal — can't calculate
+                
+                # Calculate deemed gain using actual market value
+                market_value = close_price * quantity
+                taxable_gain = market_value - cost_basis
+                
+                if taxable_gain > 0:
+                    lot_uplifts.append({
+                        "lot_index": lot_idx,
+                        "uplifted_cost_basis": close_price,  # per-share uplifted basis
+                        "deemed_year": deemed_year,
+                    })
+                    total_taxable_gain += taxable_gain
+                    
+                    deemed_disposals.append({
+                        'ticker': ticker,
+                        'purchase_date': purchase_date,
+                        'cost_basis': cost_basis,
+                        'market_value': market_value,
+                        'taxable_gain': taxable_gain,
+                        'deemed_year': deemed_year,
+                        'lot_index': lot_idx,
+                    })
+                
+                # After first deemed disposal, subsequent anniversaries use
+                # the uplifted basis. The cost_basis is updated for the next cycle.
+                cost_basis = market_value
         
-        # Use current year's rate for deemed disposal (assessed at today's rate)
-        current_year = current_date.year
+        # Use current year's rate for deemed disposal
+        current_year = current_date_clean.year if 'current_date_clean' in dir() else datetime.now().year
         exit_tax_rate = get_etf_exit_tax_rate(current_year)
         tax_liability = total_taxable_gain * exit_tax_rate
-        return total_taxable_gain, tax_liability, deemed_disposals
+        return total_taxable_gain, tax_liability, deemed_disposals, lot_uplifts, errors
     
     def classify_transaction_type(self, type_str):
         """Classify transaction types"""
@@ -273,10 +409,12 @@ class ImprovedCapitalGainsCalculator:
     def process_transactions(self, df, store_transactions=False):
         """Process transactions and calculate realized/unrealized gains"""
         df = df.copy()
-        # Normalize ISO dates: strip 'Z' suffix for compat across pandas versions
-        if df['Date'].dtype == 'object':
-            df['Date'] = df['Date'].astype(str).str.replace('Z', '', regex=False)
-        df['Date'] = pd.to_datetime(df['Date'], utc=True, errors='coerce')
+        # Normalize ISO dates: convert each value individually via str() to handle
+        # all types openpyxl may return (datetime, string, NaT). Strip 'Z' suffix
+        # then parse as UTC. Row-by-row apply is more robust than Series.astype(str).
+        df['Date'] = df['Date'].apply(
+            lambda x: pd.to_datetime(str(x).replace('Z', ''), utc=True, errors='coerce')
+        )
         df['Year'] = df['Date'].dt.year
         df['TransactionType'] = df['Type'].apply(self.classify_transaction_type)
         # Identify tickers that had merger transactions
@@ -371,7 +509,8 @@ class ImprovedCapitalGainsCalculator:
                 'avg_cost_basis': 0,
                 'deemed_disposal_liability': 0,
                 'buy_transactions': []
-            })
+            }),
+            'deemed_disposal_errors': [],  # [{ticker, year, reason}]
         }
         
         # Process valid tickers
@@ -428,7 +567,9 @@ class ImprovedCapitalGainsCalculator:
                     buy_transaction = {
                         'quantity': converted_quantity,
                         'price_per_share_eur': converted_price,
-                        'year': year
+                        'year': year,
+                        'deemed_years_applied': set(),   # e.g. {2029, 2037}
+                        'uplifted_cost_basis': None,     # per-share basis after deemed disposal
                     }
                     buy_queue.append(buy_transaction)
                     
@@ -452,9 +593,16 @@ class ImprovedCapitalGainsCalculator:
                     while remaining_to_sell > 0 and buy_queue:
                         buy_transaction = buy_queue[0]
                         
+                        # Use uplifted cost basis if deemed disposal has been applied to this lot
+                        per_share_basis = (
+                            buy_transaction['uplifted_cost_basis']
+                            if buy_transaction['uplifted_cost_basis'] is not None
+                            else buy_transaction['price_per_share_eur']
+                        )
+                        
                         if buy_transaction['quantity'] <= remaining_to_sell:
                             sold_quantity = buy_transaction['quantity']
-                            cost_basis = sold_quantity * buy_transaction['price_per_share_eur']
+                            cost_basis = sold_quantity * per_share_basis
                             total_cost_basis += cost_basis
                             remaining_to_sell -= sold_quantity
                             total_shares -= sold_quantity
@@ -462,7 +610,7 @@ class ImprovedCapitalGainsCalculator:
                             buy_queue.popleft()
                         else:
                             sold_quantity = remaining_to_sell
-                            cost_basis = sold_quantity * buy_transaction['price_per_share_eur']
+                            cost_basis = sold_quantity * per_share_basis
                             total_cost_basis += cost_basis
                             buy_transaction['quantity'] -= sold_quantity
                             remaining_to_sell = 0
@@ -486,16 +634,22 @@ class ImprovedCapitalGainsCalculator:
                         while remaining_to_remove > 0 and buy_queue:
                             buy_transaction = buy_queue[0]
                             
+                            per_share_basis = (
+                                buy_transaction['uplifted_cost_basis']
+                                if buy_transaction['uplifted_cost_basis'] is not None
+                                else buy_transaction['price_per_share_eur']
+                            )
+                            
                             if buy_transaction['quantity'] <= remaining_to_remove:
                                 removed_quantity = buy_transaction['quantity']
-                                cost_basis = removed_quantity * buy_transaction['price_per_share_eur']
+                                cost_basis = removed_quantity * per_share_basis
                                 remaining_to_remove -= removed_quantity
                                 total_shares -= removed_quantity
                                 total_cost -= cost_basis
                                 buy_queue.popleft()
                             else:
                                 removed_quantity = remaining_to_remove
-                                cost_basis = removed_quantity * buy_transaction['price_per_share_eur']
+                                cost_basis = removed_quantity * per_share_basis
                                 buy_transaction['quantity'] -= removed_quantity
                                 remaining_to_remove = 0
                                 total_shares -= removed_quantity
@@ -517,7 +671,9 @@ class ImprovedCapitalGainsCalculator:
                         buy_transaction = {
                             'quantity': quantity,
                             'price_per_share_eur': 0.0,  # Zero cost basis from merger
-                            'year': year
+                            'year': year,
+                            'deemed_years_applied': set(),
+                            'uplifted_cost_basis': None,
                         }
                         buy_queue.append(buy_transaction)
                         
@@ -541,8 +697,22 @@ class ImprovedCapitalGainsCalculator:
             # Calculate deemed disposal liability for ETFs
             if is_etf and results['ticker_detail'][ticker]['buy_transactions']:
                 buy_df = pd.DataFrame(results['ticker_detail'][ticker]['buy_transactions'])
-                taxable_gain, tax_liability, deemed_disposals = self.calculate_deemed_disposal_liability(ticker, buy_df)
+                taxable_gain, tax_liability, deemed_disposals, lot_uplifts, dd_errors = \
+                    self.calculate_deemed_disposal_liability(ticker, buy_df)
                 results['ticker_detail'][ticker]['deemed_disposal_liability'] = tax_liability
+                
+                # Apply uplifted cost bases to the buy_queue lots
+                for uplift in lot_uplifts:
+                    lot_idx = uplift['lot_index']
+                    if lot_idx < len(buy_queue):
+                        lot = buy_queue[lot_idx]
+                        lot['deemed_years_applied'].add(uplift['deemed_year'])
+                        lot['uplifted_cost_basis'] = uplift['uplifted_cost_basis']
+                
+                # Collect errors
+                for err in dd_errors:
+                    results['deemed_disposal_errors'].append(err)
+                
                 # Attribute each deemed disposal to its 8-year anniversary year
                 for dd in deemed_disposals:
                     deemed_year = dd['deemed_year']

@@ -67,6 +67,14 @@ class TaxLine(BaseModel):
 
 
 
+class DeemedDisposalError(BaseModel):
+    """Error details when a deemed disposal price could not be fetched."""
+
+    ticker: str
+    year: int
+    reason: str
+
+
 class TickerBreakdown(BaseModel):
     """Per-ticker breakdown of gains and dividends."""
 
@@ -89,6 +97,7 @@ class CalculateResponse(BaseModel):
     ticker_breakdown: List[TickerBreakdown] = []
     total_tax_due_eur: float = 0.0
     console_output: str = ""
+    deemed_disposal_errors: List[DeemedDisposalError] = []
 
 
 class UploadResponse(BaseModel):

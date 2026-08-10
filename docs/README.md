@@ -41,10 +41,9 @@ python improved_calculator.py samples/revolut_fy23.xlsx --margin-rate 40
 ## Quick start (Web App)
 
 ```bash
-# Terminal 1: Start the FastAPI backend
-cd src/api
-pip install -r ../../requirements.txt  # if not already done
-uvicorn main:app --reload --port 8000
+# Terminal 1: Start the FastAPI backend (run from project root)
+pip install -r requirements.txt  # if not already done
+uvicorn src.api.main:app --reload --port 8000
 
 # Terminal 2: Start the React frontend
 cd frontend

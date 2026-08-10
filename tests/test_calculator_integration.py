@@ -24,6 +24,7 @@ Coverage:
 
 import sys
 import os
+from unittest.mock import patch
 import pandas as pd
 import pytest
 from datetime import datetime
@@ -202,9 +203,9 @@ class TestFix1NoCrossEtfLossOffsetting:
 
 class TestFix2DeemedDisposalAwareness:
     """
-    Tests that the calculator correctly identifies deemed disposal events
-    and reports the liability. Full cost basis uplift and credit tracking 
-    will be implemented in a future enhancement.
+    Tests that the calculator correctly identifies deemed disposal events,
+    fetches historical prices from yfinance, and applies per-lot cost
+    basis uplift with error propagation on API failure.
     """
 
     def get_calculator(self):
@@ -224,7 +225,7 @@ class TestFix2DeemedDisposalAwareness:
     def test_deemed_disposal_detected_for_old_holdings(self):
         """
         Buy 100 shares @ €100 on 2016-01-01 (more than 8 years ago).
-        Should trigger deemed disposal detection.
+        Should trigger deemed disposal with yfinance historical price.
         """
         calc = self.get_calculator()
         
@@ -240,7 +241,10 @@ class TestFix2DeemedDisposalAwareness:
         }
         df = pd.DataFrame(buy_data)
         
-        results = calc.process_transactions(df)
+        # Mock historical close: €120/share at the 2024 anniversary
+        with patch.object(ImprovedCapitalGainsCalculator, '_get_historical_close',
+                          return_value=(120.0, None)):
+            results = calc.process_transactions(df)
         
         # The 2016 lot (10+ years old) should trigger deemed disposal
         dd_liability = results['ticker_detail']['DD_ETF'].get('deemed_disposal_liability', 0)
@@ -251,16 +255,20 @@ class TestFix2DeemedDisposalAwareness:
         # 2016-01-01 purchase -> 8-year anniversary is 2024
         assert 2024 in dd_gains
         assert dd_gains[2024] > 0
+        # Market value 120 * 100 qty = 12000, cost 10000, gain 2000
         assert dd_gains[2024] == 2000.0
-    
-    def test_final_sale_after_deemed_disposal(self):
+
+    def test_final_sale_after_deemed_disposal_with_uplift(self):
         """
-        Lifecycle test:
+        Lifecycle test with cost basis uplift:
         Year 2016: Buy 100 shares @ €100 = €10,000
-        Year 2026 (10 years): Deemed disposal triggers
-        Sell 100 shares @ €130 = €13,000 => +€3,000 gain
+        Year 2024 (8 years): Deemed disposal @ €120/share → gain €2,000, tax €760
+                             Cost basis uplifted to €120/share
+        Year 2026 (10 years): Sell 100 shares @ €130 = €13,000
+                             Remaining gain = (€130 - €120) * 100 = €1,000
         
-        Deemed disposal liability should be detected and reported.
+        Without uplift (old behavior): gain = (€130 - €100) * 100 = €3,000 (double-counts)
+        With uplift (new): gain = €1,000 (only the gain since deemed disposal)
         """
         calc = self.get_calculator()
         
@@ -276,27 +284,52 @@ class TestFix2DeemedDisposalAwareness:
         }
         df = pd.DataFrame(data)
         
-        results = calc.process_transactions(df)
+        # Mock historical close: €120/share at 2024 anniversary
+        with patch.object(ImprovedCapitalGainsCalculator, '_get_historical_close',
+                          return_value=(120.0, None)):
+            results = calc.process_transactions(df)
         
-        # Check realized gain
+        # Check realized gain uses uplifted basis: (130 - 120) * 100 = 1000
         realized_gain = results['summary']['etfs']['realized_gains'][2026]
-        assert realized_gain == 3000.0, f"Expected 3000 gain, got {realized_gain}"
+        assert realized_gain == 1000.0, f"Expected 1000 with uplifted cost basis, got {realized_gain}"
         
         # Check deemed disposal liability detected
         dd_liability = results['ticker_detail']['DD_ETF'].get('deemed_disposal_liability', 0)
         assert dd_liability > 0
+    
+    def test_deemed_disposal_errors_propagate(self):
+        """
+        When yfinance fails to fetch historical price, errors should appear
+        in the results dict and the ticker should still be in the breakdown.
+        """
+        calc = self.get_calculator()
         
-        # Verify that per-ticker ETF tax calc works with the generate_report flow
-        per_ticker_data = {
-            'DD_ETF': {
-                'realized_gains': 3000.0,
-                'dividends': 0,
-                'deemed_gains': 0
-            }
+        buy_data = {
+            'Date': pd.to_datetime(['2016-01-01']),
+            'Ticker': ['DD_ETF'],
+            'Type': ['BUY'],
+            'Quantity': [100.0],
+            'Price per share': [100.0],
+            'Total Amount': [10000.0],
+            'Currency': ['EUR'],
+            'FX Rate': [1.0],
         }
-        result = calculate_etf_exit_tax_per_ticker(per_ticker_data, 2026)
-        assert result['total_taxable'] == 3000.0
-        assert result['total_exit_tax'] == 1140.0  # 3000 * 0.38
+        df = pd.DataFrame(buy_data)
+        
+        with patch.object(ImprovedCapitalGainsCalculator, '_get_historical_close',
+                          return_value=(None, "API rate limit exceeded")):
+            results = calc.process_transactions(df)
+        
+        # Errors should be present
+        errors = results.get('deemed_disposal_errors', [])
+        assert len(errors) > 0, f"Expected errors, got {errors}"
+        assert errors[0]['ticker'] == 'DD_ETF'
+        
+        # Deemed disposal liability should be 0 (no valid prices)
+        assert results['ticker_detail']['DD_ETF'].get('deemed_disposal_liability', 0) == 0
+        
+        # But the ticker should still be in ticker_detail (not dropped)
+        assert results['ticker_detail']['DD_ETF']['current_holdings'] == 100.0
 
 
 # ==============================================================================

@@ -79,14 +79,11 @@ python improved_calculator.py transactions.xlsx --ticker AAPL
 
 ## Web App Quick Start
 ```bash
-# Backend
-cd src/api
-uvicorn main:app --reload --port 8000
+# Backend — run from project root (absolute imports require this)
+uvicorn src.api.main:app --reload --port 8000
 
 # Frontend (separate terminal)
-cd frontend
-npm install
-npm run dev
+cd frontend && npm install && npm run dev
 ```
 
 ## Output (CLI)

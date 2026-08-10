@@ -37,16 +37,20 @@ backlog_table = None
 
 
 def _float_to_decimal(obj: Any) -> Any:
-    """Recursively convert all float values to Decimal for DynamoDB compatibility."""
+    """Recursively convert all float values to Decimal for DynamoDB compatibility.
+    Also handles pandas NaT and NaN sentinels that boto3 cannot serialize."""
+    if isinstance(obj, dict):
+        return {k: _float_to_decimal(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [_float_to_decimal(v) for v in obj]
+    import pandas as pd
+    if pd.isna(obj):
+        return None
     if isinstance(obj, float):
         try:
             return Decimal(str(obj))
         except InvalidOperation:
             return Decimal("0")
-    elif isinstance(obj, dict):
-        return {k: _float_to_decimal(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [_float_to_decimal(v) for v in obj]
     return obj
 
 
@@ -193,7 +197,7 @@ def add_to_backlog(ticker: str, app_source: str = "unknown"):
         return False
 
 
-def add_to_backlog_atomic(ticker: str, app_source: str = "unknown"):
+def add_to_backlog_atomic(ticker: str, app_source: str = "unknown", status: str = "unresolvable"):
     """Atomically add or update a ticker in the backlog.
 
     Uses a single update_item call with ADD on the counter and
@@ -201,6 +205,11 @@ def add_to_backlog_atomic(ticker: str, app_source: str = "unknown"):
     Increments encounter_count by 1 each time a customer run hits it.
     Sets last_seen to current time.
     Sets timestamp on first creation (if_not_exists).
+
+    Status values:
+      - "unresolvable" — ticker can't be classified (yfinance 404)
+      - "price_unavailable" — ticker is known but historical price
+        can't be fetched for deemed disposal calculation
     """
     if backlog_table is None:
         print("Warning: Backlog not available, ticker '{}' not stored".format(ticker))
@@ -221,7 +230,7 @@ def add_to_backlog_atomic(ticker: str, app_source: str = "unknown"):
                 "#timestamp": "timestamp",
             },
             ExpressionAttributeValues={
-                ":status": "unresolvable",
+                ":status": status,
                 ":app_source": app_source,
                 ":now": now,
                 ":one": 1,

@@ -14,8 +14,8 @@ python improved_calculator.py samples/sample_revolut_transactions.csv
 
 ### Web App
 ```bash
-# Terminal 1 — backend
-cd src/api && uvicorn main:app --reload --port 8000
+# Terminal 1 — backend (run from project root)
+uvicorn src.api.main:app --reload --port 8000
 # Terminal 2 — frontend
 cd frontend && npm install && npm run dev
 ```

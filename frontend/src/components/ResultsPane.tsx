@@ -3,7 +3,7 @@ import {
   Card, Text, Table, Stack, Title, Group, Badge, Select, Radio,
   Pagination, Tooltip, NumberInput, Button,
 } from '@mantine/core';
-import { IconHelpCircle, IconRefresh, IconChevronUp, IconChevronDown } from '@tabler/icons-react';
+import { IconHelpCircle, IconRefresh, IconChevronUp, IconChevronDown, IconAlertTriangle } from '@tabler/icons-react';
 import { CalculateResponse, PriorTaxPaid } from '../api/client';
 
 interface Props {
@@ -27,7 +27,17 @@ function fmt(amount: number, currency: string): string {
 }
 
 export default function ResultsPane({ data, onRecalculate }: Props) {
-  const { tax_summary, ticker_breakdown, total_tax_due_eur } = data;
+  const { tax_summary, ticker_breakdown, total_tax_due_eur, deemed_disposal_errors } = data;
+
+  // Map of ticker -> set of years with deemed disposal errors
+  const ddErrorMap = useMemo(() => {
+    const map: Record<string, Set<number>> = {};
+    for (const e of deemed_disposal_errors) {
+      if (!map[e.ticker]) map[e.ticker] = new Set();
+      map[e.ticker].add(e.year);
+    }
+    return map;
+  }, [deemed_disposal_errors]);
 
   const stockRows = tax_summary.filter((r) => r.asset_type === 'Stocks');
   const etfRows = tax_summary.filter((r) => r.asset_type === 'ETFs');
@@ -97,7 +107,7 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
   const [page, setPage] = useState(1);
 
   // --- Sort state for per-ticker breakdown ---
-  type SortColumn = 'gain' | 'dividends' | null;
+  type SortColumn = 'gain' | 'dividends' | 'type' | 'name' | 'year' | null;
   const [sortColumn, setSortColumn] = useState<SortColumn>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
 
@@ -119,9 +129,35 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
     }
     // Apply sorting
     if (sortColumn === 'gain') {
-      rows.sort((a, b) => sortDir === 'asc' ? a.realized_gains_eur - b.realized_gains_eur : b.realized_gains_eur - a.realized_gains_eur);
+      rows.sort((a, b) => sortDir === 'asc'
+        ? a.realized_gains_eur - b.realized_gains_eur
+        : b.realized_gains_eur - a.realized_gains_eur);
     } else if (sortColumn === 'dividends') {
-      rows.sort((a, b) => sortDir === 'asc' ? a.dividends_eur - b.dividends_eur : b.dividends_eur - a.dividends_eur);
+      rows.sort((a, b) => sortDir === 'asc'
+        ? a.dividends_eur - b.dividends_eur
+        : b.dividends_eur - a.dividends_eur);
+    } else if (sortColumn === 'type') {
+      rows.sort((a, b) => {
+        const cmp = a.asset_type.localeCompare(b.asset_type);
+        if (cmp !== 0) return sortDir === 'asc' ? cmp : -cmp;
+        return b.realized_gains_eur - a.realized_gains_eur; // secondary: gain desc
+      });
+    } else if (sortColumn === 'year') {
+      rows.sort((a, b) => {
+        const cmp = a.year - b.year;
+        if (cmp !== 0) return sortDir === 'asc' ? cmp : -cmp;
+        const nameA = a.long_name || a.ticker;
+        const nameB = b.long_name || b.ticker;
+        return nameA.localeCompare(nameB); // secondary: name asc
+      });
+    } else if (sortColumn === 'name') {
+      rows.sort((a, b) => {
+        const nameA = a.long_name || a.ticker;
+        const nameB = b.long_name || b.ticker;
+        const cmp = nameA.localeCompare(nameB);
+        if (cmp !== 0) return sortDir === 'asc' ? cmp : -cmp;
+        return b.realized_gains_eur - a.realized_gains_eur; // secondary: gain desc
+      });
     }
     return rows;
   }, [ticker_breakdown, filterMode, selectedYear, selectedTicker, sortColumn, sortDir]);
@@ -133,7 +169,8 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
   );
 
   // Reset page when filter changes
-  useMemo(() => setPage(1), [filterMode, selectedYear, selectedTicker]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useMemo(() => setPage(1), [filterMode, selectedYear, selectedTicker, sortColumn]);
 
   return (
     <Stack my="lg">
@@ -330,9 +367,39 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
           <Table striped highlightOnHover>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>Year</Table.Th>
-                <Table.Th>Ticker</Table.Th>
-                <Table.Th>Type</Table.Th>
+                <Table.Th
+                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={() => toggleSort('year')}
+                >
+                  <Group gap={4} wrap="nowrap">
+                    Year
+                    {sortColumn === 'year'
+                      ? (sortDir === 'asc' ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />)
+                      : null}
+                  </Group>
+                </Table.Th>
+                <Table.Th
+                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={() => toggleSort('name')}
+                >
+                  <Group gap={4} wrap="nowrap">
+                    Name
+                    {sortColumn === 'name'
+                      ? (sortDir === 'asc' ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />)
+                      : null}
+                  </Group>
+                </Table.Th>
+                <Table.Th
+                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={() => toggleSort('type')}
+                >
+                  <Group gap={4} wrap="nowrap">
+                    Type
+                    {sortColumn === 'type'
+                      ? (sortDir === 'asc' ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />)
+                      : null}
+                  </Group>
+                </Table.Th>
                 <Table.Th
                   style={{ cursor: 'pointer', userSelect: 'none' }}
                   onClick={() => toggleSort('gain')}
@@ -385,7 +452,16 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
                         )}
                       </Group>
                     </Table.Td>
-                    <Table.Td>{r.asset_type}</Table.Td>
+                    <Table.Td>
+                      <Group gap={4} wrap="nowrap">
+                        <Text component="span">{r.asset_type}</Text>
+                        {ddErrorMap[r.ticker]?.has(r.year) && (
+                          <Tooltip label={`Deemed disposal could not be calculated — historical price unavailable`} multiline maw={300}>
+                            <IconAlertTriangle size={14} color="var(--mantine-color-yellow-6)" />
+                          </Tooltip>
+                        )}
+                      </Group>
+                    </Table.Td>
                     <Table.Td>{fmt(r.realized_gains_eur, cur)}</Table.Td>
                     <Table.Td>{fmt(r.dividends_eur, cur)}</Table.Td>
                     <Table.Td>{fmt(r.dividends_irish_eur, 'EUR')}</Table.Td>

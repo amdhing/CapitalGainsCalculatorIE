@@ -28,9 +28,11 @@ User uploads trades ──► Calculator runs ──► Lookup ticker
 ```
 
 When a ticker lands in the backlog, it means:
-- yfinance returned a 404 or error
+- yfinance returned a 404 or error for the bare ticker symbol
 - The cache either has no entry, or has an entry with an empty `long_name`
 - The DynamoDB `ticker-backlog` table records it with an `encounter_count` (incremented each time the app hits it)
+
+**Important:** The backlog is populated from `get_ticker_info()` in `src/improved_calculator.py` — when a ticker can't be resolved, a placeholder entry (`type: "etf"`, `currency: "EUR"`, `domicile: "IE"`) is created in-memory and the ticker is added to DynamoDB. This ensures the ticker still appears in the UI (with "Ticker info for {symbol} coming soon...") rather than being silently dropped.
 
 ---
 
@@ -251,11 +253,28 @@ for item in backlog:
 
 | Situation | Cache update needed | Notes |
 |---|---|---|
-| **ETF trading on Xetra with ISIN-based code** | Set `type: "etf"`, `currency: "EUR"`, `domicile: "IE"` or `"LU"` | Many Xetra-listed ETFs have codes like LYP6, 2B72, LGQK |
-| **US stock trading on Revolut** | Set `type: "stock"`, `currency: "USD"`, `domicile: "US"`, `withholding_tax_deducted: true` | Standard for NYSE/Nasdaq stocks |
-| **German stock (e.g. Deutsche Börse)** | Set `type: "stock"`, `currency: "EUR"`, `domicile: "DE"`, `withholding_tax_deducted: false` | German withholding tax (26.375%) may apply depending on broker setup |
+| **ETF trading on Xetra with ISIN-based code** | Set `type: "etf"`, `currency: "EUR"`, `domicile: "IE"` or `"LU"`, `yfinance_ticker: "{TICKER}.DE"` | Many Xetra-listed ETFs have codes like LYP6, 2B72, LGQK, LYTR. The `.DE` suffix is needed for historical price lookups. |
+| **Stock trading on Xetra (e.g. Adyen, Delivery Hero)** | Set `type: "stock"`, `currency: "EUR"`, `domicile: "NL"` (or actual country), `yfinance_ticker: "{TICKER}.DE"` | yfinance often needs suffix like `.DE`; bare ticker gets 404 |
+| **US stock trading on Revolut** | Set `type: "stock"`, `currency: "USD"`, `domicile: "US"`, `withholding_tax_deducted: true` | Standard for NYSE/Nasdaq stocks. No `yfinance_ticker` needed — bare symbol works. |
+| **Luxembourg-domiciled ETF** | Set `type: "etf"`, `currency: "EUR"`, `domicile: "LU"`, `withholding_tax_deducted: false` | No withholding tax at fund level |
 | **Inactive/merged ticker** | Set `active: false`, `merged_into: "NEW_TICKER"`, set `conversion_ratio` | Calculator uses this for FIFO continuity |
 | **Ticker that no longer exists (bankruptcy)** | Set `active: false`, leave `merged_into: null` | Calculator treats as a total loss |
+
+### Backlog status types
+
+| Status | Meaning | Resolution |
+|--------|---------|------------|
+| `unresolvable` | Ticker can't be classified by yfinance (404) | Research and add to `data/ticker_cache.json` |
+| `price_unavailable` | Ticker is classified but yfinance can't fetch historical close price | Add `yfinance_ticker` field with exchange suffix (typically `.DE` for EUR securities) |
+
+Check the backlog via API: `curl -s http://localhost:8000/api/backlog`
+Filter by status: `curl -s http://localhost:8000/api/backlog | python3 -c "import sys,json; [print(f'{i[\"ticker\"]} {i[\"status\"]}') for i in json.load(sys.stdin)['backlog']]"`
+
+### yfinance_ticker resolution
+
+EUR-denominated securities listed on Xetra/Deutsche Börse (most EU ETFs) need the `.DE` suffix for yfinance to resolve them. The code auto-falls back to `{ticker}.DE` when the bare symbol fails and `currency == "EUR"`. This covers ~25 ETFs in the cache without explicit `yfinance_ticker` entries.
+
+For cases where `.DE` doesn't work (e.g., Amsterdam-listed `VWCE.AS`), add an explicit `yfinance_ticker` field to the cache entry. The explicit field is always tried first and takes priority over auto-fallback.
 
 ---
 
@@ -267,12 +286,15 @@ for item in backlog:
 | DynamoDB `ticker-backlog` | Tracks unresolvable tickers | Remove entry after cache update |
 | `src/ticker_utils.py` | Logic for adding new tickers to cache | Only if changing lookup behaviour |
 | `src/api/routers/tickers.py` | API endpoint for ticker info | Only if changing response format |
-| `src/api/routers/calculations.py` | Resolves long_name during calculations | Only if changing resolution logic |
+| `src/improved_calculator.py` (`get_ticker_info`) | Creates placeholder + adds to backlog on yfinance failure | Only if changing fallback behaviour |
+| `src/api/routers/calculations.py` (`_resolve_long_name`) | Resolves long_name during calculations | Only if changing resolution logic |
+| `src/api/routers/calculations.py` (ticker_breakdown section) | Builds per-ticker breakdown for UI | Only if changing which tickers appear |
 
 ## Verification checklist
 
 - [ ] Cache entry has the correct `long_name`, `type`, `currency`, `domicile`, and `withholding_tax_deducted`
-- [ ] Backlog entry for this ticker has been deleted
+- [ ] Backlog entry for this ticker has been deleted (`DELETE /api/backlog/{symbol}` or `curl -X DELETE http://localhost:8000/api/backlog/{symbol}`)
 - [ ] `GET /api/ticker/{symbol}` returns the expected data with `unresolvable: false`
 - [ ] Frontend tooltip shows the long name (not "unavailable")
 - [ ] Tax rate is correct for the asset type (CGT vs exit tax)
+- [ ] Re-run calculation to confirm the ticker appears in per-ticker breakdown

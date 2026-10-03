@@ -5,7 +5,7 @@ import { IconCurrencyEuro, IconBrandGithub, IconBrandLinkedin, IconExternalLink,
 import UploadPane from './components/UploadPane';
 import ResultsPane from './components/ResultsPane';
 import HowToGuide from './components/HowToGuide';
-import { CalculateResponse, calculate, PriorTaxPaid } from './api/client';
+import { CalculateResponse, calculate, PriorTaxPaid, TaxOptions } from './api/client';
 
 export default function App() {
   const [results, setResults] = useState<CalculateResponse | null>(null);
@@ -13,6 +13,11 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [fileIds, setFileIds] = useState<string[]>([]);
   const [showGuide, setShowGuide] = useState(false);
+  const [taxOptions, setTaxOptions] = useState<TaxOptions>({
+    applyIrishTax: true,
+    domicile: null,
+    remittedForeignGainsEur: null,
+  });
 
   // Called by UploadPane when calculation completes — stores file IDs for later re-calcs
   const handleResults = useCallback((r: CalculateResponse, fids?: string[]) => {
@@ -25,14 +30,14 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await calculate(fileIds, 40, priorTaxPaid);
+      const res = await calculate(fileIds, 40, priorTaxPaid, taxOptions);
       setResults(res);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Recalculation failed');
     } finally {
       setLoading(false);
     }
-  }, [fileIds]);
+  }, [fileIds, taxOptions]);
 
   return (
     <AppShell header={{ height: 60 }} padding="md">
@@ -60,7 +65,13 @@ export default function App() {
             {error && (
               <Text c="red" mb="md" style={{ whiteSpace: 'pre-wrap' }}>{error}</Text>
             )}
-            <UploadPane onResults={handleResults} onLoading={setLoading} onError={setError} />
+            <UploadPane
+              onResults={handleResults}
+              onLoading={setLoading}
+              onError={setError}
+              taxOptions={taxOptions}
+              onTaxOptionsChange={setTaxOptions}
+            />
             {loading && (
               <Center my="xl">
                 <Stack align="center" gap="sm">

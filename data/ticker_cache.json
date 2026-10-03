@@ -911,5 +911,936 @@
     "withholding_tax_deducted": false,
     "domicile": "US",
     "long_name": "FlexShares Credit-Scored US Long Corporate Bond Index Fund"
+  },
+  "DEMO_ETF": {
+    "type": "etf",
+    "currency": "EUR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IE",
+    "long_name": "Ticker info for DEMO_ETF coming soon..."
+  },
+  "WIPRO": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for WIPRO coming soon..."
+  },
+  "KOTAKBANK": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for KOTAKBANK coming soon..."
+  },
+  "PHARMABEES": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for PHARMABEES coming soon..."
+  },
+  "DELTACORP": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for DELTACORP coming soon..."
+  },
+  "ITBEES": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for ITBEES coming soon..."
+  },
+  "MANYAVAR": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for MANYAVAR coming soon..."
+  },
+  "KTKBANK": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for KTKBANK coming soon..."
+  },
+  "KANSAINER": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for KANSAINER coming soon..."
+  },
+  "SWSOLAR": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for SWSOLAR coming soon..."
+  },
+  "JIOFIN": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for JIOFIN coming soon..."
+  },
+  "SENSEXBEES": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for SENSEXBEES coming soon..."
+  },
+  "SBICARD": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for SBICARD coming soon..."
+  },
+  "MARICO": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for MARICO coming soon..."
+  },
+  "KAYA": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for KAYA coming soon..."
+  },
+  "BPCL": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for BPCL coming soon..."
+  },
+  "TATAPOWER": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for TATAPOWER coming soon..."
+  },
+  "HATHWAY": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for HATHWAY coming soon..."
+  },
+  "GSPL": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for GSPL coming soon..."
+  },
+  "NHPC": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for NHPC coming soon..."
+  },
+  "ICICIBANK": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for ICICIBANK coming soon..."
+  },
+  "ZOMATO": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for ZOMATO coming soon..."
+  },
+  "BRITANNIA": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for BRITANNIA coming soon..."
+  },
+  "REDINGTON": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for REDINGTON coming soon..."
+  },
+  "MOTHERSON": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for MOTHERSON coming soon..."
+  },
+  "JPPOWER": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for JPPOWER coming soon..."
+  },
+  "3IINFOLTD": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for 3IINFOLTD coming soon..."
+  },
+  "GOLDETF": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for GOLDETF coming soon..."
+  },
+  "JYOTHYLAB": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for JYOTHYLAB coming soon..."
+  },
+  "IRCTC": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for IRCTC coming soon..."
+  },
+  "SBIN": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for SBIN coming soon..."
+  },
+  "MANGIND": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for MANGIND coming soon..."
+  },
+  "TRIVENIENT": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for TRIVENIENT coming soon..."
+  },
+  "LIQUIDBEES": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for LIQUIDBEES coming soon..."
+  },
+  "NYKAA": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for NYKAA coming soon..."
+  },
+  "AAVAS": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for AAVAS coming soon..."
+  },
+  "RECLTD": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for RECLTD coming soon..."
+  },
+  "NIFTYBEES": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for NIFTYBEES coming soon..."
+  },
+  "MASTEK": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for MASTEK coming soon..."
+  },
+  "CUB": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "City Union Bank Limited",
+    "yfinance_ticker": "CUB.NS"
+  },
+  "RELIANCE": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Reliance Industries Limited",
+    "yfinance_ticker": "RELIANCE.NS"
+  },
+  "INFY": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Infosys Limited",
+    "yfinance_ticker": "INFY.NS"
+  },
+  "IDBI": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "IDBI Bank Limited",
+    "yfinance_ticker": "IDBI.NS",
+    "splits": [
+      {
+        "date": "2001-02-12",
+        "ratio": 1.6
+      }
+    ]
+  },
+  "3IINFOTECH": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for 3IINFOTECH coming soon..."
+  },
+  "IOC": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Indian Oil Corporation Limited",
+    "yfinance_ticker": "IOC.NS",
+    "splits": [
+      {
+        "date": "1999-09-27",
+        "ratio": 2.0
+      },
+      {
+        "date": "2003-08-14",
+        "ratio": 1.5
+      },
+      {
+        "date": "2009-10-29",
+        "ratio": 2.0
+      },
+      {
+        "date": "2016-10-18",
+        "ratio": 2.0
+      },
+      {
+        "date": "2018-03-15",
+        "ratio": 2.0
+      },
+      {
+        "date": "2022-06-30",
+        "ratio": 1.5
+      }
+    ]
+  },
+  "TATAMOTORS": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for TATAMOTORS coming soon..."
+  },
+  "BIOGEN": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Biogen Pharmachem Industries Limited",
+    "yfinance_ticker": "BIOGEN.BO",
+    "splits": [
+      {
+        "date": "2026-05-15",
+        "ratio": 1.1666666666666667
+      }
+    ]
+  },
+  "ASIANPAINT": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Asian Paints Limited",
+    "yfinance_ticker": "ASIANPAINT.NS",
+    "splits": [
+      {
+        "date": "2003-08-22",
+        "ratio": 1.5
+      },
+      {
+        "date": "2013-07-30",
+        "ratio": 10.0
+      }
+    ]
+  },
+  "SIMPLEXINF": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Simplex Infrastructures Limited",
+    "yfinance_ticker": "SIMPLEXINF.NS",
+    "splits": []
+  },
+  "SINTEX": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for SINTEX coming soon..."
+  },
+  "EXIDEIND": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Exide Industries Limited",
+    "yfinance_ticker": "EXIDEIND.NS",
+    "splits": [
+      {
+        "date": "2003-07-03",
+        "ratio": 2.0
+      },
+      {
+        "date": "2006-09-08",
+        "ratio": 10.0
+      }
+    ]
+  },
+  "IEX": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Indian Energy Exchange Limited",
+    "yfinance_ticker": "IEX.NS",
+    "splits": [
+      {
+        "date": "2018-10-19",
+        "ratio": 10.0
+      },
+      {
+        "date": "2021-12-03",
+        "ratio": 3.0
+      }
+    ]
+  },
+  "FEDERALBNK": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "The Federal Bank Limited",
+    "yfinance_ticker": "FEDERALBNK.NS",
+    "splits": [
+      {
+        "date": "2004-11-29",
+        "ratio": 3.0
+      },
+      {
+        "date": "2013-10-17",
+        "ratio": 5.0
+      },
+      {
+        "date": "2015-07-08",
+        "ratio": 2.0
+      }
+    ]
+  },
+  "UJJIVANSFB": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ujjivan Small Finance Bank Limited",
+    "yfinance_ticker": "UJJIVANSFB.NS",
+    "splits": []
+  },
+  "HDFCBANK": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "HDFC Bank Limited",
+    "yfinance_ticker": "HDFCBANK.NS",
+    "splits": [
+      {
+        "date": "2011-07-14",
+        "ratio": 5.0
+      },
+      {
+        "date": "2019-09-19",
+        "ratio": 2.0
+      },
+      {
+        "date": "2025-08-26",
+        "ratio": 2.0
+      }
+    ]
+  },
+  "DLINKINDIA": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "D-Link (India) Limited",
+    "yfinance_ticker": "DLINKINDIA.NS",
+    "splits": []
+  },
+  "RAJESHEXPO": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Rajesh Exports Limited",
+    "yfinance_ticker": "RAJESHEXPO.NS",
+    "splits": [
+      {
+        "date": "2005-09-09",
+        "ratio": 5.0
+      },
+      {
+        "date": "2008-01-29",
+        "ratio": 3.0
+      }
+    ]
+  },
+  "MANGIND-RE": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for MANGIND-RE coming soon..."
+  },
+  "ASHOKLEY": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ashok Leyland Limited",
+    "yfinance_ticker": "ASHOKLEY.NS",
+    "splits": [
+      {
+        "date": "2011-08-02",
+        "ratio": 2.0
+      },
+      {
+        "date": "2025-07-16",
+        "ratio": 2.0
+      }
+    ]
+  },
+  "ARMANFIN": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Arman Financial Services Limited",
+    "yfinance_ticker": "ARMANFIN.NS",
+    "splits": []
+  },
+  "HINDUNILVR": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Hindustan Unilever Limited",
+    "yfinance_ticker": "HINDUNILVR.NS",
+    "splits": [
+      {
+        "date": "2000-07-10",
+        "ratio": 10.0
+      }
+    ]
+  },
+  "EASEMYTRIP": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Easy Trip Planners Limited",
+    "yfinance_ticker": "EASEMYTRIP.NS",
+    "splits": [
+      {
+        "date": "2022-02-28",
+        "ratio": 2.0
+      },
+      {
+        "date": "2022-11-21",
+        "ratio": 4.0
+      },
+      {
+        "date": "2024-11-29",
+        "ratio": 2.0
+      }
+    ]
+  },
+  "THOMASCOOK": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Thomas Cook (India) Limited",
+    "yfinance_ticker": "THOMASCOOK.NS",
+    "splits": [
+      {
+        "date": "2007-05-14",
+        "ratio": 10.0
+      }
+    ]
+  },
+  "KPITTECH": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "KPIT Technologies Limited",
+    "yfinance_ticker": "KPITTECH.NS",
+    "splits": []
+  },
+  "CYIENT": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Cyient Limited",
+    "yfinance_ticker": "CYIENT.NS",
+    "splits": [
+      {
+        "date": "2010-06-10",
+        "ratio": 2.0
+      }
+    ]
+  },
+  "ETERNAL": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Eternal Limited",
+    "yfinance_ticker": "ETERNAL.NS",
+    "splits": []
+  },
+  "ALPHA": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for ALPHA coming soon..."
+  },
+  "POLICYBZR": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "PB Fintech Limited",
+    "yfinance_ticker": "POLICYBZR.NS",
+    "splits": []
+  },
+  "3IINFO-RE": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Ticker info for 3IINFO-RE coming soon..."
+  },
+  "VBL": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Varun Beverages Limited",
+    "yfinance_ticker": "VBL.NS",
+    "splits": [
+      {
+        "date": "2019-07-25",
+        "ratio": 1.5
+      },
+      {
+        "date": "2021-06-10",
+        "ratio": 1.5
+      },
+      {
+        "date": "2022-06-06",
+        "ratio": 1.5
+      },
+      {
+        "date": "2023-06-15",
+        "ratio": 2.0
+      },
+      {
+        "date": "2024-09-12",
+        "ratio": 2.5
+      }
+    ]
+  },
+  "KWIL": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Kwality Walls (India) Limited",
+    "yfinance_ticker": "KWIL.NS",
+    "splits": []
+  },
+  "BAJAJFINSV": {
+    "type": "stock",
+    "currency": "INR",
+    "active": true,
+    "merged_into": null,
+    "conversion_ratio": 1.0,
+    "withholding_tax_deducted": false,
+    "domicile": "IN",
+    "long_name": "Bajaj Finserv Ltd.",
+    "yfinance_ticker": "BAJAJFINSV.NS",
+    "splits": [
+      {
+        "date": "2022-09-13",
+        "ratio": 5.0
+      }
+    ]
   }
 }

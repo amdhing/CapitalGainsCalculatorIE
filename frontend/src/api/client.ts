@@ -13,10 +13,18 @@ export interface DeemedDisposalError {
   reason: string;
 }
 
+export interface SourceYearSummary {
+  year: number;
+  source: string;
+  realized_gains_eur: number;
+  dividends_eur: number;
+}
+
 export interface CalculateResponse {
   calculation_id: string;
   tax_summary: TaxLine[];
   ticker_breakdown: TickerBreakdown[];
+  source_summary: SourceYearSummary[];
   total_tax_due_eur: number;
   console_output: string;
   deemed_disposal_errors: DeemedDisposalError[];
@@ -57,6 +65,7 @@ export interface TickerBreakdown {
   dividends_irish_eur: number;
   dividends_foreign_eur: number;
   long_name?: string;
+  source?: string;
 }
 
 export async function uploadFile(file: File): Promise<UploadResponse> {
@@ -67,11 +76,30 @@ export async function uploadFile(file: File): Promise<UploadResponse> {
   return res.json();
 }
 
-export async function calculate(files: string[], marginRate = 40, priorTaxPaid: PriorTaxPaid[] = []): Promise<CalculateResponse> {
+export interface TaxOptions {
+  applyIrishTax: boolean;
+  domicile: string | null;
+  remittedForeignGainsEur: number | null;
+}
+
+export async function calculate(
+  files: string[],
+  marginRate = 40,
+  priorTaxPaid: PriorTaxPaid[] = [],
+  taxOptions: TaxOptions = { applyIrishTax: true, domicile: null, remittedForeignGainsEur: null },
+): Promise<CalculateResponse> {
   const res = await fetch(`${API_BASE}/calculate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ files, margin_rate: marginRate, csv_export: false, prior_tax_paid: priorTaxPaid }),
+    body: JSON.stringify({
+      files,
+      margin_rate: marginRate,
+      csv_export: false,
+      prior_tax_paid: priorTaxPaid,
+      apply_irish_tax: taxOptions.applyIrishTax,
+      domicile: taxOptions.domicile,
+      remitted_foreign_gains_eur: taxOptions.remittedForeignGainsEur,
+    }),
   });
   if (!res.ok) throw new Error(await res.text());
   return res.json();

@@ -9,16 +9,19 @@ Available as both a **CLI tool** and a **web application** with a FastAPI backen
 - **📊 [Sample Output](SAMPLE_OUTPUT.md)** - See example calculator output with anonymized data
 - **📋 [Project Specification](project_spec.md)** - Technical details and implementation guide
 - **📜 [Tax Rules Spec](tax_rules_spec.md)** - ETF exit tax rules and implementation gaps
+- **🧩 [Parsing Architecture](design/parsing_architecture.md)** - Multi-broker parsing & situs/domicile tax design
 
 ## What it does
 
 - **Calculates Irish taxes**: 33% CGT on stocks, 41%/38% exit tax on ETFs, income tax on dividends
 - **FIFO accounting**: Proper cost basis calculation across multiple years
 - **Loss carry forward**: Indefinite carry forward for stock losses (Irish law compliant)
-- **Smart classification**: Auto-detects stocks vs ETFs using yfinance API
-- **Multi-currency**: Converts everything to EUR using your FX rates
+- **Smart classification**: Auto-detects stocks vs ETFs (yfinance); Indian ETFs (*BEES, GOLDETF) treated as stocks
+- **Multi-currency**: Converts everything to EUR (INR auto-fetched for Zerodha)
+- **Domicile-aware CGT**: arising vs remittance basis for foreign-situs (non-Irish) gains
 - **Handles complexity**: Mergers, inactive stocks, broker transfers, 8-year deemed disposal
-- **Web app**: Upload files via browser, interactive tax tables with Deemed/Deemed Pd columns and prior-tax-paid inputs
+- **Multi-broker**: Revolut + Zerodha (Trading 212 planned) via a broker-agnostic parsing layer
+- **Web app**: Upload files via browser, per-source summaries + charts, interactive tax tables with Deemed/Deemed Pd columns and prior-tax-paid inputs
 
 ## Quick start (CLI)
 
@@ -55,17 +58,27 @@ Then open `http://localhost:5173` in your browser.
 
 ## Input format
 
-Your Excel/CSV needs these columns:
-- **Date**: Transaction date
-- **Ticker**: Stock/ETF symbol (AAPL, VWCE, etc.)
-- **Type**: BUY, SELL, DIVIDEND, etc.
-- **Quantity**: Number of shares
-- **Price per share**: In original currency
-- **Total Amount**: Total transaction value
-- **Currency**: EUR, USD, etc.
-- **FX Rate**: Exchange rate to EUR
+The app auto-detects the broker format and normalises it into one internal schema before calculating.
 
-**Designed for Revolut exports** - This calculator is specifically tested with Revolut transaction format. Other brokers (Trading 212, etc.) may require format adjustments.
+### Supported brokers
+
+| Broker | Format | Notes |
+|--------|--------|-------|
+| **Revolut** | CSV / XLSX | Columns: `Date, Ticker, Type, Quantity, Price per share, Total Amount, Currency, FX Rate` |
+| **Zerodha** | XLSX (NSE/BSE tradebook) | Indian equity — `Symbol, ISIN, Trade Date, Trade Type, Quantity, Price`. Auto-detected; INR converted to EUR automatically. |
+| **Trading 212** | CSV | Format researched; full parsing is on the roadmap. |
+
+### Canonical columns (what the tax engine consumes)
+- **Date**: Transaction date
+- **Ticker**: Stock/ETF symbol (AAPL, VWCE, RELIANCE, …)
+- **Type**: BUY, SELL, DIVIDEND, MERGER, TRANSFER
+- **Quantity**: Number of shares
+- **Price per share**: In the transaction's currency
+- **Total Amount**: Total transaction value
+- **Currency**: EUR, USD, INR, …
+- **FX Rate**: Units of "currency" per 1 EUR
+
+Zerodha tradebooks contain only BUY/SELL in INR; dividends arrive in a separate corporate-action report (not yet parsed).
 
 ## Irish tax calculations
 

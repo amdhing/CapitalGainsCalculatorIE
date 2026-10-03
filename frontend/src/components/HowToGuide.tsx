@@ -27,6 +27,9 @@ export default function HowToGuide() {
           <Tabs.Tab value="etf" leftSection={<IconCalculator size={16} />}>
             ETF Exit Tax
           </Tabs.Tab>
+          <Tabs.Tab value="how-calc" leftSection={<IconDeviceDesktopAnalytics size={16} />}>
+            How Calculations Work
+          </Tabs.Tab>
         </Tabs.List>
 
         {/* ─────────────────────── CGT CURRENT YEAR ─────────────────────── */}
@@ -42,6 +45,11 @@ export default function HowToGuide() {
         {/* ─────────────────────── ETF EXIT TAX ──────────────────────────── */}
         <Tabs.Panel value="etf" pt="md">
           <EtfPanel />
+        </Tabs.Panel>
+
+        {/* ─────────────────────── HOW CALCULATIONS WORK ─────────────────── */}
+        <Tabs.Panel value="how-calc" pt="md">
+          <HowCalculationsWorkPanel />
         </Tabs.Panel>
       </Tabs>
     </Stack>
@@ -60,11 +68,11 @@ function CgtCurrentYearPanel() {
         subtitle="Revenue's myAccount — online filing for same-year gains"
       >
         <Text size="sm">
-          If you sold shares (stocks) this year and realised a gain, you need to
-          pay Preliminary CGT by <strong>15 November</strong> of the current year
-          (or <strong>15 December</strong> if you file and pay via myAccount).
-          Use the calculator above to determine how much you owe, then follow the
-          steps below to pay via Revenue's myAccount service.
+          If you sold shares (stocks) this year and realised a gain, Preliminary
+          CGT is due by <strong>15 December</strong> for disposals between
+          1 January and 30 November, and by <strong>31 January</strong> for
+          disposals in December. Use the calculator above to determine how much
+          you owe, then follow the steps below to pay via Revenue's myAccount.
         </Text>
       </InfoCard>
 
@@ -241,35 +249,31 @@ function CgtPriorYearPanel() {
         icon={<IconInfoCircle size={20} />}
       >
         <Text size="sm">
-          The CG1 form has sections for:
+          The CG1 form uses numbered sections. For share disposals the key ones are:
         </Text>
         <List spacing="xs" size="sm">
           <List.Item>
-            <strong>Panel 1:</strong> Personal details &ndash; your name,
-            PPSN, tax year.
+            <strong>Section 1 (Description of Assets):</strong> enter aggregate
+            consideration for <em>Shares / Securities — Quoted</em> (and
+            <em>Unquoted</em> if applicable) from the calculator's ticker breakdown.
           </List.Item>
           <List.Item>
-            <strong>Panel 2:</strong> Summary of chargeable gains &ndash;
-            enter the total gains and losses from the calculator.
+            <strong>Section 10 / 11 (Chargeable gains & losses):</strong>
+            the calculator's net chargeable gain and any losses.
           </List.Item>
           <List.Item>
-            <strong>Panel 3:</strong> Losses &ndash; enter losses brought
-            forward and carried forward.
+            <strong>Section 26 (Double Taxation Relief):</strong> claim credit
+            for any foreign tax withheld (list country, gain, and tax).
           </List.Item>
           <List.Item>
-            <strong>Panel 4:</strong> Annual exemption &ndash; claim your
-            €1,270 exemption (if applicable).
-          </List.Item>
-          <List.Item>
-            <strong>Panel 5:</strong> Tax payable &ndash; the calculator's
-            CGT liability for that year.
-          </List.Item>
-          <List.Item>
-            <strong>Schedule (separate sheet):</strong> List each individual
-            disposal &ndash; date, proceeds, cost, gain/loss. The calculator's
-            ticker breakdown can help populate this.
+            <strong>Section 28 (Self-Assessment):</strong> the final CGT
+            liability for that year.
           </List.Item>
         </List>
+        <Text size="sm" mt="xs">
+          The €1,270 annual exemption is applied within the chargeable-gain
+          calculation (Section 10); there is no separate "exemption" box.
+        </Text>
       </StepCard>
 
       <StepCard
@@ -295,6 +299,16 @@ function CgtPriorYearPanel() {
           calculate your balance.
         </Text>
       </StepCard>
+
+      <NoteCard>
+        <Text size="sm">
+          <strong>Foreign gains & foreign tax credit (CG1):</strong> report
+          foreign share gains in the same Schedules as Irish gains — there is no
+          separate "foreign gains" box. If foreign tax was withheld at source,
+          claim it under <strong>Section 26 "Double Taxation Relief"</strong>{' '}
+          (list the country, the gain, and the foreign tax).
+        </Text>
+      </NoteCard>
 
       <NoteCard>
         <Text size="sm">
@@ -502,6 +516,137 @@ function EtfPanel() {
           </Anchor>
         </Group>
       </Card>
+    </Stack>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   How Calculations Work
+   ──────────────────────────────────────────────────────────────────────── */
+
+function HowCalculationsWorkPanel() {
+  return (
+    <Stack gap="md">
+      <InfoCard
+        title="How This Calculator Works"
+        subtitle="Same FIFO cost-basis engine, regardless of which broker the file came from"
+      >
+        <Text size="sm">
+          Every uploaded file is normalised into one internal format, then run
+          through the same Irish tax engine. This means Revolut, Zerodha, and
+          future brokers are all treated consistently — and can even be mixed in
+          a single calculation.
+        </Text>
+      </InfoCard>
+
+      <StepCard step={1} title="Broker files are normalised" icon={<IconFileDescription size={20} />}>
+        <List spacing="xs" size="sm">
+          <List.Item>
+            <strong>Revolut</strong> — read directly (it already includes trade
+            date, quantity, price, total, currency, and FX rate).
+          </List.Item>
+          <List.Item>
+            <strong>Zerodha</strong> — the Indian tradebook (Symbol, ISIN, Trade
+            Date, Trade Type, Quantity, Price) is mapped to the same format. INR
+            is converted to EUR automatically.
+          </List.Item>
+          <List.Item>
+            <strong>Trading 212</strong> — format researched; full parsing is on
+            the roadmap.
+          </List.Item>
+        </List>
+      </StepCard>
+
+      <StepCard step={2} title="Everything is converted to EUR" icon={<IconCalculator size={20} />}>
+        <Text size="sm">
+          Irish taxes are calculated in EUR. For Revolut, the file's own FX rate
+          is used. For Zerodha (INR), the app fetches{' '}
+          <strong>one current INR→EUR rate from yfinance</strong> and applies it.
+        </Text>
+        <Text size="xs" c="dimmed">
+          Note: a single current rate is applied across all Zerodha trades — a
+          known simplification tracked for improvement (per-trade-date rates).
+        </Text>
+      </StepCard>
+
+      <StepCard step={3} title="Stocks vs ETFs are classified" icon={<IconInfoCircle size={20} />}>
+        <List spacing="xs" size="sm">
+          <List.Item>
+            <strong>Stocks</strong> → Capital Gains Tax (33%, €1,270 exemption,
+            loss carry-forward).
+          </List.Item>
+          <List.Item>
+            <strong>Irish UCITS and "equivalent" offshore funds</strong> (EU/EEA/
+            OECD UCITS-like funds) → Exit Tax (41% to 2025, 38% from 2026), no
+            exemption, no loss relief, 8-year deemed disposal.
+          </List.Item>
+          <List.Item>
+            <strong>Non-equivalent foreign funds</strong> — e.g. Indian-domiciled
+            ETFs such as Zerodha <em>*BEES</em>, <em>GOLDETF</em> — are generally
+            outside the exit-tax regime and taxed under ordinary CGT (33%,
+            €1,270 exemption, loss carry-forward), like shares.
+          </List.Item>
+        </List>
+        <Text size="xs" c="dimmed">
+          The "equivalence" test is fact-specific; the app treats Indian ETFs as
+          non-equivalent (CGT) as a simplification. Verify with a tax advisor.
+        </Text>
+      </StepCard>
+
+      <StepCard step={4} title="Gains use FIFO cost basis" icon={<IconCalculator size={20} />}>
+        <Text size="sm">
+          Shares sold are matched against your oldest buys first (first-in,
+          first-out). Merger conversions, broker transfers, and inactive
+          (delisted) securities are accounted for.
+        </Text>
+      </StepCard>
+
+      <StepCard step={5} title="Foreign-situs gains use your domicile status" icon={<IconInfoCircle size={20} />}>
+        <Text size="sm">
+          Irish CGT on <strong>non-Irish</strong> assets depends on your{' '}
+          <strong>domicile</strong>, not citizenship:
+        </Text>
+        <List spacing="xs" size="sm">
+          <List.Item>
+            <strong>Domiciled (arising basis)</strong> — the full worldwide gain
+            is taxed in Ireland, even if not remitted.
+          </List.Item>
+          <List.Item>
+            <strong>Non-domiciled (remittance basis)</strong> — only foreign
+            gains <em>remitted to Ireland</em> are taxed.
+          </List.Item>
+        </List>
+        <Text size="sm" mt="xs">
+          Irish-situs assets (domiciled <em>IE</em>) are always taxable. Set your
+          domicile status in the tax parameter card before calculating.
+        </Text>
+      </StepCard>
+
+      <StepCard step={6} title="Results are summarised three ways" icon={<IconDeviceDesktopAnalytics size={20} />}>
+        <List spacing="xs" size="sm">
+          <List.Item>
+            <strong>Per-Source Summary</strong> — one line per broker per year
+            (gains + dividends), with a chart.
+          </List.Item>
+          <List.Item>
+            <strong>Stock CGT / ETF Tax Summary</strong> — the consolidated Irish
+            tax liability tables.
+          </List.Item>
+          <List.Item>
+            <strong>Per-Ticker Breakdown</strong> — individual securities, all in
+            EUR (their native currency is shown as a badge).
+          </List.Item>
+        </List>
+      </StepCard>
+
+      <NoteCard>
+        <Text size="sm">
+          <strong>Indian double-taxation:</strong> under the Ireland–India treaty
+          (Art. 13), for an Irish tax resident Ireland has the primary right to tax
+          share disposals. Indian tax withheld at source can be entered as "Already
+          Paid" to offset your Irish liability.
+        </Text>
+      </NoteCard>
     </Stack>
   );
 }

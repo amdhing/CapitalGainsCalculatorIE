@@ -30,6 +30,18 @@ class CalculateRequest(BaseModel):
         default=[],
         description="Prior tax already paid per year and asset type"
     )
+    apply_irish_tax: bool = Field(
+        default=True,
+        description="Whether to compute Irish CGT on Zerodha (Indian) equity"
+    )
+    domicile: Optional[str] = Field(
+        default=None,
+        description='Irish tax domicile status: "domiciled" or "non_domiciled"'
+    )
+    remitted_foreign_gains_eur: Optional[float] = Field(
+        default=None, ge=0,
+        description="Portion of foreign (Indian) gains remitted to Ireland (non-domiciled only)"
+    )
 
 
 class TickerInfoResponse(BaseModel):
@@ -76,7 +88,12 @@ class DeemedDisposalError(BaseModel):
 
 
 class TickerBreakdown(BaseModel):
-    """Per-ticker breakdown of gains and dividends."""
+    """Per-ticker breakdown of gains and dividends.
+
+    All monetary fields are denominated in EUR. ``currency`` records the
+    ticker's native trading currency (informational only); ``source`` is the
+    originating broker id (e.g. "revolut", "zerodha", "trading212").
+    """
 
     year: int
     ticker: str
@@ -87,6 +104,16 @@ class TickerBreakdown(BaseModel):
     dividends_irish_eur: float = 0.0
     dividends_foreign_eur: float = 0.0
     long_name: str = ""
+    source: str = ""
+
+
+class SourceYearSummary(BaseModel):
+    """One-line aggregate per broker source per year (all amounts in EUR)."""
+
+    year: int
+    source: str
+    realized_gains_eur: float = 0.0
+    dividends_eur: float = 0.0
 
 
 class CalculateResponse(BaseModel):
@@ -95,6 +122,7 @@ class CalculateResponse(BaseModel):
     calculation_id: str
     tax_summary: List[TaxLine] = []
     ticker_breakdown: List[TickerBreakdown] = []
+    source_summary: List[SourceYearSummary] = []
     total_tax_due_eur: float = 0.0
     console_output: str = ""
     deemed_disposal_errors: List[DeemedDisposalError] = []

@@ -21,8 +21,16 @@ Available as both a **CLI tool** and a **web application** (FastAPI backend + Re
 - **Web app**: FastAPI backend API + React frontend (Mantine UI) with file upload, per-ticker breakdown, and inline prior-tax editing
 
 ## Input format
-Excel/CSV files with columns:
-- Date, Ticker, Type, Quantity, Price per share, Total Amount, Currency, FX Rate
+
+The app auto-detects the broker format and normalises it into one internal schema.
+
+| Broker | Format | Notes |
+|--------|--------|-------|
+| **Revolut** | CSV / XLSX | `Date, Ticker, Type, Quantity, Price per share, Total Amount, Currency, FX Rate` |
+| **Zerodha** | XLSX (NSE/BSE tradebook) | `Symbol, ISIN, Trade Date, Trade Type, Quantity, Price`; INR auto-converted to EUR |
+| **Trading 212** | CSV | Researched; full parsing on the roadmap |
+
+Canonical (internal) columns: Date, Ticker, Type, Quantity, Price per share, Total Amount, Currency, FX Rate, Source, ISIN.
 
 Handles transaction types: BUY, SELL, DIVIDEND, MERGER, TRANSFER
 Ignores: CASH TOP-UP, CASH WITHDRAWAL, CUSTODY FEE
@@ -34,6 +42,14 @@ Ignores: CASH TOP-UP, CASH WITHDRAWAL, CUSTODY FEE
 2. Apply carried forward losses from previous years
 3. Calculate 33% tax on remaining gains
 4. Carry forward any net losses to future years
+
+**Domicile-aware CGT on foreign-situs gains** (see `src/foreign_gains.py` and
+`docs/design/parsing_architecture.md`): Irish-situs (IE-domiciled) securities are
+always taxed; foreign-situs gains follow the taxpayer's domicile status — arising
+basis (domiciled) or remittance basis (non-domiciled).
+
+**Indian (Zerodha) equity & non-equivalent foreign funds**: treated as stocks
+(CGT, not the UCITS "equivalent fund" exit tax).
 
 ### ETFs (Exit Tax - Per-Ticker)
 - **41%** on gains, dividends, and deemed disposals (up to 31 Dec 2025)
@@ -138,7 +154,9 @@ CapitalGainsCalculatorIE/
 ├── src/                          # Python source code
 │   ├── improved_calculator.py    # Core calculator logic
 │   ├── tax_calculations.py       # Irish tax functions
+│   ├── foreign_gains.py          # Situs/domicile-driven CGT logic
 │   ├── ticker_utils.py           # Ticker utilities (cache + yfinance)
+│   ├── parsing/                  # Broker statement parsers (revolut, trading212, zerodha)
 │   └── api/                      # FastAPI web API
 │       ├── main.py               # FastAPI app entry point
 │       ├── models.py             # Pydantic request/response models

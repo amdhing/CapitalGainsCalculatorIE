@@ -1,9 +1,13 @@
 import { useState, useMemo } from 'react';
 import {
   Card, Text, Table, Stack, Title, Group, Badge, Select, Radio,
-  Pagination, Tooltip, NumberInput, Button,
+  Pagination, Tooltip, NumberInput, Button, Grid,
 } from '@mantine/core';
 import { IconHelpCircle, IconRefresh, IconChevronUp, IconChevronDown, IconAlertTriangle } from '@tabler/icons-react';
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer,
+  Tooltip as RechartsTooltip,
+} from 'recharts';
 import { CalculateResponse, PriorTaxPaid } from '../api/client';
 
 interface Props {
@@ -26,8 +30,27 @@ function fmt(amount: number, currency: string): string {
   return `${sign}${sym}${Math.abs(amount).toFixed(2)}`;
 }
 
+/** Human-friendly display + color metadata for known broker sources. */
+const SOURCE_META: Record<string, { label: string; badge: string; stroke: string }> = {
+  revolut: { label: 'Revolut', badge: 'teal', stroke: '#12b886' },
+  zerodha: { label: 'Zerodha', badge: 'orange', stroke: '#f76707' },
+  trading212: { label: 'Trading 212', badge: 'blue', stroke: '#339af0' },
+};
+
+function sourceLabel(source: string): string {
+  return SOURCE_META[source]?.label ?? (source || '-');
+}
+
+function sourceBadge(source: string): string {
+  return SOURCE_META[source]?.badge ?? 'gray';
+}
+
+function sourceStroke(source: string): string {
+  return SOURCE_META[source]?.stroke ?? '#868e96';
+}
+
 export default function ResultsPane({ data, onRecalculate }: Props) {
-  const { tax_summary, ticker_breakdown, total_tax_due_eur, deemed_disposal_errors } = data;
+  const { tax_summary, ticker_breakdown, source_summary, total_tax_due_eur, deemed_disposal_errors } = data;
 
   // Map of ticker -> set of years with deemed disposal errors
   const ddErrorMap = useMemo(() => {
@@ -101,6 +124,36 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
     return Array.from(s).sort();
   }, [ticker_breakdown]);
 
+  // Per-source chart data: one series per (source, metric) across years.
+  const chartSources = useMemo(
+    () => Array.from(new Set(source_summary.map((s) => s.source))),
+    [source_summary],
+  );
+
+  const chartData = useMemo(() => {
+    const years = Array.from(new Set(source_summary.map((s) => s.year))).sort((a, b) => a - b);
+    return years.map((year) => {
+      const row: Record<string, string | number> = { year };
+      for (const s of source_summary) {
+        if (s.year !== year) continue;
+        const label = sourceLabel(s.source);
+        row[`${label} · Gains`] = Number(s.realized_gains_eur.toFixed(2));
+        row[`${label} · Dividends`] = Number(s.dividends_eur.toFixed(2));
+      }
+      return row;
+    });
+  }, [source_summary]);
+
+  const chartLines = useMemo(() => {
+    return chartSources.flatMap((src) => {
+      const label = sourceLabel(src);
+      return [
+        { key: `${src}-gains`, dataKey: `${label} · Gains`, name: `${label} · Gains`, stroke: sourceStroke(src) },
+        { key: `${src}-div`, dataKey: `${label} · Dividends`, name: `${label} · Dividends`, stroke: sourceStroke(src), dashed: true },
+      ];
+    });
+  }, [chartSources]);
+
   const [filterMode, setFilterMode] = useState<'year' | 'ticker' | 'all'>('year');
   const [selectedYear, setSelectedYear] = useState<string | null>(years.length > 0 ? String(years[0]) : null);
   const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
@@ -127,8 +180,17 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
     } else if (filterMode === 'ticker' && selectedTicker) {
       rows = rows.filter((r) => r.ticker === selectedTicker);
     }
-    // Apply sorting
-    if (sortColumn === 'gain') {
+    // Default (no explicit sort): name ascending, then year ascending, so a
+    // ticker's rows appear together in chronological order.
+    if (sortColumn === null) {
+      rows.sort((a, b) => {
+        const nameA = a.long_name || a.ticker;
+        const nameB = b.long_name || b.ticker;
+        const cmp = nameA.localeCompare(nameB);
+        if (cmp !== 0) return cmp;
+        return a.year - b.year;
+      });
+    } else if (sortColumn === 'gain') {
       rows.sort((a, b) => sortDir === 'asc'
         ? a.realized_gains_eur - b.realized_gains_eur
         : b.realized_gains_eur - a.realized_gains_eur);
@@ -156,7 +218,7 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
         const nameB = b.long_name || b.ticker;
         const cmp = nameA.localeCompare(nameB);
         if (cmp !== 0) return sortDir === 'asc' ? cmp : -cmp;
-        return b.realized_gains_eur - a.realized_gains_eur; // secondary: gain desc
+        return sortDir === 'asc' ? a.year - b.year : b.year - a.year; // secondary: year
       });
     }
     return rows;
@@ -181,6 +243,65 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
           Total Tax Due: &euro;{total_tax_due_eur.toFixed(2)}
         </Badge>
       </Group>
+
+      {source_summary.length > 0 && (
+        <Card withBorder shadow="sm" p="lg">
+          <Title order={4}>Per-Source Summary</Title>
+          <Text size="xs" c="dimmed" mb="md">
+            One line per source (broker) per year. Amounts are shown in EUR.
+          </Text>
+          <Grid>
+            <Grid.Col span={{ base: 12, md: 6 }}>
+              <Table striped highlightOnHover>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Year</Table.Th>
+                    <Table.Th>Source</Table.Th>
+                    <Table.Th>Total Gains</Table.Th>
+                    <Table.Th>Total Dividends</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {source_summary.map((s, i) => (
+                    <Table.Tr key={i}>
+                      <Table.Td>{s.year}</Table.Td>
+                      <Table.Td>
+                        <Badge variant="light" size="sm" color={sourceBadge(s.source)}>
+                          {sourceLabel(s.source)}
+                        </Badge>
+                      </Table.Td>
+                      <Table.Td>{fmt(s.realized_gains_eur, 'EUR')}</Table.Td>
+                      <Table.Td>{fmt(s.dividends_eur, 'EUR')}</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 6 }}>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={chartData} margin={{ top: 8, right: 24, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="year" />
+                  <YAxis />
+                  <RechartsTooltip />
+                  <Legend />
+                  {chartLines.map((l) => (
+                    <Line
+                      key={l.key}
+                      type="monotone"
+                      dataKey={l.dataKey}
+                      name={l.name}
+                      stroke={l.stroke}
+                      strokeDasharray={l.dashed ? '4 3' : undefined}
+                      dot={false}
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </Grid.Col>
+          </Grid>
+        </Card>
+      )}
 
       {stockRows.length > 0 && (
         <Card withBorder shadow="sm" p="lg">
@@ -400,6 +521,7 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
                       : null}
                   </Group>
                 </Table.Th>
+                <Table.Th>Source</Table.Th>
                 <Table.Th
                   style={{ cursor: 'pointer', userSelect: 'none' }}
                   onClick={() => toggleSort('gain')}
@@ -429,13 +551,15 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
             <Table.Tbody>
               {paginatedRows.map((r, i) => {
                 const hasName = r.long_name && r.long_name.length > 0;
-                const cur = r.currency || 'EUR';
                 return (
                   <Table.Tr key={i}>
                     <Table.Td>{r.year}</Table.Td>
                     <Table.Td>
                       <Group gap="xs" wrap="nowrap">
                         <Text fw={600} component="span">{r.ticker}</Text>
+                        {r.currency && r.currency !== 'EUR' && (
+                          <Badge variant="light" size="xs">{r.currency}</Badge>
+                        )}
                         {hasName ? (
                           <Tooltip label={r.long_name} multiline maw={400}>
                             <Text size="xs" c="dimmed" truncate maw={250}>
@@ -462,10 +586,17 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
                         )}
                       </Group>
                     </Table.Td>
-                    <Table.Td>{fmt(r.realized_gains_eur, cur)}</Table.Td>
-                    <Table.Td>{fmt(r.dividends_eur, cur)}</Table.Td>
+                    <Table.Td>
+                      {r.source ? (
+                        <Badge variant="light" size="xs" color={sourceBadge(r.source)}>
+                          {sourceLabel(r.source)}
+                        </Badge>
+                      ) : '-'}
+                    </Table.Td>
+                    <Table.Td>{fmt(r.realized_gains_eur, 'EUR')}</Table.Td>
+                    <Table.Td>{fmt(r.dividends_eur, 'EUR')}</Table.Td>
                     <Table.Td>{fmt(r.dividends_irish_eur, 'EUR')}</Table.Td>
-                    <Table.Td>{fmt(r.dividends_foreign_eur, cur)}</Table.Td>
+                    <Table.Td>{fmt(r.dividends_foreign_eur, 'EUR')}</Table.Td>
                   </Table.Tr>
                 );
               })}

@@ -27,7 +27,7 @@ import argparse
 import json
 import re
 import yfinance as yf
-from src.ticker_utils import add_missing_ticker_to_cache
+from src.ticker_utils import add_missing_ticker_to_cache, add_zerodha_ticker_to_cache
 from src.tax_calculations import (
     apply_cgt_with_loss_carry_forward,
     calculate_etf_exit_tax,
@@ -37,11 +37,84 @@ from src.tax_calculations import (
     get_exemption_applied,
     calculate_etf_exit_tax_per_ticker
 )
+from src.parsing import detect_and_parse, ParseError
+
+
+# Default placeholder attributes per broker source, used when a ticker cannot
+# be resolved via cache/yfinance. Zerodha is Indian equity (stock/INR/IN);
+# Revolut defaults to UCITS ETF (etf/EUR/IE). See docs/design/parsing_architecture.md.
+SOURCE_DEFAULTS = {
+    "revolut": {"type": "etf", "currency": "EUR", "domicile": "IE", "withholding_tax_deducted": False},
+    "trading212": {"type": "stock", "currency": "USD", "domicile": "US", "withholding_tax_deducted": False},
+    "zerodha": {"type": "stock", "currency": "INR", "domicile": "IN", "withholding_tax_deducted": False},
+}
+
+
+def merge_results(results_list):
+    """Merge multiple :func:`process_transactions` result dicts into one.
+
+    Used when a calculation spans multiple broker sources (e.g. Revolut +
+    Zerodha) whose transactions are disjoint by ticker but must share a single
+    tax summary. Year-wise metrics are summed; ticker details are largely
+    disjoint, so they are merged by straightforward key union.
+    """
+    if not results_list:
+        return None
+    if len(results_list) == 1:
+        return results_list[0]
+
+    metric_keys = [
+        "realized_gains", "unrealized_gains", "dividends",
+        "dividends_irish", "dividends_foreign", "deemed_disposal_gains",
+    ]
+
+    def empty_summary():
+        return {
+            asset: {key: defaultdict(float) for key in metric_keys}
+            for asset in ("stocks", "etfs")
+        }
+
+    merged = {
+        "skipped_rows": [],
+        "summary": empty_summary(),
+        "ticker_detail": {},
+        "deemed_disposal_errors": [],
+    }
+
+    for res in results_list:
+        merged["skipped_rows"].extend(res.get("skipped_rows", []))
+        merged["deemed_disposal_errors"].extend(res.get("deemed_disposal_errors", []))
+
+        for asset_type in ("stocks", "etfs"):
+            src_summary = res.get("summary", {}).get(asset_type, {})
+            for key in metric_keys:
+                for year, val in src_summary.get(key, {}).items():
+                    merged["summary"][asset_type][key][year] += val
+
+        for ticker, detail in res.get("ticker_detail", {}).items():
+            if ticker not in merged["ticker_detail"]:
+                merged["ticker_detail"][ticker] = detail
+            else:
+                dst = merged["ticker_detail"][ticker]
+                for key in metric_keys:
+                    src_metric = detail.get(key, {})
+                    if isinstance(src_metric, dict):
+                        dst_metric = dst.setdefault(key, defaultdict(float))
+                        for year, val in src_metric.items():
+                            dst_metric[year] += val
+                dst["current_holdings"] = dst.get("current_holdings", 0) + detail.get("current_holdings", 0)
+                dst["deemed_disposal_liability"] = dst.get("deemed_disposal_liability", 0) + detail.get("deemed_disposal_liability", 0)
+                if detail.get("source") and not dst.get("source"):
+                    dst["source"] = detail["source"]
+
+    return merged
+
 
 class ImprovedCapitalGainsCalculator:
     def __init__(self):
         self.ticker_cache_file = 'data/ticker_cache.json'
         self.ticker_cache = self.load_ticker_cache()
+        self.app_source = "revolut"
     
     def load_ticker_cache(self):
         """Load ticker cache from JSON file"""
@@ -75,25 +148,36 @@ class ImprovedCapitalGainsCalculator:
             return self.ticker_cache[ticker_str]
         
         # Auto-add missing ticker
-        ticker_info, _ = add_missing_ticker_to_cache(ticker_str, self.ticker_cache_file)
+        # Zerodha symbols are Indian equities (NSE/BSE). The bare symbol is
+        # ambiguous on Yahoo (may 404 or resolve to a US ADR), so resolve via
+        # .NS/.BO suffix with country==India validation.
+        if self.app_source == "zerodha":
+            ticker_info, _ = add_zerodha_ticker_to_cache(ticker_str, self.ticker_cache_file)
+        else:
+            ticker_info, _ = add_missing_ticker_to_cache(ticker_str, self.ticker_cache_file)
+
         if ticker_info is None:
             # Unresolvable: add to DynamoDB backlog so future runs skip yfinance.
-            # Revolut-only EU tickers are almost certainly ETFs (e.g. EUR, IE-domiciled),
-            # so the placeholder defaults to ETF attributes.
+            # The placeholder attributes are source-aware (Zerodha -> stock/INR/IN,
+            # Revolut -> etf/EUR/IE) so unknown tickers classify sensibly.
             from src.api.db import add_to_backlog_atomic
-            add_to_backlog_atomic(ticker_str, app_source="revolut")
-            ticker_info = {
-                "type": "etf",
-                "currency": "EUR",
-                "active": True,
-                "merged_into": None,
-                "conversion_ratio": 1.0,
-                "withholding_tax_deducted": False,
-                "domicile": "IE",
-                "long_name": f"Ticker info for {ticker_str} coming soon...",
-            }
+            add_to_backlog_atomic(ticker_str, app_source=self.app_source)
+            ticker_info = self._build_placeholder_ticker(ticker_str)
         self.ticker_cache[ticker_str] = ticker_info
         return ticker_info
+
+    def _build_placeholder_ticker(self, ticker_str):
+        defaults = SOURCE_DEFAULTS.get(self.app_source, SOURCE_DEFAULTS["revolut"])
+        return {
+            "type": defaults["type"],
+            "currency": defaults["currency"],
+            "active": True,
+            "merged_into": None,
+            "conversion_ratio": 1.0,
+            "withholding_tax_deducted": defaults["withholding_tax_deducted"],
+            "domicile": defaults["domicile"],
+            "long_name": f"Ticker info for {ticker_str} coming soon...",
+        }
     
     def normalize_ticker(self, ticker):
         """Normalize ticker to handle mergers"""
@@ -198,7 +282,7 @@ class ImprovedCapitalGainsCalculator:
             price, error = self._try_fetch_price(explicit_yf, target_date)
             if price is None:
                 from src.api.db import add_to_backlog_atomic
-                add_to_backlog_atomic(ticker, app_source="revolut", status="price_unavailable")
+                add_to_backlog_atomic(ticker, app_source=self.app_source, status="price_unavailable")
             return price, error
         
         # No explicit yfinance_ticker — try bare symbol first
@@ -216,7 +300,7 @@ class ImprovedCapitalGainsCalculator:
         
         # All attempts failed — log to backlog for operator triage
         from src.api.db import add_to_backlog_atomic
-        add_to_backlog_atomic(ticker, app_source="revolut", status="price_unavailable")
+        add_to_backlog_atomic(ticker, app_source=self.app_source, status="price_unavailable")
         return None, error
     
     def _get_anniversary_dates(self, purchase_date, current_date):
@@ -379,13 +463,14 @@ class ImprovedCapitalGainsCalculator:
         return 0.0
     
     def convert_to_eur(self, amount, currency, fx_rate):
-        """Convert amount to EUR using FX rate"""
+        """Convert amount to EUR using FX rate (units of ``currency`` per 1 EUR)."""
         if currency == 'EUR':
             return amount
-        elif currency == 'USD' and not pd.isna(fx_rate) and fx_rate > 0:
-            return amount / fx_rate
-        else:
+        if currency not in ('USD', 'INR'):
+            raise ValueError(f"Unsupported currency for conversion: {currency}")
+        if fx_rate is None or pd.isna(fx_rate) or fx_rate <= 0:
             raise ValueError(f"Invalid FX rate for {currency}: {fx_rate}")
+        return amount / fx_rate
     
     def get_weighted_fx_rate(self, ticker_transactions):
         """Calculate weighted average FX rate from transactions"""
@@ -406,8 +491,14 @@ class ImprovedCapitalGainsCalculator:
         # No fallback - require actual FX rates
         raise ValueError(f"No valid FX rates found for ticker transactions")
     
-    def process_transactions(self, df, store_transactions=False):
+    def process_transactions(self, df, store_transactions=False, source=None):
         """Process transactions and calculate realized/unrealized gains"""
+        if source is not None:
+            self.app_source = source
+        elif "Source" in df.columns:
+            sources = [s for s in df["Source"].dropna().unique().tolist() if s]
+            if len(sources) == 1:
+                self.app_source = sources[0]
         df = df.copy()
         # Normalize ISO dates: convert each value individually via str() to handle
         # all types openpyxl may return (datetime, string, NaT). Strip 'Z' suffix
@@ -724,7 +815,11 @@ class ImprovedCapitalGainsCalculator:
             
             # Store current holdings for unrealized calculation
             results['ticker_detail'][ticker]['current_holdings'] = total_shares
-            
+            # Record the broker source (provenance) and security domicile
+            # (country) — tax treatment keys off the latter, not the former.
+            results['ticker_detail'][ticker]['source'] = self.app_source
+            results['ticker_detail'][ticker]['domicile'] = self.get_domicile(ticker)
+
             # For unrealized holdings, show cost basis in original currency
             ticker_info = self.get_ticker_info(ticker)
             if ticker_info is None:
@@ -759,9 +854,9 @@ class ImprovedCapitalGainsCalculator:
         
         return results
     
-    def process_transactions_with_detail(self, df, target_ticker=None):
+    def process_transactions_with_detail(self, df, target_ticker=None, source=None):
         """Process transactions with detailed tracking for specific ticker"""
-        results = self.process_transactions(df, store_transactions=True)
+        results = self.process_transactions(df, store_transactions=True, source=source)
         
         if target_ticker and hasattr(self, 'transaction_history'):
             # Add transaction details for the target ticker
@@ -775,6 +870,30 @@ class ImprovedCapitalGainsCalculator:
         
         return results
     
+    def process_files_with_detail(self, file_paths, target_ticker=None, inr_per_eur=None):
+        """Parse files via the registry, then process with transaction tracking.
+
+        Keeps ticker-detail reporting on the same parser path as normal
+        processing so source-aware ticker classification and INR handling apply.
+        """
+        by_source = {}
+        for file_path in file_paths:
+            parsed = detect_and_parse(file_path, inr_per_eur=inr_per_eur)
+            for warning in parsed.warnings:
+                print(f"Warning: {warning}")
+            by_source.setdefault(parsed.source, []).append(parsed.data)
+
+        if not by_source:
+            return None
+
+        all_results = []
+        for source, dfs in by_source.items():
+            combined = pd.concat(dfs, ignore_index=True).sort_values('Date')
+            all_results.append(
+                self.process_transactions_with_detail(combined, target_ticker, source=source)
+            )
+        return merge_results(all_results)
+
     def calculate_dividend_taxes(self, results, margin_rate):
         """Calculate dividend taxation breakdown for Irish tax compliance"""
         dividend_tax_summary = {}
@@ -1193,70 +1312,53 @@ class ImprovedCapitalGainsCalculator:
             deemed_df.to_csv(deemed_filename, index=False)
             print(f"Deemed disposal report exported to: {deemed_filename}")
     
-    def process_file(self, file_path):
-        """Process single Excel or CSV file"""
+    def process_file(self, file_path, inr_per_eur=None):
+        """Process a single transaction file (Revolut or Zerodha)."""
         try:
             print(f"Processing file: {file_path}")
-            
-            # Determine file type and read accordingly
-            if file_path.lower().endswith('.csv'):
-                df = pd.read_csv(file_path)
-            else:
-                df = pd.read_excel(file_path)
-            
-            required_columns = ['Date', 'Ticker', 'Type', 'Quantity', 'Price per share', 'Total Amount', 'Currency', 'FX Rate']
-            missing_columns = [col for col in required_columns if col not in df.columns]
-            
-            if missing_columns:
-                print(f"Error: Missing required columns: {missing_columns}")
-                return None
-            
-            result = self.process_transactions(df)
+            parsed = detect_and_parse(file_path, inr_per_eur=inr_per_eur)
+            for warning in parsed.warnings:
+                print(f"Warning: {warning}")
+            self.app_source = parsed.source
+            result = self.process_transactions(parsed.data, source=parsed.source)
             # Save cache after processing
             self.save_ticker_cache()
             return result
-            
+        except ParseError as e:
+            print(f"Error processing file {file_path}: {e}")
+            return None
         except Exception as e:
             print(f"Error processing file {file_path}: {e}")
             return None
 
-    def process_multiple_files(self, file_paths):
-        """Process multiple Excel/CSV files with proper FIFO across all files"""
-        # Combine all transactions from all files first
-        all_transactions = []
-        
+    def process_multiple_files(self, file_paths, inr_per_eur=None):
+        """Process multiple files with proper FIFO, grouped by broker source."""
+        # Parse each file and group by source so source-aware ticker defaults apply.
+        by_source = {}
         for file_path in file_paths:
             try:
                 print(f"Loading file: {file_path}")
-                
-                # Determine file type and read accordingly
-                if file_path.lower().endswith('.csv'):
-                    df = pd.read_csv(file_path)
-                else:
-                    df = pd.read_excel(file_path)
-                
-                required_columns = ['Date', 'Ticker', 'Type', 'Quantity', 'Price per share', 'Total Amount', 'Currency', 'FX Rate']
-                missing_columns = [col for col in required_columns if col not in df.columns]
-                
-                if missing_columns:
-                    print(f"Error: Missing required columns in {file_path}: {missing_columns}")
-                    continue
-                
-                all_transactions.append(df)
-                
+                parsed = detect_and_parse(file_path, inr_per_eur=inr_per_eur)
+                for warning in parsed.warnings:
+                    print(f"Warning: {warning}")
+                by_source.setdefault(parsed.source, []).append(parsed.data)
+            except ParseError as e:
+                print(f"Error loading file {file_path}: {e}")
+                continue
             except Exception as e:
                 print(f"Error loading file {file_path}: {e}")
                 continue
-        
-        if not all_transactions:
+
+        if not by_source:
             return None
-        
-        # Combine all dataframes and sort by date for proper FIFO
-        combined_df = pd.concat(all_transactions, ignore_index=True)
-        combined_df = combined_df.sort_values('Date')
-        
-        # Process the combined transactions with proper FIFO
-        result = self.process_transactions(combined_df)
+
+        all_results = []
+        for source, dfs in by_source.items():
+            combined_df = pd.concat(dfs, ignore_index=True)
+            combined_df = combined_df.sort_values('Date')
+            all_results.append(self.process_transactions(combined_df, source=source))
+
+        result = merge_results(all_results)
         # Save cache after processing
         self.save_ticker_cache()
         return result
@@ -1396,26 +1498,9 @@ def main():
     
     if results:
         if args.ticker:
-            # For ticker detail mode, reprocess with transaction tracking
-            if len(args.files) == 1:
-                file_path = args.files[0]
-                if file_path.lower().endswith('.csv'):
-                    df = pd.read_csv(file_path)
-                else:
-                    df = pd.read_excel(file_path)
-                results = calculator.process_transactions_with_detail(df, args.ticker)
-            else:
-                # Combine files for ticker detail
-                all_transactions = []
-                for file_path in args.files:
-                    if file_path.lower().endswith('.csv'):
-                        df = pd.read_csv(file_path)
-                    else:
-                        df = pd.read_excel(file_path)
-                    all_transactions.append(df)
-                combined_df = pd.concat(all_transactions, ignore_index=True).sort_values('Date')
-                results = calculator.process_transactions_with_detail(combined_df, args.ticker)
-            
+            results = calculator.process_files_with_detail(
+                args.files, target_ticker=args.ticker
+            )
             # Normalize ticker for lookup
             normalized_ticker = calculator.normalize_ticker(args.ticker)
             calculator.generate_ticker_detail_report(results, normalized_ticker)

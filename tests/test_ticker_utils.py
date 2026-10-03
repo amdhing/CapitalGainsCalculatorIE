@@ -15,7 +15,64 @@ from unittest.mock import patch, MagicMock, PropertyMock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from ticker_utils import add_missing_ticker_to_cache
+from ticker_utils import add_missing_ticker_to_cache, _fetch_splits, fetch_inr_per_eur
+
+
+class TestFetchInrPerEur:
+    """fetch_inr_per_eur pulls the INR-per-EUR rate from EURINR=X."""
+
+    def test_returns_last_close(self):
+        import pandas as pd
+        with patch("ticker_utils.yf.Ticker") as mock_ticker:
+            mock_instance = MagicMock()
+            mock_instance.history.return_value = pd.DataFrame({"Close": [107.0, 108.0]})
+            mock_ticker.return_value = mock_instance
+            assert fetch_inr_per_eur() == 108.0
+
+    def test_empty_history_returns_none(self):
+        import pandas as pd
+        with patch("ticker_utils.yf.Ticker") as mock_ticker:
+            mock_instance = MagicMock()
+            mock_instance.history.return_value = pd.DataFrame()
+            mock_ticker.return_value = mock_instance
+            assert fetch_inr_per_eur() is None
+
+    def test_error_returns_none(self):
+        with patch("ticker_utils.yf.Ticker", side_effect=Exception("boom")):
+            assert fetch_inr_per_eur() is None
+
+
+class TestFetchSplits:
+    """_fetch_splits turns yfinance split events into JSON-safe dicts."""
+
+    def test_serializes_and_sorts(self):
+        import pandas as pd
+        splits = pd.Series(
+            [2.0, 4.0],
+            index=pd.to_datetime(["2015-06-15", "2004-07-01"]),
+        )
+        with patch("ticker_utils.yf.Ticker") as mock_ticker:
+            mock_instance = MagicMock()
+            mock_instance.splits = splits
+            mock_ticker.return_value = mock_instance
+            events = _fetch_splits("INFY.NS")
+
+        assert events == [
+            {"date": "2004-07-01", "ratio": 4.0},
+            {"date": "2015-06-15", "ratio": 2.0},
+        ]
+
+    def test_empty_when_no_splits(self):
+        import pandas as pd
+        with patch("ticker_utils.yf.Ticker") as mock_ticker:
+            mock_instance = MagicMock()
+            mock_instance.splits = pd.Series(dtype=float)
+            mock_ticker.return_value = mock_instance
+            assert _fetch_splits("NO_SPLITS") == []
+
+    def test_empty_on_error(self):
+        with patch("ticker_utils.yf.Ticker", side_effect=Exception("boom")):
+            assert _fetch_splits("BROKEN") == []
 
 
 class TestAddMissingTickerToCache:

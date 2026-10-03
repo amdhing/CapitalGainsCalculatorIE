@@ -25,3 +25,4 @@ frontend/dist/
 
 # Personal sample files (keep local, don't commit)
 samples/revolut_*
+samples/zerodha_*

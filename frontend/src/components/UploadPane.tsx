@@ -1,13 +1,13 @@
 import { useState, useRef } from 'react';
 import {
   Card, Button, Text, Group, Stack, Select, Table,
-  Loader, Tooltip, ActionIcon, Collapse,
+  Loader, Tooltip, ActionIcon, Collapse, Switch, NumberInput,
 } from '@mantine/core';
 import {
   IconUpload, IconCalculator, IconX, IconFile,
   IconChevronDown, IconChevronRight,
 } from '@tabler/icons-react';
-import { uploadFile, calculate, CalculateResponse } from '../api/client';
+import { uploadFile, calculate, CalculateResponse, TaxOptions } from '../api/client';
 
 interface UploadedFile {
   file_id: string;
@@ -19,9 +19,11 @@ interface Props {
   onResults: (r: CalculateResponse, fileIds?: string[]) => void;
   onLoading: (v: boolean) => void;
   onError: (e: string | null) => void;
+  taxOptions: TaxOptions;
+  onTaxOptionsChange: (options: TaxOptions) => void;
 }
 
-export default function UploadPane({ onResults, onLoading, onError }: Props) {
+export default function UploadPane({ onResults, onLoading, onError, taxOptions, onTaxOptionsChange }: Props) {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [marginRate, setMarginRate] = useState<string | null>('40');
   const [uploading, setUploading] = useState(false);
@@ -64,6 +66,8 @@ export default function UploadPane({ onResults, onLoading, onError }: Props) {
       const resp = await calculate(
         files.map((f) => f.file_id),
         Number(marginRate) || 40,
+        [],
+        taxOptions,
       );
       onResults(resp, files.map((f) => f.file_id));
       // Collapse upload section after successful calculation
@@ -183,6 +187,40 @@ export default function UploadPane({ onResults, onLoading, onError }: Props) {
               w={200}
             />
           </Group>
+
+          <Switch
+            label="Apply Irish CGT to foreign-situs (non-Irish) stock gains"
+            checked={taxOptions.applyIrishTax}
+            onChange={(e) => onTaxOptionsChange({ ...taxOptions, applyIrishTax: e.currentTarget.checked })}
+          />
+
+          {taxOptions.applyIrishTax && (
+            <>
+              <Select
+                label="Tax domicile status"
+                description="Irish-domiciled → worldwide gains taxed. Non-domiciled → foreign gains taxed only when remitted to Ireland."
+                data={[
+                  { value: 'domiciled', label: 'Domiciled (arising basis)' },
+                  { value: 'non_domiciled', label: 'Non-domiciled (remittance basis)' },
+                ]}
+                value={taxOptions.domicile}
+                onChange={(v) => onTaxOptionsChange({ ...taxOptions, domicile: v })}
+                w={360}
+                clearable
+              />
+              {taxOptions.domicile === 'non_domiciled' && (
+                <NumberInput
+                  label="Foreign gains remitted to Ireland (EUR)"
+                  description="Applies to foreign-situs stock gains only."
+                  value={taxOptions.remittedForeignGainsEur ?? 0}
+                  onChange={(v) => onTaxOptionsChange({ ...taxOptions, remittedForeignGainsEur: Number(v) || 0 })}
+                  min={0}
+                  decimalScale={2}
+                  w={240}
+                />
+              )}
+            </>
+          )}
           <Button
             leftSection={calculating ? <Loader size="sm" color="white" /> : <IconCalculator size={16} />}
             onClick={handleCalculate}

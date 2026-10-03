@@ -9,9 +9,11 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from src.api.models import (
     CalculateRequest, CalculateResponse, UploadResponse,
-    PriorTaxPaid, TaxLine, TickerBreakdown,
+    PriorTaxPaid, TaxLine, TickerBreakdown, SourceYearSummary,
 )
 from src.api.db import save_result, get_result, list_results, is_backlogged, add_to_backlog_atomic, add_parse_error
+from src import foreign_gains
+from src.foreign_gains import ForeignGainsValidationError
 from src.improved_calculator import ImprovedCapitalGainsCalculator
 from src.ticker_utils import add_missing_ticker_to_cache
 
@@ -86,22 +88,38 @@ async def calculate(request: CalculateRequest):
     try:
         import pandas as pd
 
-        # Load and combine all files
-        dfs = []
-        for fp in file_paths:
-            if fp.lower().endswith(".csv"):
-                df = pd.read_csv(fp)
-            else:
-                df = pd.read_excel(fp)
-            dfs.append(df)
-        combined = pd.concat(dfs, ignore_index=True)
-
         calculator = ImprovedCapitalGainsCalculator()
-        results = calculator.process_transactions(combined)
+        results = calculator.process_multiple_files(file_paths)
+        if results is None:
+            raise HTTPException(
+                status_code=400,
+                detail="No parseable transactions found in the uploaded files.",
+            )
 
         # Persist any skipped rows for later inspection
         for skipped in results.get('skipped_rows', []):
             add_parse_error(calc_id, skipped)
+
+        # Situs-driven stock CGT base: split realized gains into Irish-situs vs
+        # foreign-situs, then apply the taxpayer's domicile status.
+        irish_gains, foreign_gains_by_year = foreign_gains.split_stock_gains_by_situs(results)
+        has_foreign_situs = any(v != 0 for v in foreign_gains_by_year.values())
+        try:
+            foreign_gains.validate_foreign_gains_request(
+                has_foreign_situs=has_foreign_situs,
+                apply_irish_tax=request.apply_irish_tax,
+                domicile=request.domicile,
+                remitted_foreign_gains_eur=request.remitted_foreign_gains_eur,
+            )
+        except ForeignGainsValidationError as exc:
+            raise HTTPException(status_code=400, detail=str(exc))
+        effective_stock_gains, _unremitted = foreign_gains.compute_effective_stock_gains(
+            irish_gains,
+            foreign_gains_by_year,
+            request.apply_irish_tax,
+            request.domicile,
+            request.remitted_foreign_gains_eur,
+        )
 
         # Build tax summary from results
         margin_rate = request.margin_rate
@@ -110,6 +128,7 @@ async def calculate(request: CalculateRequest):
             all_years.update(asset_type["realized_gains"].keys())
             all_years.update(asset_type["dividends"].keys())
             all_years.update(asset_type.get("deemed_disposal_gains", {}).keys())
+        all_years.update(effective_stock_gains.keys())
 
         accumulated_losses = 0
         tax_summary = []
@@ -117,7 +136,7 @@ async def calculate(request: CalculateRequest):
         tax_lines = {}
 
         for year in sorted(all_years):
-            stock_realized = results["summary"]["stocks"]["realized_gains"].get(year, 0)
+            stock_realized = effective_stock_gains.get(year, 0.0)
             # Apply CGT with loss carry forward
             after_exemption = stock_realized - min(stock_realized, cgt_exemption) if stock_realized > 0 else stock_realized
             carry_forward_used = 0
@@ -233,6 +252,7 @@ async def calculate(request: CalculateRequest):
                     "currency": ticker_cache.get(ticker, {}).get("currency", "EUR"),
                 }
             info = resolved_info[ticker]
+            source = td.get("source", "")
             # Collect years from realized gains AND dividends (dividends-only years were being missed)
             ticker_years = set(td["realized_gains"].keys()) | set(td["dividends"].keys())
             # Also include buy-only tickers that have holdings but no realized gains yet
@@ -254,8 +274,31 @@ async def calculate(request: CalculateRequest):
                         dividends_irish_eur=float(td.get("dividends_irish", {}).get(yr, 0)),
                         dividends_foreign_eur=float(td.get("dividends_foreign", {}).get(yr, 0)),
                         long_name=info["long_name"],
+                        source=source,
                     )
                 )
+
+        # One-line aggregate per source per year (gains + dividends, all EUR).
+        # NOTE: uses the raw stock/ETF realized/dividend sums (not the
+        # domicile-adjusted effective base) so the user sees gross activity.
+        source_agg: dict = {}
+        for tb in ticker_breakdown:
+            key = (tb.year, tb.source or "unknown")
+            if key not in source_agg:
+                source_agg[key] = {"realized": 0.0, "dividends": 0.0}
+            # ``realized_gains_eur`` is net realized gains for that ticker/year;
+            # include dividends separately so both are visible.
+            source_agg[key]["realized"] += tb.realized_gains_eur
+            source_agg[key]["dividends"] += tb.dividends_eur
+        source_summary = [
+            SourceYearSummary(
+                year=year,
+                source=source,
+                realized_gains_eur=agg["realized"],
+                dividends_eur=agg["dividends"],
+            )
+            for (year, source), agg in sorted(source_agg.items(), key=lambda kv: (kv[0][0], kv[0][1]))
+        ]
 
         total_tax = sum(t.tax_liability_eur for t in tax_summary)
 
@@ -273,10 +316,13 @@ async def calculate(request: CalculateRequest):
             calculation_id=calc_id,
             tax_summary=tax_summary,
             ticker_breakdown=ticker_breakdown,
+            source_summary=source_summary,
             total_tax_due_eur=total_tax,
             console_output="",
             deemed_disposal_errors=results.get("deemed_disposal_errors", []),
         )
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Calculation failed: {e}")
 

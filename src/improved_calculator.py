@@ -28,6 +28,7 @@ import json
 import re
 import yfinance as yf
 from src.ticker_utils import add_missing_ticker_to_cache, add_zerodha_ticker_to_cache
+from src.ticker_cache import TickerCacheStore, build_entry
 from src.tax_calculations import (
     apply_cgt_with_loss_carry_forward,
     calculate_etf_exit_tax,
@@ -117,19 +118,12 @@ class ImprovedCapitalGainsCalculator:
         self.app_source = "revolut"
     
     def load_ticker_cache(self):
-        """Load ticker cache from JSON file"""
-        if os.path.exists(self.ticker_cache_file):
-            try:
-                with open(self.ticker_cache_file, 'r') as f:
-                    return json.load(f)
-            except:
-                return {}
-        return {}
+        """Load and normalize the ticker cache via the canonical store."""
+        return TickerCacheStore(self.ticker_cache_file).load()
     
     def save_ticker_cache(self):
-        """Save ticker cache to JSON file"""
-        with open(self.ticker_cache_file, 'w') as f:
-            json.dump(self.ticker_cache, f, indent=2)
+        """Save the ticker cache, normalizing every entry (canonical schema)."""
+        TickerCacheStore(self.ticker_cache_file).save(self.ticker_cache)
     
     def get_ticker_info(self, ticker):
         """Get ticker info from cache, auto-add if missing"""
@@ -168,16 +162,13 @@ class ImprovedCapitalGainsCalculator:
 
     def _build_placeholder_ticker(self, ticker_str):
         defaults = SOURCE_DEFAULTS.get(self.app_source, SOURCE_DEFAULTS["revolut"])
-        return {
-            "type": defaults["type"],
-            "currency": defaults["currency"],
-            "active": True,
-            "merged_into": None,
-            "conversion_ratio": 1.0,
-            "withholding_tax_deducted": defaults["withholding_tax_deducted"],
-            "domicile": defaults["domicile"],
-            "long_name": f"Ticker info for {ticker_str} coming soon...",
-        }
+        return build_entry(
+            type_=defaults["type"],
+            currency=defaults["currency"],
+            domicile=defaults["domicile"],
+            withholding_tax_deducted=defaults["withholding_tax_deducted"],
+            long_name=f"Ticker info for {ticker_str} coming soon...",
+        )
     
     def normalize_ticker(self, ticker):
         """Normalize ticker to handle mergers"""

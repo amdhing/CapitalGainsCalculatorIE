@@ -108,6 +108,15 @@ Determine the correct details for the ticker:
 
 ## Step 3: Update the cache
 
+> **Schema source of truth:** the canonical ticker schema is defined by
+> `src/ticker_cache.py` (`TickerCacheEntry` / `build_entry`). Every new entry
+> should be produced via `build_entry(...)`, and every load/save goes through
+> `TickerCacheStore`, which coerces and validates the shape. Run
+> `python scripts/normalize_ticker_cache.py` after any manual edit to
+> re-canonicalize the file. Note that empty/default optional fields
+> (`merged_into`, `conversion_ratio`, `yfinance_ticker`, `splits`) are *omitted*
+> rather than stored as `null` / `1.0` / `[]`.
+
 ### Option A — Manual edit (fast for one-off fixes)
 
 Edit `data/ticker_cache.json` directly. Find or add the ticker entry:
@@ -118,8 +127,6 @@ Edit `data/ticker_cache.json` directly. Find or add the ticker entry:
     "type": "etf",
     "currency": "EUR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
     "domicile": "IE",
     "long_name": "iShares MSCI Europe UCITS ETF"
@@ -127,28 +134,29 @@ Edit `data/ticker_cache.json` directly. Find or add the ticker entry:
 }
 ```
 
+(Optional fields `merged_into`, `conversion_ratio`, `yfinance_ticker`,
+`splits` are omitted when empty — matching the canonical form.)
+
 **Important:** The `long_name` field is what the frontend shows. Without it, the ticker will keep falling through to yfinance and re-enter the backlog.
 
 ### Option B — Programmatic update (for agent automation)
 
 ```python
-import json
+from src.ticker_cache import TickerCacheStore, build_entry
 
-cache = json.load(open("data/ticker_cache.json"))
+store = TickerCacheStore("data/ticker_cache.json")
+cache = store.load()
 
-# Example: update an ETF ticker with correct info
-cache["EXI2"] = {
-    "type": "etf",
-    "currency": "EUR",
-    "active": True,
-    "merged_into": None,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": False,
-    "domicile": "IE",
-    "long_name": "iShares MSCI Europe UCITS ETF",
-}
+# Example: update an ETF ticker with correct info (canonical shape, optional
+# fields omitted when empty).
+cache["EXI2"] = build_entry(
+    type_="etf",
+    currency="EUR",
+    domicile="IE",
+    long_name="iShares MSCI Europe UCITS ETF",
+)
 
-json.dump(cache, open("data/ticker_cache.json", "w"), indent=2)
+store.save(cache)
 ```
 
 ---

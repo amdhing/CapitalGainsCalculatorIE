@@ -1,55 +1,49 @@
 #!/usr/bin/env python3
 
-import json
-import os
 import yfinance as yf
 
-
-def _load_cache(cache_file):
-    if os.path.exists(cache_file):
-        try:
-            with open(cache_file, 'r') as f:
-                return json.load(f)
-        except Exception:
-            return {}
-    return {}
+from src.ticker_cache import TickerCacheStore, build_entry
 
 
 def add_missing_ticker_to_cache(ticker, cache_file='ticker_cache.json'):
     """Add missing ticker to cache with yfinance classification.
-    
+
     Returns tuple of (ticker_data: dict | None, is_new: bool)
     If ticker can't be resolved, returns (None, False).
+
+    Entries are built through :func:`ticker_cache.build_entry` and persisted
+    through :class:`ticker_cache.TickerCacheStore` so the on-disk schema stays
+    canonical.
     """
-    cache = _load_cache(cache_file)
+    cache = TickerCacheStore(cache_file).load()
 
     # Skip if ticker already exists
     if ticker in cache:
         return cache[ticker], False
-    
+
     # Use yfinance to get ticker info
     try:
         yf_ticker = yf.Ticker(ticker)
         info = yf_ticker.info
     except Exception:
         return None, False
-    
+
     # Check if we got meaningful data
     quote_type = info.get('quoteType', '')
     if not quote_type:
         return None, False
-    
+
     is_etf = quote_type.upper() == 'ETF'
-    
+
     # Get currency and country info
     currency = info.get('currency', 'USD')
     country = info.get('country', 'United States')
     long_name = info.get('longName') or info.get('shortName') or ticker
-    
+
     # Map country to domicile code
     domicile_map = {
         'Ireland': 'IE',
-        'United States': 'US', 
+        'United States': 'US',
         'Germany': 'DE',
         'United Kingdom': 'GB',
         'Netherlands': 'NL',
@@ -57,26 +51,22 @@ def add_missing_ticker_to_cache(ticker, cache_file='ticker_cache.json'):
         'Switzerland': 'CH'
     }
     domicile = domicile_map.get(country, 'US')
-    
+
     print(f"Added ticker '{ticker}' to cache as {'ETF' if is_etf else 'stock'} ({currency}, {country}) — {long_name}")
-    
-    # Add ticker with determined values, including any known stock-split events.
-    cache[ticker] = {
-        "type": "etf" if is_etf else "stock",
-        "currency": currency,
-        "active": True,
-        "merged_into": None,
-        "conversion_ratio": 1.0,
-        "withholding_tax_deducted": False,
-        "domicile": domicile,
-        "long_name": long_name,
-        "splits": _fetch_splits(ticker),
-    }
-    
-    # Save updated cache
-    with open(cache_file, 'w') as f:
-        json.dump(cache, f, indent=2)
-    
+
+    # Build a canonical entry. witholding_tax_deducted is derived from
+    # domicile/type; splits are recorded for future corporate-action handling.
+    cache[ticker] = build_entry(
+        type_="etf" if is_etf else "stock",
+        currency=currency,
+        domicile=domicile,
+        long_name=long_name,
+        splits=_fetch_splits(ticker),
+    )
+
+    # Save canonicalized cache
+    TickerCacheStore(cache_file).save(cache)
+
     return cache[ticker], True
 
 
@@ -149,7 +139,7 @@ def add_zerodha_ticker_to_cache(ticker, cache_file='ticker_cache.json'):
 
     Returns (ticker_data dict | None, is_new bool).
     """
-    cache = _load_cache(cache_file)
+    cache = TickerCacheStore(cache_file).load()
 
     if ticker in cache:
         return cache[ticker], False
@@ -160,22 +150,16 @@ def add_zerodha_ticker_to_cache(ticker, cache_file='ticker_cache.json'):
         if india is None:
             continue
 
-        data = {
-            "type": "stock",
-            "currency": "INR",
-            "active": True,
-            "merged_into": None,
-            "conversion_ratio": 1.0,
-            "withholding_tax_deducted": False,
-            "domicile": "IN",
-            "long_name": india["long_name"],
-            "yfinance_ticker": symbol,
-            "splits": _fetch_splits(symbol),
-        }
-        cache[ticker] = data
-        with open(cache_file, 'w') as f:
-            json.dump(cache, f, indent=2)
+        cache[ticker] = build_entry(
+            type_="stock",
+            currency="INR",
+            domicile="IN",
+            long_name=india["long_name"],
+            yfinance_ticker=symbol,
+            splits=_fetch_splits(symbol),
+        )
+        TickerCacheStore(cache_file).save(cache)
         print(f"Added Zerodha ticker '{ticker}' -> {symbol} ({india['long_name']})")
-        return data, True
+        return cache[ticker], True
 
     return None, False

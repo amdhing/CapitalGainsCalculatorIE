@@ -6,23 +6,18 @@ Lookup flow:
 3. Query yfinance, cache the result, or add to backlog if unresolvable
 """
 
-import json
-import os
 from fastapi import APIRouter, HTTPException
 from src.api.models import TickerInfoResponse
 from src.api.db import is_backlogged, add_to_backlog_atomic, list_backlog, list_parse_errors
 from src.ticker_utils import add_missing_ticker_to_cache
+from src.ticker_cache import TickerCacheStore
 
 router = APIRouter(prefix="/api", tags=["tickers"])
 
 
 def _load_cache():
-    """Load ticker cache from JSON file."""
-    cache_file = "data/ticker_cache.json"
-    if os.path.exists(cache_file):
-        with open(cache_file) as f:
-            return json.load(f)
-    return {}
+    """Load the ticker cache, normalized via the canonical store."""
+    return TickerCacheStore("data/ticker_cache.json").load()
 
 
 @router.get("/ticker/{symbol}", response_model=TickerInfoResponse)
@@ -39,7 +34,7 @@ async def get_ticker_info(symbol: str, app_source: str = "manual"):
             currency=info.get("currency", "USD"),
             active=info.get("active", True),
             domicile=info.get("domicile", "US"),
-            withholding_tax_deducted=info.get("withholding_tax_deducted", True),
+            withholding_tax_deducted=info.get("withholding_tax_deducted", False),
             merged_into=info.get("merged_into"),
             long_name=info["long_name"],
         )

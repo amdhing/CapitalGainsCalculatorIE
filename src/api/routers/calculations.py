@@ -16,19 +16,16 @@ from src import foreign_gains
 from src.foreign_gains import ForeignGainsValidationError
 from src.improved_calculator import ImprovedCapitalGainsCalculator
 from src.ticker_utils import add_missing_ticker_to_cache
+from src.ticker_cache import TickerCacheStore
 
 
 def _resolve_long_name(ticker: str) -> str:
     """Resolve the long name for a ticker: cache -> backlog -> yfinance."""
     ticker = ticker.upper()
     # Check local JSON cache — return immediately if we have a long name
-    cache_file = "data/ticker_cache.json"
-    if os.path.exists(cache_file):
-        with open(cache_file) as f:
-            cache = json.load(f)
-        info = cache.get(ticker)
-        if info and info.get("long_name"):
-            return info["long_name"]
+    info = TickerCacheStore().load().get(ticker)
+    if info and info.get("long_name"):
+        return info["long_name"]
     # Check backlog — don't retry yfinance if already backlogged
     if is_backlogged(ticker):
         return ""
@@ -237,11 +234,7 @@ async def calculate(request: CalculateRequest):
         # Per-ticker breakdown
         ticker_breakdown = []
         resolved_info = {}  # ticker -> {"long_name": ..., "currency": ...}
-        cache_file = "data/ticker_cache.json"
-        ticker_cache = {}
-        if os.path.exists(cache_file):
-            with open(cache_file) as f:
-                ticker_cache = json.load(f)
+        ticker_cache = TickerCacheStore().load()
 
         for ticker, td in results["ticker_detail"].items():
             asset_label = "Stocks" if td["asset_type"] == "stocks" else "ETFs"

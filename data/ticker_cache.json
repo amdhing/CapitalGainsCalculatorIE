@@ -1,1377 +1,767 @@
 {
   "1N8": {
-    "type": "stock",
-    "currency": "EUR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "EUR",
     "domicile": "NL",
     "long_name": "Adyen NV",
+    "type": "stock",
+    "withholding_tax_deducted": false,
     "yfinance_ticker": "1N8.DE"
   },
-  "LYTR": {
-    "type": "etf",
-    "currency": "EUR",
+  "2B72": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc",
-    "yfinance_ticker": "LYTR.DE"
-  },
-  "EFRW": {
-    "type": "etf",
     "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
     "domicile": "IE",
-    "long_name": "iShares S&P 500 Equal Weight UCITS ETF EUR Hedged (Acc)",
-    "yfinance_ticker": "EFRW.DE"
-  },
-  "UBER": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Uber Technologies, Inc."
-  },
-  "CHPT": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "ChargePoint Holdings, Inc."
-  },
-  "OXY": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Occidental Petroleum Corporation"
-  },
-  "AAL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "American Airlines Group Inc."
-  },
-  "NCLH": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Norwegian Cruise Line Holdings Ltd."
-  },
-  "IBN": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "IN",
-    "long_name": "ICICI Bank Limited"
-  },
-  "C": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Citigroup Inc."
-  },
-  "INTC": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Intel Corporation"
-  },
-  "UAL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "United Airlines Holdings, Inc."
-  },
-  "GRPN": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Groupon, Inc."
-  },
-  "BMBL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Bumble Inc."
-  },
-  "DUK": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Duke Energy Corporation"
-  },
-  "GM": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "General Motors Company"
-  },
-  "UAA": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Under Armour, Inc."
-  },
-  "EXEL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Exelixis, Inc."
-  },
-  "ERJ": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "BR",
-    "long_name": "Embraer S.A."
-  },
-  "KO": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "The Coca-Cola Company"
-  },
-  "GOOGL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Alphabet Inc."
-  },
-  "BRK.B": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Berkshire Hathaway Inc."
-  },
-  "GME": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "GameStop Corp."
-  },
-  "HTZ": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Hertz Global Holdings, Inc."
-  },
-  "VICI": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "VICI Properties Inc."
-  },
-  "AAPL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Apple Inc."
-  },
-  "DAL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Delta Air Lines, Inc."
-  },
-  "DHER": {
-    "type": "stock",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "DE",
-    "long_name": "Delivery Hero SE"
-  },
-  "ZAL": {
-    "type": "stock",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "DE",
-    "long_name": "Zalando SE"
-  },
-  "MBG": {
-    "type": "stock",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "DE",
-    "long_name": "Mercedes-Benz Group AG"
-  },
-  "QDVY": {
+    "long_name": "iShares MSCI Europe Mid Cap UCITS ETF EUR (Acc)",
     "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares $ Floating Rate Bond UCITS ETF USD Dist"
-  },
-  "CVS": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "CVS Health Corporation"
+    "withholding_tax_deducted": false
   },
   "36BZ": {
-    "type": "etf",
-    "currency": "EUR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "EUR",
     "domicile": "IE",
-    "long_name": "iShares MSCI China A UCITS ETF USD (Acc)"
-  },
-  "BABA": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "CN",
-    "long_name": "Alibaba Group Holding Limited"
-  },
-  "CMCSA": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Comcast Corporation"
-  },
-  "JD": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "CN",
-    "long_name": "JD.com, Inc."
-  },
-  "VOW3": {
-    "type": "stock",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "DE",
-    "long_name": "Volkswagen AG (Vorzugsaktien)"
-  },
-  "V": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Visa Inc."
-  },
-  "MSFT": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Microsoft Corporation"
-  },
-  "NKE": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "NIKE, Inc."
-  },
-  "IBCC": {
+    "long_name": "iShares MSCI China A UCITS ETF USD (Acc)",
     "type": "etf",
-    "currency": "EUR",
+    "withholding_tax_deducted": false
+  },
+  "3IINFO-RE": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares iBonds Mar 2018 Term Corporate ex-Financials UCITS ETF"
-  },
-  "CBLAQ": {
-    "type": "stock",
-    "currency": "USD",
-    "active": false,
-    "merged_into": "CBL",
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "CBL & Associates Properties, Inc."
-  },
-  "CBL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "CBL & Associates Properties, Inc."
-  },
-  "HTZGQ": {
-    "type": "stock",
-    "currency": "USD",
-    "active": false,
-    "merged_into": "HTZ",
-    "conversion_ratio": 0.09044939,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Hertz Global Holdings, Inc."
-  },
-  "HTZZW": {
-    "type": "stock",
-    "currency": "USD",
-    "active": false,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Hertz Global Holdings, Inc. Warrants"
-  },
-  "DBX": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Dropbox, Inc."
-  },
-  "TWTR": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Twitter, Inc."
-  },
-  "AMC": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "AMC Entertainment Holdings, Inc."
-  },
-  "CLDR": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Cloudera, Inc."
-  },
-  "PLUG": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Plug Power Inc."
-  },
-  "GDDY": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "GoDaddy Inc."
-  },
-  "COUR": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Coursera, Inc."
-  },
-  "STZ": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Constellation Brands, Inc."
-  },
-  "EUNA": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares STOXX Europe 50 UCITS ETF EUR Dist"
-  },
-  "IQQC": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares China Large Cap UCITS ETF USD Dist"
-  },
-  "ASML": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "NL",
-    "long_name": "ASML Holding N.V."
-  },
-  "DUOL": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Duolingo, Inc."
-  },
-  "SPGI": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "S&P Global Inc."
-  },
-  "IS3K": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares $ Short Duration High Yield Corp Bond UCITS ETF USD (Dist)"
-  },
-  "AMEM": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi MSCI Emerging Markets Swap UCITS ETF EUR Acc"
-  },
-  "DBXJ": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Xtrackers MSCI Japan UCITS ETF 1C"
-  },
-  "XUCD": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "Xtrackers MSCI USA Consumer Discretionary UCITS ETF 1D"
-  },
-  "IS3Q": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares Edge MSCI World Quality Factor UCITS ETF USD (Acc)"
-  },
-  "EXW1": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares EURO STOXX 50 UCITS ETF (DE)"
-  },
-  "EXI2": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "DE",
-    "long_name": "iShares Dow Jones Global Titans 50 UCITS ETF (DE)"
-  },
-  "XDWT": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "Xtrackers MSCI World Information Technology UCITS ETF 1C"
-  },
-  "IUSU": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares S&P 500 Utilities Sector UCITS ETF USD (Acc)"
-  },
-  "IBCD": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares iBonds Mar 2020 Term Corporate ex-Financials UCITS ETF"
-  },
-  "VWCE": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "Vanguard FTSE All-World UCITS ETF (USD) Accumulating",
-    "yfinance_ticker": "VWCE.DE"
-  },
-  "TSLA": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Tesla, Inc."
-  },
-  "NVDA": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "NVIDIA Corporation"
-  },
-  "MELI": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "MercadoLibre, Inc."
-  },
-  "BKNG": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Booking Holdings Inc."
-  },
-  "TCOM": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "CN",
-    "long_name": "Trip.com Group Limited"
-  },
-  "NFLX": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Netflix, Inc."
-  },
-  "AMEL": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi MSCI Emerging Markets Latin America UCITS ETF EUR (C)"
-  },
-  "79U0": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares Core MSCI World UCITS ETF USD (Acc)"
-  },
-  "LEMA": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi Core MSCI Emerging Markets Swap UCITS ETF Acc"
-  },
-  "LYP6": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi Core Stoxx Europe 600 UCITS ETF Acc"
-  },
-  "PRAJ": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi Prime Japan UCITS ETF DR (C)"
-  },
-  "EBUY": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi MSCI Digital Economy UCITS ETF Acc"
-  },
-  "LYMS": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi Core Nasdaq-100 Swap UCITS ETF Acc"
-  },
-  "XDWI": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "Xtrackers MSCI World Industrials UCITS ETF 1C"
-  },
-  "2B72": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares MSCI Europe Mid Cap UCITS ETF EUR (Acc)"
-  },
-  "WELK": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "Amundi S&P World Financials Screened UCITS ETF Acc"
-  },
-  "LYP5": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "LU",
-    "long_name": "Amundi Core S&P 500 Swap UCITS ETF Acc"
-  },
-  "UBUD": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "UBS Solactive Global Pure Gold Miners UCITS ETF USD Dis"
-  },
-  "LGQK": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "iShares MSCI World SRI UCITS ETF EUR (Acc)"
-  },
-  "VSNT": {
-    "type": "stock",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": true,
-    "domicile": "US",
-    "long_name": "Versant Media Group, Inc."
-  },
-  "STOCK_A": {
-    "type": "stock",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE"
-  },
-  "LKOR": {
-    "type": "etf",
-    "currency": "USD",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "US",
-    "long_name": "FlexShares Credit-Scored US Long Corporate Bond Index Fund"
-  },
-  "DEMO_ETF": {
-    "type": "etf",
-    "currency": "EUR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IE",
-    "long_name": "Ticker info for DEMO_ETF coming soon..."
-  },
-  "WIPRO": {
-    "type": "stock",
     "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
     "domicile": "IN",
-    "long_name": "Ticker info for WIPRO coming soon..."
-  },
-  "KOTAKBANK": {
+    "long_name": "Ticker info for 3IINFO-RE coming soon...",
     "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for KOTAKBANK coming soon..."
-  },
-  "PHARMABEES": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for PHARMABEES coming soon..."
-  },
-  "DELTACORP": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for DELTACORP coming soon..."
-  },
-  "ITBEES": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for ITBEES coming soon..."
-  },
-  "MANYAVAR": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for MANYAVAR coming soon..."
-  },
-  "KTKBANK": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for KTKBANK coming soon..."
-  },
-  "KANSAINER": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for KANSAINER coming soon..."
-  },
-  "SWSOLAR": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for SWSOLAR coming soon..."
-  },
-  "JIOFIN": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for JIOFIN coming soon..."
-  },
-  "SENSEXBEES": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for SENSEXBEES coming soon..."
-  },
-  "SBICARD": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for SBICARD coming soon..."
-  },
-  "MARICO": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for MARICO coming soon..."
-  },
-  "KAYA": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for KAYA coming soon..."
-  },
-  "BPCL": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for BPCL coming soon..."
-  },
-  "TATAPOWER": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for TATAPOWER coming soon..."
-  },
-  "HATHWAY": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for HATHWAY coming soon..."
-  },
-  "GSPL": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for GSPL coming soon..."
-  },
-  "NHPC": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for NHPC coming soon..."
-  },
-  "ICICIBANK": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for ICICIBANK coming soon..."
-  },
-  "ZOMATO": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for ZOMATO coming soon..."
-  },
-  "BRITANNIA": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for BRITANNIA coming soon..."
-  },
-  "REDINGTON": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for REDINGTON coming soon..."
-  },
-  "MOTHERSON": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for MOTHERSON coming soon..."
-  },
-  "JPPOWER": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for JPPOWER coming soon..."
+    "withholding_tax_deducted": false
   },
   "3IINFOLTD": {
-    "type": "stock",
-    "currency": "INR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for 3IINFOLTD coming soon..."
+    "long_name": "3i Infotech Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "3IINFOLTD.NS"
   },
-  "GOLDETF": {
-    "type": "stock",
-    "currency": "INR",
+  "3IINFOTECH": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for GOLDETF coming soon..."
+    "long_name": "Ticker info for 3IINFOTECH coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
   },
-  "JYOTHYLAB": {
-    "type": "stock",
-    "currency": "INR",
+  "79U0": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for JYOTHYLAB coming soon..."
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares Core MSCI World UCITS ETF USD (Acc)",
+    "type": "etf",
+    "withholding_tax_deducted": false
   },
-  "IRCTC": {
-    "type": "stock",
-    "currency": "INR",
+  "AAL": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for IRCTC coming soon..."
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "American Airlines Group Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
-  "SBIN": {
-    "type": "stock",
-    "currency": "INR",
+  "AAPL": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for SBIN coming soon..."
-  },
-  "MANGIND": {
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Apple Inc.",
     "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for MANGIND coming soon..."
-  },
-  "TRIVENIENT": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for TRIVENIENT coming soon..."
-  },
-  "LIQUIDBEES": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for LIQUIDBEES coming soon..."
-  },
-  "NYKAA": {
-    "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for NYKAA coming soon..."
+    "withholding_tax_deducted": true
   },
   "AAVAS": {
-    "type": "stock",
-    "currency": "INR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for AAVAS coming soon..."
+    "long_name": "Aavas Financiers Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "AAVAS.NS"
   },
-  "RECLTD": {
-    "type": "stock",
-    "currency": "INR",
+  "ALPHA": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for RECLTD coming soon..."
+    "long_name": "Ticker info for ALPHA coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
   },
-  "NIFTYBEES": {
-    "type": "stock",
-    "currency": "INR",
+  "AMC": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for NIFTYBEES coming soon..."
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "AMC Entertainment Holdings, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
-  "MASTEK": {
-    "type": "stock",
-    "currency": "INR",
+  "AMEL": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi MSCI Emerging Markets Latin America UCITS ETF EUR (C)",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "AMEM": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi MSCI Emerging Markets Swap UCITS ETF EUR Acc",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "ARMANFIN": {
+    "active": true,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for MASTEK coming soon..."
+    "long_name": "Arman Financial Services Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "ARMANFIN.NS"
+  },
+  "ASHOKLEY": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Ashok Leyland Limited",
+    "splits": [
+      {
+        "date": "2011-08-02",
+        "ratio": 2.0
+      },
+      {
+        "date": "2025-07-16",
+        "ratio": 2.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "ASHOKLEY.NS"
+  },
+  "ASIANPAINT": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Asian Paints Limited",
+    "splits": [
+      {
+        "date": "2003-08-22",
+        "ratio": 1.5
+      },
+      {
+        "date": "2013-07-30",
+        "ratio": 10.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "ASIANPAINT.NS"
+  },
+  "ASML": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "NL",
+    "long_name": "ASML Holding N.V.",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "BABA": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "CN",
+    "long_name": "Alibaba Group Holding Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "BAJAJFINSV": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Bajaj Finserv Ltd.",
+    "splits": [
+      {
+        "date": "2022-09-13",
+        "ratio": 5.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "BAJAJFINSV.NS"
+  },
+  "BIOGEN": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Biogen Pharmachem Industries Limited",
+    "splits": [
+      {
+        "date": "2026-05-15",
+        "ratio": 1.1666666666666667
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "BIOGEN.BO"
+  },
+  "BKNG": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Booking Holdings Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "BMBL": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Bumble Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "BPCL": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Bharat Petroleum Corporation Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "BPCL.NS"
+  },
+  "BRITANNIA": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Britannia Industries Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "BRITANNIA.NS"
+  },
+  "BRK.B": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Berkshire Hathaway Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "C": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Citigroup Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "CBL": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "CBL & Associates Properties, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "CBLAQ": {
+    "active": false,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "CBL & Associates Properties, Inc.",
+    "merged_into": "CBL",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "CHPT": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "ChargePoint Holdings, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "CLDR": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Cloudera, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "CMCSA": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Comcast Corporation",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "COUR": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Coursera, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
   "CUB": {
-    "type": "stock",
-    "currency": "INR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
     "long_name": "City Union Bank Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
     "yfinance_ticker": "CUB.NS"
   },
-  "RELIANCE": {
-    "type": "stock",
-    "currency": "INR",
+  "CVS": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Reliance Industries Limited",
-    "yfinance_ticker": "RELIANCE.NS"
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "CVS Health Corporation",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
-  "INFY": {
-    "type": "stock",
-    "currency": "INR",
+  "CYIENT": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Infosys Limited",
-    "yfinance_ticker": "INFY.NS"
+    "long_name": "Cyient Limited",
+    "splits": [
+      {
+        "date": "2010-06-10",
+        "ratio": 2.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "CYIENT.NS"
+  },
+  "DAL": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Delta Air Lines, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "DBX": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Dropbox, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "DBXJ": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Xtrackers MSCI Japan UCITS ETF 1C",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "DELTACORP": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Delta Corp Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "DELTACORP.NS"
+  },
+  "DEMO_ETF": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "Ticker info for DEMO_ETF coming soon...",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "DHER": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "DE",
+    "long_name": "Delivery Hero SE",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "DLINKINDIA": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "D-Link (India) Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "DLINKINDIA.NS"
+  },
+  "DUK": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Duke Energy Corporation",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "DUOL": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Duolingo, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "EASEMYTRIP": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Easy Trip Planners Limited",
+    "splits": [
+      {
+        "date": "2022-02-28",
+        "ratio": 2.0
+      },
+      {
+        "date": "2022-11-21",
+        "ratio": 4.0
+      },
+      {
+        "date": "2024-11-29",
+        "ratio": 2.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "EASEMYTRIP.NS"
+  },
+  "EBUY": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi MSCI Digital Economy UCITS ETF Acc",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "EFRW": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares S&P 500 Equal Weight UCITS ETF EUR Hedged (Acc)",
+    "type": "etf",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "EFRW.DE"
+  },
+  "ERJ": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "BR",
+    "long_name": "Embraer S.A.",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "ETERNAL": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Eternal Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "ETERNAL.NS"
+  },
+  "EUNA": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares STOXX Europe 50 UCITS ETF EUR Dist",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "EXEL": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Exelixis, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "EXI2": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "DE",
+    "long_name": "iShares Dow Jones Global Titans 50 UCITS ETF (DE)",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "EXIDEIND": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Exide Industries Limited",
+    "splits": [
+      {
+        "date": "2003-07-03",
+        "ratio": 2.0
+      },
+      {
+        "date": "2006-09-08",
+        "ratio": 10.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "EXIDEIND.NS"
+  },
+  "EXW1": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares EURO STOXX 50 UCITS ETF (DE)",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "FEDERALBNK": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "The Federal Bank Limited",
+    "splits": [
+      {
+        "date": "2004-11-29",
+        "ratio": 3.0
+      },
+      {
+        "date": "2013-10-17",
+        "ratio": 5.0
+      },
+      {
+        "date": "2015-07-08",
+        "ratio": 2.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "FEDERALBNK.NS"
+  },
+  "GDDY": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "GoDaddy Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "GM": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "General Motors Company",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "GME": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "GameStop Corp.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "GOLDETF": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Ticker info for GOLDETF coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "GOOGL": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Alphabet Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "GRPN": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Groupon, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "GSPL": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Gujarat State Petronet Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "GSPL.NS"
+  },
+  "HATHWAY": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Hathway Cable and Datacom Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "HATHWAY.NS"
+  },
+  "HDFCBANK": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "HDFC Bank Limited",
+    "splits": [
+      {
+        "date": "2011-07-14",
+        "ratio": 5.0
+      },
+      {
+        "date": "2019-09-19",
+        "ratio": 2.0
+      },
+      {
+        "date": "2025-08-26",
+        "ratio": 2.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "HDFCBANK.NS"
+  },
+  "HINDUNILVR": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Hindustan Unilever Limited",
+    "splits": [
+      {
+        "date": "2000-07-10",
+        "ratio": 10.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "HINDUNILVR.NS"
+  },
+  "HTZ": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Hertz Global Holdings, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "HTZGQ": {
+    "active": false,
+    "conversion_ratio": 0.09044939,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Hertz Global Holdings, Inc.",
+    "merged_into": "HTZ",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "HTZZW": {
+    "active": false,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Hertz Global Holdings, Inc. Warrants",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "IBCC": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares iBonds Mar 2018 Term Corporate ex-Financials UCITS ETF",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "IBCD": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares iBonds Mar 2020 Term Corporate ex-Financials UCITS ETF",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "IBN": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "IN",
+    "long_name": "ICICI Bank Limited",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "ICICIBANK": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "ICICI Bank Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "ICICIBANK.NS"
   },
   "IDBI": {
-    "type": "stock",
-    "currency": "INR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
     "long_name": "IDBI Bank Limited",
-    "yfinance_ticker": "IDBI.NS",
     "splits": [
       {
         "date": "2001-02-12",
         "ratio": 1.6
       }
-    ]
-  },
-  "3IINFOTECH": {
+    ],
     "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
+    "yfinance_ticker": "IDBI.NS"
+  },
+  "IEX": {
+    "active": true,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for 3IINFOTECH coming soon..."
+    "long_name": "Indian Energy Exchange Limited",
+    "splits": [
+      {
+        "date": "2018-10-19",
+        "ratio": 10.0
+      },
+      {
+        "date": "2021-12-03",
+        "ratio": 3.0
+      }
+    ],
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "IEX.NS"
+  },
+  "INFY": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Infosys Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "INFY.NS"
+  },
+  "INTC": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Intel Corporation",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
   "IOC": {
-    "type": "stock",
-    "currency": "INR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
     "long_name": "Indian Oil Corporation Limited",
-    "yfinance_ticker": "IOC.NS",
     "splits": [
       {
         "date": "1999-09-27",
@@ -1397,204 +787,412 @@
         "date": "2022-06-30",
         "ratio": 1.5
       }
-    ]
-  },
-  "TATAMOTORS": {
+    ],
     "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for TATAMOTORS coming soon..."
+    "yfinance_ticker": "IOC.NS"
   },
-  "BIOGEN": {
-    "type": "stock",
-    "currency": "INR",
+  "IQQC": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Biogen Pharmachem Industries Limited",
-    "yfinance_ticker": "BIOGEN.BO",
-    "splits": [
-      {
-        "date": "2026-05-15",
-        "ratio": 1.1666666666666667
-      }
-    ]
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares China Large Cap UCITS ETF USD Dist",
+    "type": "etf",
+    "withholding_tax_deducted": false
   },
-  "ASIANPAINT": {
-    "type": "stock",
-    "currency": "INR",
+  "IRCTC": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Asian Paints Limited",
-    "yfinance_ticker": "ASIANPAINT.NS",
-    "splits": [
-      {
-        "date": "2003-08-22",
-        "ratio": 1.5
-      },
-      {
-        "date": "2013-07-30",
-        "ratio": 10.0
-      }
-    ]
+    "long_name": "Indian Railway Catering & Tourism Corporation Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "IRCTC.NS"
   },
-  "SIMPLEXINF": {
-    "type": "stock",
-    "currency": "INR",
+  "IS3K": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Simplex Infrastructures Limited",
-    "yfinance_ticker": "SIMPLEXINF.NS",
-    "splits": []
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares $ Short Duration High Yield Corp Bond UCITS ETF USD (Dist)",
+    "type": "etf",
+    "withholding_tax_deducted": false
   },
-  "SINTEX": {
-    "type": "stock",
-    "currency": "INR",
+  "IS3Q": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for SINTEX coming soon..."
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares Edge MSCI World Quality Factor UCITS ETF USD (Acc)",
+    "type": "etf",
+    "withholding_tax_deducted": false
   },
-  "EXIDEIND": {
-    "type": "stock",
-    "currency": "INR",
+  "ITBEES": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Exide Industries Limited",
-    "yfinance_ticker": "EXIDEIND.NS",
-    "splits": [
-      {
-        "date": "2003-07-03",
-        "ratio": 2.0
-      },
-      {
-        "date": "2006-09-08",
-        "ratio": 10.0
-      }
-    ]
+    "long_name": "Ticker info for ITBEES coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
   },
-  "IEX": {
-    "type": "stock",
-    "currency": "INR",
+  "IUSU": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Indian Energy Exchange Limited",
-    "yfinance_ticker": "IEX.NS",
-    "splits": [
-      {
-        "date": "2018-10-19",
-        "ratio": 10.0
-      },
-      {
-        "date": "2021-12-03",
-        "ratio": 3.0
-      }
-    ]
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares S&P 500 Utilities Sector UCITS ETF USD (Acc)",
+    "type": "etf",
+    "withholding_tax_deducted": false
   },
-  "FEDERALBNK": {
-    "type": "stock",
-    "currency": "INR",
+  "JD": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "The Federal Bank Limited",
-    "yfinance_ticker": "FEDERALBNK.NS",
-    "splits": [
-      {
-        "date": "2004-11-29",
-        "ratio": 3.0
-      },
-      {
-        "date": "2013-10-17",
-        "ratio": 5.0
-      },
-      {
-        "date": "2015-07-08",
-        "ratio": 2.0
-      }
-    ]
+    "currency": "USD",
+    "domicile": "CN",
+    "long_name": "JD.com, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": false
   },
-  "UJJIVANSFB": {
-    "type": "stock",
-    "currency": "INR",
+  "JIOFIN": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ujjivan Small Finance Bank Limited",
-    "yfinance_ticker": "UJJIVANSFB.NS",
-    "splits": []
+    "long_name": "Jio Financial Services Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "JIOFIN.NS"
   },
-  "HDFCBANK": {
-    "type": "stock",
-    "currency": "INR",
+  "JPPOWER": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "HDFC Bank Limited",
-    "yfinance_ticker": "HDFCBANK.NS",
-    "splits": [
-      {
-        "date": "2011-07-14",
-        "ratio": 5.0
-      },
-      {
-        "date": "2019-09-19",
-        "ratio": 2.0
-      },
-      {
-        "date": "2025-08-26",
-        "ratio": 2.0
-      }
-    ]
+    "long_name": "Jaiprakash Power Ventures Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "JPPOWER.NS"
   },
-  "DLINKINDIA": {
-    "type": "stock",
-    "currency": "INR",
+  "JYOTHYLAB": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "D-Link (India) Limited",
-    "yfinance_ticker": "DLINKINDIA.NS",
-    "splits": []
+    "long_name": "Jyothy Labs Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "JYOTHYLAB.NS"
+  },
+  "KANSAINER": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Kansai Nerolac Paints Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "KANSAINER.NS"
+  },
+  "KAYA": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Kaya Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "KAYA.NS"
+  },
+  "KO": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "The Coca-Cola Company",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "KOTAKBANK": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Kotak Mahindra Bank Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "KOTAKBANK.NS"
+  },
+  "KPITTECH": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "KPIT Technologies Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "KPITTECH.NS"
+  },
+  "KTKBANK": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "The Karnataka Bank Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "KTKBANK.NS"
+  },
+  "KWIL": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Kwality Walls (India) Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "KWIL.NS"
+  },
+  "LEMA": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi Core MSCI Emerging Markets Swap UCITS ETF Acc",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "LGQK": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares MSCI World SRI UCITS ETF EUR (Acc)",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "LIQUIDBEES": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Ticker info for LIQUIDBEES coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "LKOR": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "FlexShares Credit-Scored US Long Corporate Bond Index Fund",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "LYMS": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi Core Nasdaq-100 Swap UCITS ETF Acc",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "LYP5": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi Core S&P 500 Swap UCITS ETF Acc",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "LYP6": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi Core Stoxx Europe 600 UCITS ETF Acc",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "LYTR": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc",
+    "type": "etf",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "LYTR.DE"
+  },
+  "MANGIND": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Mangalam Industrial Finance Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "MANGIND.BO"
+  },
+  "MANGIND-RE": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Ticker info for MANGIND-RE coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "MANYAVAR": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Vedant Fashions Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "MANYAVAR.NS"
+  },
+  "MARICO": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Marico Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "MARICO.NS"
+  },
+  "MASTEK": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Mastek Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "MASTEK.NS"
+  },
+  "MBG": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "DE",
+    "long_name": "Mercedes-Benz Group AG",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "MELI": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "MercadoLibre, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "MOTHERSON": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Samvardhana Motherson International Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "MOTHERSON.NS"
+  },
+  "MSFT": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Microsoft Corporation",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "NCLH": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Norwegian Cruise Line Holdings Ltd.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "NFLX": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Netflix, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "NHPC": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "NHPC Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "NHPC.NS"
+  },
+  "NIFTYBEES": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Ticker info for NIFTYBEES coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "NKE": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "NIKE, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "NVDA": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "NVIDIA Corporation",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "NYKAA": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "FSN E-Commerce Ventures Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "NYKAA.NS"
+  },
+  "OXY": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Occidental Petroleum Corporation",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "PHARMABEES": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Nippon Life India Asset Management Ltd. - Nippon India Mutual Fund - Nippon India Nifty Pharma ETF",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "PHARMABEES.NS"
+  },
+  "PLUG": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Plug Power Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "POLICYBZR": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "PB Fintech Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "POLICYBZR.NS"
+  },
+  "PRAJ": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "LU",
+    "long_name": "Amundi Prime Japan UCITS ETF DR (C)",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "QDVY": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "iShares $ Floating Rate Bond UCITS ETF USD Dist",
+    "type": "etf",
+    "withholding_tax_deducted": false
   },
   "RAJESHEXPO": {
-    "type": "stock",
-    "currency": "INR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
     "long_name": "Rajesh Exports Limited",
-    "yfinance_ticker": "RAJESHEXPO.NS",
     "splits": [
       {
         "date": "2005-09-09",
@@ -1604,193 +1202,234 @@
         "date": "2008-01-29",
         "ratio": 3.0
       }
-    ]
-  },
-  "MANGIND-RE": {
+    ],
     "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for MANGIND-RE coming soon..."
+    "yfinance_ticker": "RAJESHEXPO.NS"
   },
-  "ASHOKLEY": {
-    "type": "stock",
-    "currency": "INR",
+  "RECLTD": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ashok Leyland Limited",
-    "yfinance_ticker": "ASHOKLEY.NS",
-    "splits": [
-      {
-        "date": "2011-08-02",
-        "ratio": 2.0
-      },
-      {
-        "date": "2025-07-16",
-        "ratio": 2.0
-      }
-    ]
+    "long_name": "REC Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "RECLTD.NS"
   },
-  "ARMANFIN": {
-    "type": "stock",
-    "currency": "INR",
+  "REDINGTON": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Arman Financial Services Limited",
-    "yfinance_ticker": "ARMANFIN.NS",
-    "splits": []
+    "long_name": "Redington Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "REDINGTON.NS"
   },
-  "HINDUNILVR": {
-    "type": "stock",
-    "currency": "INR",
+  "RELIANCE": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Hindustan Unilever Limited",
-    "yfinance_ticker": "HINDUNILVR.NS",
-    "splits": [
-      {
-        "date": "2000-07-10",
-        "ratio": 10.0
-      }
-    ]
+    "long_name": "Reliance Industries Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "RELIANCE.NS"
   },
-  "EASEMYTRIP": {
-    "type": "stock",
-    "currency": "INR",
+  "SBICARD": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Easy Trip Planners Limited",
-    "yfinance_ticker": "EASEMYTRIP.NS",
-    "splits": [
-      {
-        "date": "2022-02-28",
-        "ratio": 2.0
-      },
-      {
-        "date": "2022-11-21",
-        "ratio": 4.0
-      },
-      {
-        "date": "2024-11-29",
-        "ratio": 2.0
-      }
-    ]
+    "long_name": "SBI Cards and Payment Services Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "SBICARD.NS"
+  },
+  "SBIN": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "State Bank of India",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "SBIN.NS"
+  },
+  "SENSEXBEES": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Nippon Mutual Funds - Nippon India ETF S&P BSE Sensex",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "SENSEXBEES.BO"
+  },
+  "SIMPLEXINF": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Simplex Infrastructures Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "SIMPLEXINF.NS"
+  },
+  "SINTEX": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Ticker info for SINTEX coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "SPGI": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "S&P Global Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "STOCK_A": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "STZ": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Constellation Brands, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "SWSOLAR": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Sterling and Wilson Renewable Energy Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "SWSOLAR.NS"
+  },
+  "TATAMOTORS": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Ticker info for TATAMOTORS coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "TATAPOWER": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "The Tata Power Company Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "TATAPOWER.NS"
+  },
+  "TCOM": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "CN",
+    "long_name": "Trip.com Group Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false
   },
   "THOMASCOOK": {
-    "type": "stock",
-    "currency": "INR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
     "long_name": "Thomas Cook (India) Limited",
-    "yfinance_ticker": "THOMASCOOK.NS",
     "splits": [
       {
         "date": "2007-05-14",
         "ratio": 10.0
       }
-    ]
-  },
-  "KPITTECH": {
+    ],
     "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "KPIT Technologies Limited",
-    "yfinance_ticker": "KPITTECH.NS",
-    "splits": []
+    "yfinance_ticker": "THOMASCOOK.NS"
   },
-  "CYIENT": {
-    "type": "stock",
-    "currency": "INR",
+  "TRIVENIENT": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Cyient Limited",
-    "yfinance_ticker": "CYIENT.NS",
-    "splits": [
-      {
-        "date": "2010-06-10",
-        "ratio": 2.0
-      }
-    ]
+    "long_name": "Triveni Enterprises Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "TRIVENIENT.BO"
   },
-  "ETERNAL": {
-    "type": "stock",
-    "currency": "INR",
+  "TSLA": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Eternal Limited",
-    "yfinance_ticker": "ETERNAL.NS",
-    "splits": []
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Tesla, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
-  "ALPHA": {
-    "type": "stock",
-    "currency": "INR",
+  "TWTR": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Ticker info for ALPHA coming soon..."
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Twitter, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
-  "POLICYBZR": {
-    "type": "stock",
-    "currency": "INR",
+  "UAA": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "PB Fintech Limited",
-    "yfinance_ticker": "POLICYBZR.NS",
-    "splits": []
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Under Armour, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
-  "3IINFO-RE": {
-    "type": "stock",
-    "currency": "INR",
+  "UAL": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "United Airlines Holdings, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "UBER": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Uber Technologies, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "UBUD": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "UBS Solactive Global Pure Gold Miners UCITS ETF USD Dis",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "UJJIVANSFB": {
+    "active": true,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for 3IINFO-RE coming soon..."
+    "long_name": "Ujjivan Small Finance Bank Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "UJJIVANSFB.NS"
+  },
+  "V": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Visa Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
   },
   "VBL": {
-    "type": "stock",
-    "currency": "INR",
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
-    "withholding_tax_deducted": false,
+    "currency": "INR",
     "domicile": "IN",
     "long_name": "Varun Beverages Limited",
-    "yfinance_ticker": "VBL.NS",
     "splits": [
       {
         "date": "2019-07-25",
@@ -1812,35 +1451,99 @@
         "date": "2024-09-12",
         "ratio": 2.5
       }
-    ]
-  },
-  "KWIL": {
+    ],
     "type": "stock",
-    "currency": "INR",
-    "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
     "withholding_tax_deducted": false,
-    "domicile": "IN",
-    "long_name": "Kwality Walls (India) Limited",
-    "yfinance_ticker": "KWIL.NS",
-    "splits": []
+    "yfinance_ticker": "VBL.NS"
   },
-  "BAJAJFINSV": {
-    "type": "stock",
-    "currency": "INR",
+  "VICI": {
     "active": true,
-    "merged_into": null,
-    "conversion_ratio": 1.0,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "VICI Properties Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "VOW3": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "DE",
+    "long_name": "Volkswagen AG (Vorzugsaktien)",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "VSNT": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "Versant Media Group, Inc.",
+    "type": "stock",
+    "withholding_tax_deducted": true
+  },
+  "VWCE": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "Vanguard FTSE All-World UCITS ETF (USD) Accumulating",
+    "type": "etf",
     "withholding_tax_deducted": false,
+    "yfinance_ticker": "VWCE.DE"
+  },
+  "WELK": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "Amundi S&P World Financials Screened UCITS ETF Acc",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "WIPRO": {
+    "active": true,
+    "currency": "INR",
     "domicile": "IN",
-    "long_name": "Bajaj Finserv Ltd.",
-    "yfinance_ticker": "BAJAJFINSV.NS",
-    "splits": [
-      {
-        "date": "2022-09-13",
-        "ratio": 5.0
-      }
-    ]
+    "long_name": "Wipro Limited",
+    "type": "stock",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "WIPRO.NS"
+  },
+  "XDWI": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "Xtrackers MSCI World Industrials UCITS ETF 1C",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "XDWT": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "Xtrackers MSCI World Information Technology UCITS ETF 1C",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "XUCD": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "IE",
+    "long_name": "Xtrackers MSCI USA Consumer Discretionary UCITS ETF 1D",
+    "type": "etf",
+    "withholding_tax_deducted": false
+  },
+  "ZAL": {
+    "active": true,
+    "currency": "EUR",
+    "domicile": "DE",
+    "long_name": "Zalando SE",
+    "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "ZOMATO": {
+    "active": true,
+    "currency": "INR",
+    "domicile": "IN",
+    "long_name": "Ticker info for ZOMATO coming soon...",
+    "type": "stock",
+    "withholding_tax_deducted": false
   }
 }

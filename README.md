@@ -40,8 +40,10 @@ CapitalGainsCalculatorIE/
 ├── improved_calculator.py        # CLI entry point
 ├── src/                          # Python source
 │   ├── improved_calculator.py    # Core calculator logic
-│   ├── tax_calculations.py       # Irish tax functions
-│   ├── foreign_gains.py          # Situs/domicile-driven CGT logic
+│   ├── tax/                      # Pure tax-domain modules
+│   │   ├── tax_calculations.py   # CGT / ETF exit-tax / income-tax primitives
+│   │   ├── foreign_gains.py      # Situs/domicile-driven CGT logic
+│   │   └── offshore_funds.py     # Case IV income tax on offshore funds
 │   ├── ticker_utils.py           # Ticker cache + yfinance
 │   ├── parsing/                  # Broker parsers (revolut, trading212, zerodha)
 │   └── api/                      # FastAPI backend
@@ -60,7 +62,7 @@ CapitalGainsCalculatorIE/
 
 ## ✨ Key Features
 
-- **Irish Tax Compliance**: 33% CGT on stocks, 41%/38% exit tax on ETFs
+- **Irish Tax Compliance**: 33% CGT on stocks, 41%/38% exit tax on equivalent funds, Case IV income tax on offshore funds
 - **FIFO Accounting**: Proper cost basis across multiple years
 - **Loss Carry Forward**: Indefinite for stock losses (Irish law compliant)
 - **Deemed Disposal**: 8-year rule with per-anniversary-year attribution

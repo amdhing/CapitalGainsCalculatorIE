@@ -25,10 +25,11 @@
     "withholding_tax_deducted": false
   },
   "3IINFO-RE": {
-    "active": true,
+    "active": false,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for 3IINFO-RE coming soon...",
+    "long_name": "3i Infotech Ltd - Rights Entitlement (expired)",
+    "merged_into": "3IINFOLTD",
     "type": "stock",
     "withholding_tax_deducted": false
   },
@@ -42,10 +43,11 @@
     "yfinance_ticker": "3IINFOLTD.NS"
   },
   "3IINFOTECH": {
-    "active": true,
+    "active": false,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for 3IINFOTECH coming soon...",
+    "long_name": "3i Infotech Limited (now 3IINFOLTD)",
+    "merged_into": "3IINFOLTD",
     "type": "stock",
     "withholding_tax_deducted": false
   },
@@ -86,9 +88,10 @@
     "active": true,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for ALPHA coming soon...",
-    "type": "stock",
-    "withholding_tax_deducted": false
+    "long_name": "Kotak Nifty Alpha 50 ETF",
+    "type": "offshore_fund",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "ALPHA.NS"
   },
   "AMC": {
     "active": true,
@@ -571,9 +574,10 @@
     "active": true,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for GOLDETF coming soon...",
-    "type": "stock",
-    "withholding_tax_deducted": false
+    "long_name": "Nippon India ETF Gold BeES",
+    "type": "offshore_fund",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "GOLDBEES.NS"
   },
   "GOOGL": {
     "active": true,
@@ -829,9 +833,10 @@
     "active": true,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for ITBEES coming soon...",
-    "type": "stock",
-    "withholding_tax_deducted": false
+    "long_name": "Nippon India ETF Nifty IT",
+    "type": "offshore_fund",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "ITBEES.NS"
   },
   "IUSU": {
     "active": true,
@@ -958,9 +963,10 @@
     "active": true,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for LIQUIDBEES coming soon...",
-    "type": "stock",
-    "withholding_tax_deducted": false
+    "long_name": "Nippon India ETF Nifty 1D Rate Liquid BeES",
+    "type": "offshore_fund",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "LIQUIDBEES.NS"
   },
   "LKOR": {
     "active": true,
@@ -1013,10 +1019,11 @@
     "yfinance_ticker": "MANGIND.BO"
   },
   "MANGIND-RE": {
-    "active": true,
+    "active": false,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for MANGIND-RE coming soon...",
+    "long_name": "Mangalam Industrial Finance - Rights Entitlement (expired)",
+    "merged_into": "MANGIND",
     "type": "stock",
     "withholding_tax_deducted": false
   },
@@ -1109,9 +1116,10 @@
     "active": true,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for NIFTYBEES coming soon...",
-    "type": "stock",
-    "withholding_tax_deducted": false
+    "long_name": "Nippon India ETF Nifty 50 BeES",
+    "type": "offshore_fund",
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "NIFTYBEES.NS"
   },
   "NKE": {
     "active": true,
@@ -1271,10 +1279,10 @@
     "yfinance_ticker": "SIMPLEXINF.NS"
   },
   "SINTEX": {
-    "active": true,
+    "active": false,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for SINTEX coming soon...",
+    "long_name": "Sintex Industries Limited (delisted Mar 2022)",
     "type": "stock",
     "withholding_tax_deducted": false
   },
@@ -1315,9 +1323,10 @@
     "active": true,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for TATAMOTORS coming soon...",
+    "long_name": "Tata Motors Limited (demerged into TMCV + TMPV, 2025)",
     "type": "stock",
-    "withholding_tax_deducted": false
+    "withholding_tax_deducted": false,
+    "yfinance_ticker": "TMCV.NS"
   },
   "TATAPOWER": {
     "active": true,
@@ -1539,10 +1548,11 @@
     "withholding_tax_deducted": false
   },
   "ZOMATO": {
-    "active": true,
+    "active": false,
     "currency": "INR",
     "domicile": "IN",
-    "long_name": "Ticker info for ZOMATO coming soon...",
+    "long_name": "Eternal Limited (formerly Zomato)",
+    "merged_into": "ETERNAL",
     "type": "stock",
     "withholding_tax_deducted": false
   }

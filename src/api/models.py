@@ -8,7 +8,7 @@ class PriorTaxPaid(BaseModel):
     """Prior tax already paid for a given year and asset type."""
 
     year: int
-    asset_type: str  # "Stocks" or "ETFs"
+    asset_type: str  # "Stocks", "ETFs", or "Offshore Funds"
     amount_eur: float = 0.0
 
 
@@ -41,6 +41,10 @@ class CalculateRequest(BaseModel):
     remitted_foreign_gains_eur: Optional[float] = Field(
         default=None, ge=0,
         description="Portion of foreign (Indian) gains remitted to Ireland (non-domiciled only)"
+    )
+    remitted_offshore_income_eur: Optional[float] = Field(
+        default=None, ge=0,
+        description="Portion of offshore-fund Case IV income remitted to Ireland (non-domiciled only)"
     )
 
 

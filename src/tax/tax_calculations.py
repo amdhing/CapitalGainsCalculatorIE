@@ -190,6 +190,19 @@ def calculate_dividend_income_tax(dividend_income, margin_rate, irish_dividends,
     }
 
 
+def calculate_marginal_income_tax(amount, margin_rate):
+    """Tax ``amount`` as income at the taxpayer's marginal rate.
+
+    Used for Case IV offshore income (non-distributing offshore funds outside
+    EU/EEA/OECD, per s.745/Sch 20). ``margin_rate`` is the pre-computed income
+    tax slab (20/40/45) — USC/PRSI are out of scope and intentionally not added
+    here (see docs/design/offshore_funds.md §7). Non-positive amounts yield zero.
+    """
+    if amount <= 0:
+        return 0.0
+    return amount * (margin_rate / 100.0)
+
+
 def format_currency_display(amount, currency):
 
     """Format amount with appropriate currency symbol."""

@@ -80,13 +80,19 @@ export interface TaxOptions {
   applyIrishTax: boolean;
   domicile: string | null;
   remittedForeignGainsEur: number | null;
+  remittedOffshoreIncomeEur: number | null;
 }
 
 export async function calculate(
   files: string[],
   marginRate = 40,
   priorTaxPaid: PriorTaxPaid[] = [],
-  taxOptions: TaxOptions = { applyIrishTax: true, domicile: null, remittedForeignGainsEur: null },
+  taxOptions: TaxOptions = {
+    applyIrishTax: true,
+    domicile: null,
+    remittedForeignGainsEur: null,
+    remittedOffshoreIncomeEur: null,
+  },
 ): Promise<CalculateResponse> {
   const res = await fetch(`${API_BASE}/calculate`, {
     method: 'POST',
@@ -99,6 +105,7 @@ export async function calculate(
       apply_irish_tax: taxOptions.applyIrishTax,
       domicile: taxOptions.domicile,
       remitted_foreign_gains_eur: taxOptions.remittedForeignGainsEur,
+      remitted_offshore_income_eur: taxOptions.remittedOffshoreIncomeEur,
     }),
   });
   if (!res.ok) throw new Error(await res.text());

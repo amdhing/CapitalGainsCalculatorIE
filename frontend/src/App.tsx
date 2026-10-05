@@ -17,6 +17,7 @@ export default function App() {
     applyIrishTax: true,
     domicile: null,
     remittedForeignGainsEur: null,
+    remittedOffshoreIncomeEur: null,
   });
 
   // Called by UploadPane when calculation completes — stores file IDs for later re-calcs

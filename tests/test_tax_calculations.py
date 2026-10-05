@@ -17,7 +17,7 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from tax_calculations import (
+from src.tax.tax_calculations import (
     get_etf_exit_tax_rate,
     apply_cgt_with_loss_carry_forward,
     calculate_etf_exit_tax,

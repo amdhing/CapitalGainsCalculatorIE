@@ -111,8 +111,12 @@ Five files (`zerodha_fy21.xlsx` … `zerodha_fy25.xlsx`):
 Zerodha is **Indian equity** (NSE/BSE). Under Irish law:
 
 - Indian stocks → CGT (33%, €1,270 exemption, loss carry-forward) → `type: "stock"`.
-- Indian ETFs (`*BEES`, `GOLDETF`, …) are **non-equivalent foreign funds**, generally
-  outside the exit-tax regime → CGT (33%, not 41%/38%).
+- Indian ETFs (`*BEES`, `GOLDETF`, `ALPHA`, …) are **non-distributing offshore
+  funds outside the EU/EEA/OECD** (India is not an OECD member) → `type:
+  "offshore_fund"`. Their disposal gains are **Case IV income tax** at the
+  marginal rate (no €1,270 exemption, losses ignored) — not CGT and not the
+  41%/38% exit tax reserved for "equivalent" Chapter 4 funds. See
+  `docs/design/offshore_funds.md`.
 
 **Classification method (source-aware):** Zerodha symbols are resolved via **`.NS` then `.BO`** suffix with `country == "India"` and `currency == "INR"` validation (bare symbols are ambiguous — e.g. `CUB`→Lionheart Holdings, `WIPRO`→404). On miss, fall back to `type: "stock"`, `currency: "INR"`, `domicile: "IN"`. Non-Zerodha sources keep the existing Revolut fallback (`etf`/`EUR`/`IE`).
 
@@ -145,10 +149,11 @@ Zerodha is **Indian equity** (NSE/BSE). Under Irish law:
 | `domicile` | enum | `"domiciled"` \| `"non_domiciled"` |
 | `apply_irish_tax` | bool | whether to compute Irish CGT on foreign-situs gains |
 | `remitted_foreign_gains_eur` | float | foreign-situs gains remitted to IE (non-dom only) |
+| `remitted_offshore_income_eur` | float | Case IV offshore-fund income remitted to IE (non-dom only) |
 
 ### Situs split (core of the tax engine)
 
-`src/foreign_gains.py` splits per-year stock realized gains into:
+`src/tax/foreign_gains.py` splits per-year stock realized gains into:
 
 - **Irish-situs** (domicile == `IE`) → always arising-basis taxable.
 - **Foreign-situs** (domicile != `IE`) → domicile-status driven:
@@ -157,10 +162,19 @@ Zerodha is **Indian equity** (NSE/BSE). Under Irish law:
     allocated FIFO across years.
 - `apply_irish_tax == false` → gains-only report (no Irish CGT).
 
+### Offshore (Case IV) income
+
+`src/tax/offshore_funds.py` handles the distinct Case IV regime for
+non-distributing offshore funds outside the EU/EEA/OECD (see
+`docs/design/offshore_funds.md`). A dedicated `remitted_offshore_income_eur`
+input drives the remittance split, mirroring the stock-gains path but with
+losses ignored (Sch 20 para 3(2)).
+
 ### Validation rules
 
 - `apply_irish_tax == true` with foreign-situs gains but invalid `domicile` → `400`.
 - `non_domiciled` with foreign-situs gains but no `remitted_foreign_gains_eur` → `400`.
+- `non_domiciled` with offshore funds but no `remitted_offshore_income_eur` → `400`.
 
 ## 9. INR → EUR FX conversion
 
@@ -180,7 +194,7 @@ Tradebook contains only buy/sell. Dividends come in a separate corporate-action 
 
 - `UploadResponse`: unchanged.
 - `CalculateRequest` gains optional: `tax_residency`, `domicile`, `apply_irish_tax`,
-  `remitted_foreign_gains_eur`.
+  `remitted_foreign_gains_eur`, `remitted_offshore_income_eur`.
 - `CalculateResponse`: unchanged shape.
 
 ## 13. Implementation checklist
@@ -195,6 +209,8 @@ Tradebook contains only buy/sell. Dividends come in a separate corporate-action 
 - [x] Tests: parser unit, detection, situs split, both domicile cases, remittance isolation, validation, source propagation
 - [x] Record `splits` on cache entries during ticker backfill (with tests)
 - [x] Update `docs/project_spec.md` project structure / input-format sections
+- [x] Split pure tax modules into `src/tax/` (`tax_calculations`, `foreign_gains`, `offshore_funds`)
+- [x] Add offshore-fund (Case IV) regime — cache `type`, three-way classification, API remittance input, UI bucket
 
 ## 14. Out of scope (explicit)
 

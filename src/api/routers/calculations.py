@@ -12,8 +12,10 @@ from src.api.models import (
     PriorTaxPaid, TaxLine, TickerBreakdown, SourceYearSummary,
 )
 from src.api.db import save_result, get_result, list_results, is_backlogged, add_to_backlog_atomic, add_parse_error
-from src import foreign_gains
-from src.foreign_gains import ForeignGainsValidationError
+from src.tax import foreign_gains
+from src.tax.foreign_gains import ForeignGainsValidationError
+from src.tax import offshore_funds
+from src.tax.offshore_funds import OffshoreFundsValidationError
 from src.improved_calculator import ImprovedCapitalGainsCalculator
 from src.ticker_utils import add_missing_ticker_to_cache
 from src.ticker_cache import TickerCacheStore
@@ -93,6 +95,29 @@ async def calculate(request: CalculateRequest):
                 detail="No parseable transactions found in the uploaded files.",
             )
 
+        has_offshore_funds = any(
+            td.get("asset_type") == "offshore_funds"
+            for td in results.get("ticker_detail", {}).values()
+        )
+        try:
+            offshore_funds.validate_offshore_funds_request(
+                has_offshore_funds=has_offshore_funds,
+                apply_irish_tax=request.apply_irish_tax,
+                domicile=request.domicile,
+                remitted_offshore_income_eur=request.remitted_offshore_income_eur,
+            )
+        except OffshoreFundsValidationError as exc:
+            raise HTTPException(status_code=400, detail=str(exc))
+        offshore_gains_by_year = offshore_funds.split_offshore_fund_gains(results)
+        offshore_taxable_by_year, _offshore_unremitted = (
+            offshore_funds.compute_offshore_taxable_income(
+                offshore_gains_by_year,
+                request.apply_irish_tax,
+                request.domicile,
+                request.remitted_offshore_income_eur,
+            )
+        )
+
         # Persist any skipped rows for later inspection
         for skipped in results.get('skipped_rows', []):
             add_parse_error(calc_id, skipped)
@@ -126,6 +151,7 @@ async def calculate(request: CalculateRequest):
             all_years.update(asset_type["dividends"].keys())
             all_years.update(asset_type.get("deemed_disposal_gains", {}).keys())
         all_years.update(effective_stock_gains.keys())
+        all_years.update(offshore_taxable_by_year.keys())
 
         accumulated_losses = 0
         tax_summary = []
@@ -163,7 +189,11 @@ async def calculate(request: CalculateRequest):
             }
 
             # ETF exit tax
-            from src.tax_calculations import get_etf_exit_tax_rate, calculate_etf_exit_tax_per_ticker
+            from src.tax.tax_calculations import (
+                get_etf_exit_tax_rate,
+                calculate_etf_exit_tax_per_ticker,
+                calculate_marginal_income_tax,
+            )
 
             per_ticker_etf = {}
             for ticker, td in results["ticker_detail"].items():
@@ -182,6 +212,18 @@ async def calculate(request: CalculateRequest):
                 "gross": float(results["summary"]["etfs"]["realized_gains"].get(year, 0)),
                 "taxable": float(etf_total_taxable),
                 "tax": float(etf_tax_liability),
+            }
+
+            # Offshore (non-distributing funds outside EU/EEA/OECD) -> Case IV
+            # income tax at the marginal rate. Losses are ignored; no exemption.
+            offshore_taxable = offshore_taxable_by_year.get(year, 0.0)
+            tax_lines[year]["offshore_fund"] = {
+                "gross": float(
+                    results["summary"].get("offshore_funds", {})
+                    .get("realized_gains", {}).get(year, 0)
+                ),
+                "taxable": float(offshore_taxable),
+                "tax": float(calculate_marginal_income_tax(offshore_taxable, margin_rate)),
             }
 
         # Build lookup for prior tax paid: (year, asset_type) -> amount
@@ -229,6 +271,22 @@ async def calculate(request: CalculateRequest):
                     deemed_already_paid_eur=0.0,
                 )
             )
+            of = tax_lines[year].get("offshore_fund")
+            if of and of["taxable"] != 0:
+                offshore_already = prior_lookup.get((year, "Offshore Funds"), 0.0)
+                offshore_net_due = of["tax"] - offshore_already
+                tax_summary.append(
+                    TaxLine(
+                        year=year,
+                        asset_type="Offshore Funds",
+                        realized_gains_gross_eur=of["gross"],
+                        taxable_gains_net_eur=of["taxable"],
+                        tax_rate=f"{int(margin_rate)}%",
+                        tax_liability_eur=of["tax"],
+                        already_paid_eur=offshore_already,
+                        net_due_eur=offshore_net_due,
+                    )
+                )
 
 
         # Per-ticker breakdown
@@ -237,7 +295,11 @@ async def calculate(request: CalculateRequest):
         ticker_cache = TickerCacheStore().load()
 
         for ticker, td in results["ticker_detail"].items():
-            asset_label = "Stocks" if td["asset_type"] == "stocks" else "ETFs"
+            asset_label = {
+                "stocks": "Stocks",
+                "etfs": "ETFs",
+                "offshore_funds": "Offshore Funds",
+            }.get(td["asset_type"], "ETFs")
             # Resolve long name & currency once per ticker
             if ticker not in resolved_info:
                 resolved_info[ticker] = {

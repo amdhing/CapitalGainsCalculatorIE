@@ -16,7 +16,7 @@ Available as both a **CLI tool** and a **web application** with a FastAPI backen
 - **Calculates Irish taxes**: 33% CGT on stocks, 41%/38% exit tax on ETFs, income tax on dividends
 - **FIFO accounting**: Proper cost basis calculation across multiple years
 - **Loss carry forward**: Indefinite carry forward for stock losses (Irish law compliant)
-- **Smart classification**: Auto-detects stocks vs ETFs (yfinance); Indian ETFs (*BEES, GOLDETF) treated as stocks
+- **Smart classification**: Auto-detects stocks vs ETFs (yfinance); Indian ETFs (*BEES, GOLDETF) classified as offshore funds (Case IV income tax)
 - **Multi-currency**: Converts everything to EUR (INR auto-fetched for Zerodha)
 - **Domicile-aware CGT**: arising vs remittance basis for foreign-situs (non-Irish) gains
 - **Handles complexity**: Mergers, inactive stocks, broker transfers, 8-year deemed disposal
@@ -94,6 +94,13 @@ Zerodha tradebooks contain only BUY/SELL in INR; dividends arrive in a separate 
 - **Deemed disposal**: 8-year rule applies, gain attributed to anniversary year
 - **No loss relief**: Losses can't be carried forward or offset across different ETFs
 - **Deemed Pd column**: Separate input field for deemed disposal tax already paid
+
+### Offshore funds (Case IV income tax)
+- **Indian ETFs** (`*BEES`, `GOLDETF`, `ALPHA`) are non-distributing offshore funds outside the EU/EEA/OECD.
+- **Disposal gains** are Case IV income taxed at your marginal rate (20%/40%/45%)
+- **No €1,270 exemption** and **losses are ignored** (no carry-forward)
+- **No 8-year deemed disposal** (that is an equivalent-fund / Chapter 4 rule only)
+- Non-domiciled taxpayers: only the portion remitted to Ireland is taxable
 
 ### Dividend taxation
 - **Stock dividends**: Income tax at marginal rate with withholding credits

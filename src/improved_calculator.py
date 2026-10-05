@@ -29,14 +29,15 @@ import re
 import yfinance as yf
 from src.ticker_utils import add_missing_ticker_to_cache, add_zerodha_ticker_to_cache
 from src.ticker_cache import TickerCacheStore, build_entry
-from src.tax_calculations import (
+from src.tax.tax_calculations import (
     apply_cgt_with_loss_carry_forward,
     calculate_etf_exit_tax,
     get_etf_exit_tax_rate,
     calculate_dividend_income_tax,
     format_currency_display,
     get_exemption_applied,
-    calculate_etf_exit_tax_per_ticker
+    calculate_etf_exit_tax_per_ticker,
+    calculate_marginal_income_tax,
 )
 from src.parsing import detect_and_parse, ParseError
 
@@ -72,7 +73,7 @@ def merge_results(results_list):
     def empty_summary():
         return {
             asset: {key: defaultdict(float) for key in metric_keys}
-            for asset in ("stocks", "etfs")
+            for asset in ("stocks", "etfs", "offshore_funds")
         }
 
     merged = {
@@ -86,7 +87,7 @@ def merge_results(results_list):
         merged["skipped_rows"].extend(res.get("skipped_rows", []))
         merged["deemed_disposal_errors"].extend(res.get("deemed_disposal_errors", []))
 
-        for asset_type in ("stocks", "etfs"):
+        for asset_type in ("stocks", "etfs", "offshore_funds"):
             src_summary = res.get("summary", {}).get(asset_type, {})
             for key in metric_keys:
                 for year, val in src_summary.get(key, {}).items():
@@ -194,12 +195,20 @@ class ImprovedCapitalGainsCalculator:
             return 1.0
         return ticker_info.get('conversion_ratio', 1.0)
     
-    def is_etf(self, ticker):
-        """Determine if a ticker is an ETF"""
+    def asset_kind(self, ticker):
+        """Return the ticker's tax classification: 'stock', 'etf' or 'offshore_fund'."""
         ticker_info = self.get_ticker_info(ticker)
         if ticker_info is None:
-            return False
-        return ticker_info['type'] == 'etf'
+            return 'stock'
+        return ticker_info.get('type', 'stock')
+
+    def is_etf(self, ticker):
+        """Determine if a ticker is a Chapter 4 (equivalent) ETF.
+
+        Offshore funds are a distinct Case IV regime and are NOT treated as
+        ETFs — they get no 8-year deemed disposal.
+        """
+        return self.asset_kind(ticker) == 'etf'
     
     def is_active(self, ticker):
         """Check if ticker is active"""
@@ -578,6 +587,13 @@ class ImprovedCapitalGainsCalculator:
                     'dividends_irish': defaultdict(float),
                     'dividends_foreign': defaultdict(float),
                     'deemed_disposal_gains': defaultdict(float)
+                },
+                'offshore_funds': {
+                    'realized_gains': defaultdict(float), 
+                    'unrealized_gains': defaultdict(float), 
+                    'dividends': defaultdict(float),
+                    'dividends_irish': defaultdict(float),
+                    'dividends_foreign': defaultdict(float)
                 }
             },
             'ticker_detail': defaultdict(lambda: {
@@ -601,8 +617,13 @@ class ImprovedCapitalGainsCalculator:
                 (relevant_df['NormalizedTicker'] == ticker) & 
                 (relevant_df['NormalizedTicker'].notna())
             ].sort_values('Date')
-            is_etf = self.is_etf(ticker)
-            asset_type = 'etfs' if is_etf else 'stocks'
+            kind = self.asset_kind(ticker)
+            is_etf = kind == 'etf'
+            asset_type = {
+                'stock': 'stocks',
+                'etf': 'etfs',
+                'offshore_fund': 'offshore_funds',
+            }[kind]
             
             results['ticker_detail'][ticker]['asset_type'] = asset_type
             

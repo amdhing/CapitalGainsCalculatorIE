@@ -25,7 +25,7 @@ from src.parsing.base import ParseError
 from src.parsing.zerodha import ZerodhaParser
 from src.parsing.registry import detect_and_parse
 from src.improved_calculator import ImprovedCapitalGainsCalculator
-from src.foreign_gains import (
+from src.tax.foreign_gains import (
     ForeignGainsValidationError,
     compute_effective_stock_gains,
     compute_foreign_taxable_gains,

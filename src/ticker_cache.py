@@ -19,7 +19,7 @@ Schema rules
 
 **Core fields** (always present, tax/identity relevant):
 
-    type                    ``"stock"`` | ``"etf"``
+    type                    ``"stock"`` | ``"etf"`` | ``"offshore_fund"``
     currency                ISO code (``EUR``, ``USD``, ``INR``, ...)
     active                  still trading?
     withholding_tax_deducted  broker already withheld dividend tax
@@ -83,8 +83,10 @@ class TickerCacheEntry(BaseModel):
     @classmethod
     def _check_type(cls, v: Any) -> str:
         v = v.lower() if isinstance(v, str) else v
-        if v not in ("stock", "etf"):
-            raise ValueError(f"type must be 'stock' or 'etf', got {v!r}")
+        if v not in ("stock", "etf", "offshore_fund"):
+            raise ValueError(
+                f"type must be 'stock', 'etf' or 'offshore_fund', got {v!r}"
+            )
         return v
 
     @field_validator("currency", "domicile")

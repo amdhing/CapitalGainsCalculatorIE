@@ -58,7 +58,23 @@ The calculator uses ticker domicile to classify dividends:
 
 **Known simplification:** Luxembourg-domiciled ETFs (domicile `LU`) are treated as Foreign dividends with 15% withholding, but in practice Luxembourg funds are tax-transparent with 0% withholding at fund level. This is a conservative overestimate — the actual tax credit due may be lower.
 
-## 6. Current Implementation Status
+## 6. Offshore funds (Case IV) — non-distributing, outside EU/EEA/OECD
+
+Indian SEBI ETFs (`*BEES`, `GOLDETF`, `ALPHA`) are non-distributing offshore
+funds outside the EU/EEA/OECD (India is not an OECD member), so the Chapter 4
+"equivalent fund" exit-tax regime does **not** apply. Their disposal gains are
+**Case IV income tax** at the marginal rate:
+
+- No €1,270 annual exemption.
+- Losses are ignored (Sch 20 para 3(2)) — no offset, no carry-forward.
+- No 8-year deemed disposal (that is a Chapter 4 / equivalent-fund rule).
+- Non-domiciled taxpayers: only the portion remitted to Ireland is taxable
+  (s.745(4)).
+- Dividend/look-through (Case III) income is deferred and flagged in the UI.
+
+See `docs/design/offshore_funds.md` for the full classification.
+
+## 7. Current Implementation Status
 
 | Priority | Gap | Impact | Status |
 |----------|-----|--------|--------|

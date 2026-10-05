@@ -80,12 +80,12 @@ class TestGetTickerInfo:
         calc.ticker_cache = {}
 
         with patch("improved_calculator.add_missing_ticker_to_cache") as mock_add:
-            mock_add.return_value = {
+            mock_add.return_value = ({
                 "type": "stock", "currency": "USD", "active": True,
                 "merged_into": None, "conversion_ratio": 1.0,
                 "withholding_tax_deducted": False, "domicile": "US",
                 "long_name": "Auto Added Inc"
-            }
+            }, True)
             info = calc.get_ticker_info("AUTO")
             assert info["long_name"] == "Auto Added Inc"
 
@@ -247,12 +247,13 @@ class TestNormalizeTicker:
         calc.ticker_cache = {"TEST": {"type": "stock", "merged_into": None}}
         assert calc.normalize_ticker("test") == "TEST"
 
-    def test_ticker_not_in_cache_returns_none(self):
-        """If ticker can't be added, normalize returns None."""
+    def test_ticker_not_in_cache_returns_placeholder(self):
+        """Unresolvable tickers now get a placeholder, so normalize returns the
+        ticker (not None). The placeholder is built by the calculator."""
         calc = ImprovedCapitalGainsCalculator()
         calc.ticker_cache = {}
-        with patch("improved_calculator.add_missing_ticker_to_cache", return_value=None):
-            assert calc.normalize_ticker("UNKNOWN") is None
+        with patch("improved_calculator.add_missing_ticker_to_cache", return_value=(None, False)):
+            assert calc.normalize_ticker("UNKNOWN") == "UNKNOWN"
 
 
 class TestTickerClassificationHelpers:
@@ -293,7 +294,7 @@ class TestTickerClassificationHelpers:
         """Unknown tickers now get a placeholder (type: etf), so is_etf returns True."""
         calc = self.setup_calc()
         # Mock add_missing_ticker_to_cache to return None (unresolvable)
-        with patch("improved_calculator.add_missing_ticker_to_cache", return_value=None):
+        with patch("improved_calculator.add_missing_ticker_to_cache", return_value=(None, False)):
             # Placeholder defaults to type "etf" so is_etf returns True
             assert calc.is_etf("UNKNOWN") is True
 

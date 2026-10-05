@@ -34,7 +34,7 @@ from collections import defaultdict
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from improved_calculator import ImprovedCapitalGainsCalculator
-from tax_calculations import (
+from src.tax.tax_calculations import (
     get_etf_exit_tax_rate,
     calculate_etf_exit_tax,
     calculate_etf_exit_tax_per_ticker,

@@ -64,6 +64,7 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
 
   const stockRows = tax_summary.filter((r) => r.asset_type === 'Stocks');
   const etfRows = tax_summary.filter((r) => r.asset_type === 'ETFs');
+  const offshoreRows = tax_summary.filter((r) => r.asset_type === 'Offshore Funds');
 
   // --- Prior tax paid state ---
   // key: `${year}-${asset_type}`, value: amount in EUR
@@ -423,8 +424,65 @@ export default function ResultsPane({ data, onRecalculate }: Props) {
         </Card>
       )}
 
+      {offshoreRows.length > 0 && (
+        <Card withBorder shadow="sm" p="lg">
+          <Title order={4}>Offshore Fund Tax Summary</Title>
+          <Text size="xs" c="dimmed" mb="md">
+            Non-distributing offshore funds outside the EU/EEA/OECD (e.g. Indian
+            SEBI ETFs) are taxed on disposal as <strong>Case IV income</strong> at
+            your marginal rate — not CGT and not the 38% equivalent-fund exit tax.
+          </Text>
+          <Table striped highlightOnHover>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Year</Table.Th>
+                <Table.Th>Gross</Table.Th>
+                <Table.Th>Taxable</Table.Th>
+                <Table.Th>Rate</Table.Th>
+                <Table.Th>Tax Due</Table.Th>
+                <Table.Th>Already Paid</Table.Th>
+                <Table.Th>Net Due</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {offshoreRows.map((r, i) => {
+                const key = `${r.year}-${r.asset_type}`;
+                return (
+                  <Table.Tr key={i}>
+                    <Table.Td>{r.year}</Table.Td>
+                    <Table.Td>{fmt(r.realized_gains_gross_eur, 'EUR')}</Table.Td>
+                    <Table.Td>{fmt(r.taxable_gains_net_eur, 'EUR')}</Table.Td>
+                    <Table.Td>{r.tax_rate}</Table.Td>
+                    <Table.Td fw={700}>{fmt(r.tax_liability_eur, 'EUR')}</Table.Td>
+                    <Table.Td>
+                      <NumberInput
+                        value={priorAmounts[key] ?? 0}
+                        onChange={(v) => handlePriorChange(key, Number(v) || 0)}
+                        min={0}
+                        decimalScale={2}
+                        size="xs"
+                        w={110}
+                        hideControls
+                      />
+                    </Table.Td>
+                    <Table.Td fw={700} c={r.net_due_eur > 0 ? 'red' : 'green'}>
+                      {fmt(r.net_due_eur, 'EUR')}
+                    </Table.Td>
+                  </Table.Tr>
+                );
+              })}
+            </Table.Tbody>
+          </Table>
+          <Text size="xs" c="dimmed" mt="sm">
+            Note: look-through income (Case III) on the underlying fund is not
+            yet modelled, and USC/PRSI on this Case IV income is not added — the
+            amount shown may understate your total liability.
+          </Text>
+        </Card>
+      )}
+
       {/* Recalculate button */}
-      {(stockRows.length > 0 || etfRows.length > 0) && (
+      {(stockRows.length > 0 || etfRows.length > 0 || offshoreRows.length > 0) && (
         <Group justify="flex-end">
           <Button
             leftSection={<IconRefresh size={16} />}

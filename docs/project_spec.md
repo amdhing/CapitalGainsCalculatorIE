@@ -48,8 +48,10 @@ Ignores: CASH TOP-UP, CASH WITHDRAWAL, CUSTODY FEE
 always taxed; foreign-situs gains follow the taxpayer's domicile status — arising
 basis (domiciled) or remittance basis (non-domiciled).
 
-**Indian (Zerodha) equity & non-equivalent foreign funds**: treated as stocks
-(CGT, not the UCITS "equivalent fund" exit tax).
+**Indian (Zerodha) equity**: ordinary shares → CGT 33%. **Indian ETFs**
+(`*BEES`, `GOLDETF`, `ALPHA`) are non-distributing offshore funds outside the
+EU/EEA/OECD → **Case IV income tax** at the marginal rate, not CGT and not the
+38% exit tax (see `docs/design/offshore_funds.md`).
 
 ### ETFs (Exit Tax - Per-Ticker)
 - **41%** on gains, dividends, and deemed disposals (up to 31 Dec 2025)
@@ -124,7 +126,7 @@ cd frontend && npm install && npm run dev
 | cgt_exemption_applied_eur | float | €1,270 exemption (stocks only) |
 | carry_forward_loss_used_eur | float | Loss carry forward applied |
 | taxable_gains_net_eur | float | Net taxable amount |
-| tax_rate | str | "33%", "41%", "38%" |
+| tax_rate | str | "33%", "41%", "38%", or the marginal income tax rate (e.g. "40%") for offshore funds |
 | tax_liability_eur | float | Calculated tax due |
 | already_paid_eur | float | Prior tax paid input |
 | net_due_eur | float | Net amount after prior payments |
@@ -153,8 +155,10 @@ CapitalGainsCalculatorIE/
 │   └── backfill_long_names.py    # Backfill ticker names from yfinance
 ├── src/                          # Python source code
 │   ├── improved_calculator.py    # Core calculator logic
-│   ├── tax_calculations.py       # Irish tax functions
-│   ├── foreign_gains.py          # Situs/domicile-driven CGT logic
+│   ├── tax/                      # Pure tax-domain modules
+│   │   ├── tax_calculations.py   # CGT / ETF exit-tax / income-tax primitives
+│   │   ├── foreign_gains.py      # Situs/domicile-driven CGT logic
+│   │   └── offshore_funds.py     # Case IV income tax on offshore funds
 │   ├── ticker_utils.py           # Ticker utilities (cache + yfinance)
 │   ├── parsing/                  # Broker statement parsers (revolut, trading212, zerodha)
 │   └── api/                      # FastAPI web API

@@ -581,15 +581,18 @@ function HowCalculationsWorkPanel() {
             exemption, no loss relief, 8-year deemed disposal.
           </List.Item>
           <List.Item>
-            <strong>Non-equivalent foreign funds</strong> — e.g. Indian-domiciled
-            ETFs such as Zerodha <em>*BEES</em>, <em>GOLDETF</em> — are generally
-            outside the exit-tax regime and taxed under ordinary CGT (33%,
-            €1,270 exemption, loss carry-forward), like shares.
+            <strong>Offshore funds outside the EU/EEA/OECD</strong> — e.g.
+            Indian-domiciled ETFs such as Zerodha <em>*BEES</em>, <em>GOLDETF</em>{' '}
+            — are non-distributing offshore funds. Their disposal gains are taxed
+            as <strong>Case IV income</strong> at your marginal rate (no €1,270
+            exemption, losses ignored), not as CGT and not at the 38% exit-tax
+            rate.
           </List.Item>
         </List>
         <Text size="xs" c="dimmed">
-          The "equivalence" test is fact-specific; the app treats Indian ETFs as
-          non-equivalent (CGT) as a simplification. Verify with a tax advisor.
+          India is not an OECD member and lies outside the EU/EEA, so the Chapter
+          4 "equivalent fund" exit-tax regime does not apply. The app applies the
+          Chapter 2 Case IV treatment. Verify with a tax advisor.
         </Text>
       </StepCard>
 

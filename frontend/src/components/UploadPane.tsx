@@ -95,7 +95,7 @@ export default function UploadPane({ onResults, onLoading, onError, taxOptions, 
             <strong>3.</strong> Set your marginal income tax rate (20%, 40%, or 45%) — this is used for dividend tax calculations.
           </Text>
           <Text size="sm">
-            <strong>4.</strong> Review the results: Stock CGT (33%), ETF exit tax (41% up to 2025, 38% from 2026), and dividend tax. You can adjust "Already Paid" amounts per year and recalculate.
+            <strong>4.</strong> Review the results: Stock CGT (33%), equivalent-fund exit tax (41% up to 2025, 38% from 2026), offshore-fund income tax, and dividend tax. You can adjust "Already Paid" amounts per year and recalculate.
           </Text>
         </Stack>
       </Card>
@@ -209,15 +209,26 @@ export default function UploadPane({ onResults, onLoading, onError, taxOptions, 
                 clearable
               />
               {taxOptions.domicile === 'non_domiciled' && (
-                <NumberInput
-                  label="Foreign gains remitted to Ireland (EUR)"
-                  description="Applies to foreign-situs stock gains only."
-                  value={taxOptions.remittedForeignGainsEur ?? 0}
-                  onChange={(v) => onTaxOptionsChange({ ...taxOptions, remittedForeignGainsEur: Number(v) || 0 })}
-                  min={0}
-                  decimalScale={2}
-                  w={240}
-                />
+                <>
+                  <NumberInput
+                    label="Foreign gains remitted to Ireland (EUR)"
+                    description="Applies to foreign-situs stock gains only."
+                    value={taxOptions.remittedForeignGainsEur ?? 0}
+                    onChange={(v) => onTaxOptionsChange({ ...taxOptions, remittedForeignGainsEur: Number(v) || 0 })}
+                    min={0}
+                    decimalScale={2}
+                    w={240}
+                  />
+                  <NumberInput
+                    label="Offshore-fund income remitted to Ireland (EUR)"
+                    description="Applies to Case IV income from non-distributing offshore funds (e.g. Indian ETFs)."
+                    value={taxOptions.remittedOffshoreIncomeEur ?? 0}
+                    onChange={(v) => onTaxOptionsChange({ ...taxOptions, remittedOffshoreIncomeEur: Number(v) || 0 })}
+                    min={0}
+                    decimalScale={2}
+                    w={240}
+                  />
+                </>
               )}
             </>
           )}

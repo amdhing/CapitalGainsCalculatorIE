@@ -286,5 +286,62 @@ class TestAddMissingTickerToCache:
         assert result["long_name"] == "TICK"
 
 
+class TestRetryGating:
+    """Empty long_name entries must retry yfinance only below the DDB cap.
+
+    Regression for issue #7: a placeholder with an empty long_name is the
+    canonical "unresolved" signal, and it is retried via yfinance only while
+    the DynamoDB encounter count is below the cap (3).
+    """
+
+    def _write_cache(self, path, symbol="MYSTERY"):
+        with open(path, "w") as f:
+            json.dump({symbol: {"type": "etf", "currency": "EUR", "domicile": "IE", "long_name": ""}}, f)
+        return str(path)
+
+    def test_empty_long_name_retries_below_cap(self, tmp_path):
+        cache_file = self._write_cache(tmp_path / "ticker_cache.json")
+        mock_info = {
+            "quoteType": "ETF", "currency": "EUR",
+            "country": "Ireland", "longName": "Resolved ETF",
+        }
+
+        with patch("src.api.db.has_exhausted_resolution_retries", return_value=False):
+            with patch("ticker_utils.yf.Ticker") as mock_ticker:
+                mock_instance = MagicMock()
+                mock_instance.info = mock_info
+                mock_ticker.return_value = mock_instance
+                result, is_new = add_missing_ticker_to_cache("MYSTERY", cache_file=cache_file)
+
+        assert result["long_name"] == "Resolved ETF"
+        assert is_new is True
+
+    def test_empty_long_name_skips_when_cap_reached(self, tmp_path):
+        cache_file = self._write_cache(tmp_path / "ticker_cache.json")
+
+        with patch("src.api.db.has_exhausted_resolution_retries", return_value=True):
+            with patch("ticker_utils.yf.Ticker") as mock_ticker:
+                result, is_new = add_missing_ticker_to_cache("MYSTERY", cache_file=cache_file)
+                mock_ticker.assert_not_called()
+
+        assert result is not None
+        assert result["long_name"] == ""
+        assert is_new is False
+
+    def test_resolved_long_name_never_retries(self, tmp_path):
+        cache_file = tmp_path / "ticker_cache.json"
+        with open(cache_file, "w") as f:
+            json.dump({"AAPL": {"type": "stock", "currency": "USD", "domicile": "US", "long_name": "Apple Inc."}}, f)
+
+        with patch("src.api.db.has_exhausted_resolution_retries") as mock_cap:
+            with patch("ticker_utils.yf.Ticker") as mock_ticker:
+                result, is_new = add_missing_ticker_to_cache("AAPL", cache_file=str(cache_file))
+                mock_ticker.assert_not_called()
+                mock_cap.assert_not_called()
+
+        assert result["long_name"] == "Apple Inc."
+        assert is_new is False
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

@@ -18,16 +18,19 @@ from src.tax import offshore_funds
 from src.tax.offshore_funds import OffshoreFundsValidationError
 from src.improved_calculator import ImprovedCapitalGainsCalculator
 from src.ticker_utils import add_missing_ticker_to_cache
-from src.ticker_cache import TickerCacheStore
+from src.ticker_cache import TickerCacheStore, is_placeholder_long_name
 
 
 def _resolve_long_name(ticker: str) -> str:
     """Resolve the long name for a ticker: cache -> backlog -> yfinance."""
     ticker = ticker.upper()
-    # Check local JSON cache — return immediately if we have a long name
+    # Check local JSON cache — return immediately if we have a real long name.
+    # A legacy "Ticker info for ... coming soon..." sentinel is NOT a resolution
+    # and must fall through so the ticker is retried (issue #7).
     info = TickerCacheStore().load().get(ticker)
-    if info and info.get("long_name"):
-        return info["long_name"]
+    long_name = (info or {}).get("long_name") or ""
+    if long_name and not is_placeholder_long_name(long_name):
+        return long_name
     # Check backlog — don't retry yfinance if already backlogged
     if is_backlogged(ticker):
         return ""

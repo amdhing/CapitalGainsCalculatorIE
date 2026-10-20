@@ -378,7 +378,7 @@
     "active": true,
     "currency": "EUR",
     "domicile": "IE",
-    "long_name": "Ticker info for DEMO_ETF coming soon...",
+    "long_name": "",
     "type": "etf",
     "withholding_tax_deducted": false
   },
@@ -1298,7 +1298,7 @@
     "active": true,
     "currency": "EUR",
     "domicile": "IE",
-    "long_name": "",
+    "long_name": "Stock A",
     "type": "stock",
     "withholding_tax_deducted": false
   },
@@ -1343,6 +1343,14 @@
     "domicile": "CN",
     "long_name": "Trip.com Group Limited",
     "type": "stock",
+    "withholding_tax_deducted": false
+  },
+  "TEST": {
+    "active": true,
+    "currency": "USD",
+    "domicile": "US",
+    "long_name": "YieldMax TSLA Performance & Distribution Target 25 ETF",
+    "type": "etf",
     "withholding_tax_deducted": false
   },
   "THOMASCOOK": {

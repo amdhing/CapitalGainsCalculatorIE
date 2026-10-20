@@ -101,7 +101,7 @@ class TestGetTickerInfo:
 
     def test_ticker_uppercased(self):
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"AAPL": {"type": "stock"}}
+        calc.ticker_cache = {"AAPL": {"type": "stock", "long_name": "Apple Inc."}}
         info = calc.get_ticker_info("aapl")
         assert info["type"] == "stock"
 
@@ -224,14 +224,14 @@ class TestNormalizeTicker:
 
     def test_no_merge(self):
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"AAPL": {"type": "stock", "merged_into": None}}
+        calc.ticker_cache = {"AAPL": {"type": "stock", "merged_into": None, "long_name": "Apple Inc."}}
         assert calc.normalize_ticker("AAPL") == "AAPL"
 
     def test_merged_ticker_resolves(self):
         calc = ImprovedCapitalGainsCalculator()
         calc.ticker_cache = {
-            "OLD": {"type": "stock", "merged_into": "NEW"},
-            "NEW": {"type": "stock", "merged_into": None}
+            "OLD": {"type": "stock", "merged_into": "NEW", "long_name": "Old Co"},
+            "NEW": {"type": "stock", "merged_into": None, "long_name": "New Co"}
         }
         assert calc.normalize_ticker("OLD") == "NEW"
         assert calc.normalize_ticker("NEW") == "NEW"
@@ -244,7 +244,7 @@ class TestNormalizeTicker:
 
     def test_ticker_uppercased(self):
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"TEST": {"type": "stock", "merged_into": None}}
+        calc.ticker_cache = {"TEST": {"type": "stock", "merged_into": None, "long_name": "Test Co"}}
         assert calc.normalize_ticker("test") == "TEST"
 
     def test_ticker_not_in_cache_returns_placeholder(self):
@@ -254,6 +254,26 @@ class TestNormalizeTicker:
         calc.ticker_cache = {}
         with patch("improved_calculator.add_missing_ticker_to_cache", return_value=(None, False)):
             assert calc.normalize_ticker("UNKNOWN") == "UNKNOWN"
+
+    def test_placeholder_has_empty_long_name(self):
+        """Unresolvable tickers must NOT persist a human-readable sentinel.
+
+        An empty long_name is the only "unresolved" signal; a sentinel looks
+        resolved and defeats backlog triage (issue #7).
+        """
+        calc = ImprovedCapitalGainsCalculator()
+        placeholder = calc._build_placeholder_ticker("UNKNOWN")
+        assert placeholder["long_name"] == ""
+
+    def test_unresolvable_ticker_gets_empty_long_name(self):
+        """End-to-end: an unresolvable ticker enters the cache with empty name."""
+        calc = ImprovedCapitalGainsCalculator()
+        calc.ticker_cache = {}
+        with patch("improved_calculator.add_missing_ticker_to_cache", return_value=(None, False)):
+            with patch("src.api.db.add_to_backlog_atomic"):
+                info = calc.get_ticker_info("MYSTERY")
+        assert info is not None
+        assert info["long_name"] == ""
 
 
 class TestTickerClassificationHelpers:
@@ -265,22 +285,26 @@ class TestTickerClassificationHelpers:
             "STOCK_A": {
                 "type": "stock", "active": True, "currency": "USD",
                 "withholding_tax_deducted": True, "domicile": "US",
-                "merged_into": None, "conversion_ratio": 1.0
+                "merged_into": None, "conversion_ratio": 1.0,
+                "long_name": "Stock A"
             },
             "ETF_A": {
                 "type": "etf", "active": True, "currency": "EUR",
                 "withholding_tax_deducted": False, "domicile": "IE",
-                "merged_into": None, "conversion_ratio": 1.0
+                "merged_into": None, "conversion_ratio": 1.0,
+                "long_name": "ETF A"
             },
             "INACTIVE": {
                 "type": "stock", "active": False, "currency": "USD",
                 "withholding_tax_deducted": True, "domicile": "US",
-                "merged_into": None, "conversion_ratio": 1.0
+                "merged_into": None, "conversion_ratio": 1.0,
+                "long_name": "Inactive Co"
             },
             "MERGED": {
                 "type": "stock", "active": False, "currency": "USD",
                 "withholding_tax_deducted": True, "domicile": "US",
-                "merged_into": "NEW", "conversion_ratio": 0.5
+                "merged_into": "NEW", "conversion_ratio": 0.5,
+                "long_name": "Merged Co"
             },
         }
         return calc
@@ -328,7 +352,7 @@ class TestDeemedDisposalLiability:
     def test_no_deemed_disposal_for_stock(self):
         """Stocks should not have deemed disposal liability."""
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"STOCK_A": {"type": "stock"}}
+        calc.ticker_cache = {"STOCK_A": {"type": "stock", "long_name": "Stock A"}}
         gain, liability, details, uplifts, errors = calc.calculate_deemed_disposal_liability(
             "STOCK_A", pd.DataFrame()
         )
@@ -341,7 +365,7 @@ class TestDeemedDisposalLiability:
     def test_deemed_disposal_uses_yfinance(self):
         """ETF held 10+ years should attempt yfinance lookup for market value."""
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR"}}
+        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR", "long_name": "ETF A"}}
         buy_df = pd.DataFrame({
             "Date": pd.to_datetime(["2014-01-01"]),
             "PricePerShareEUR": [100.0],
@@ -365,7 +389,7 @@ class TestDeemedDisposalLiability:
     def test_yfinance_failure_produces_errors(self):
         """When yfinance fails, errors are returned, not placeholder gain."""
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR"}}
+        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR", "long_name": "ETF A"}}
         buy_df = pd.DataFrame({
             "Date": pd.to_datetime(["2014-01-01"]),
             "PricePerShareEUR": [100.0],
@@ -386,7 +410,7 @@ class TestDeemedDisposalLiability:
     def test_no_deemed_disposal_for_recent_buy(self):
         """ETF held only 1 year should not trigger deemed disposal."""
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR"}}
+        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR", "long_name": "ETF A"}}
         buy_df = pd.DataFrame({
             "Date": pd.to_datetime(["2025-01-01"]),
             "PricePerShareEUR": [100.0],
@@ -403,7 +427,7 @@ class TestDeemedDisposalLiability:
     def test_per_lot_uplifted_cost_basis(self):
         """Verify that lot uplifts contain correct per-share uplifted values."""
         calc = ImprovedCapitalGainsCalculator()
-        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR"}}
+        calc.ticker_cache = {"ETF_A": {"type": "etf", "currency": "EUR", "long_name": "ETF A"}}
         buy_df = pd.DataFrame({
             "Date": pd.to_datetime(["2014-01-01"]),
             "PricePerShareEUR": [50.0],

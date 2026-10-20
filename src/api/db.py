@@ -253,6 +253,32 @@ def is_backlogged(ticker: str) -> bool:
         return False
 
 
+# A ticker that fails resolution is retried via yfinance on subsequent runs
+# only while its DynamoDB ``encounter_count`` is below this cap. Once the cap
+# is reached, the ticker is assumed unavailable in yfinance and left for manual
+# backlog triage (see GitHub issue #7).
+MAX_TICKER_RESOLUTION_ATTEMPTS = 3
+
+
+def get_backlog_encounter_count(ticker: str) -> int:
+    """Return the resolution-attempt counter for ``ticker`` (0 if not backlogged)."""
+    if backlog_table is None:
+        return 0
+    try:
+        response = backlog_table.get_item(Key={"ticker": ticker.upper()})
+        item = response.get("Item")
+        if not item:
+            return 0
+        return int(item.get("encounter_count", 0) or 0)
+    except Exception:
+        return 0
+
+
+def has_exhausted_resolution_retries(ticker: str) -> bool:
+    """True once a ticker has hit the resolution retry cap (manual triage needed)."""
+    return get_backlog_encounter_count(ticker) >= MAX_TICKER_RESOLUTION_ATTEMPTS
+
+
 PARSE_ERRORS_TABLE_NAME = os.environ.get(
     "DYNAMODB_PARSE_ERRORS_TABLE", "parse-errors"
 )

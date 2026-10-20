@@ -17,9 +17,18 @@ def add_missing_ticker_to_cache(ticker, cache_file='ticker_cache.json'):
     """
     cache = TickerCacheStore(cache_file).load()
 
-    # Skip if ticker already exists
-    if ticker in cache:
-        return cache[ticker], False
+    # A cached entry with a real long_name is a resolved hit and is returned
+    # as-is. An entry with an empty long_name is the canonical "unresolved"
+    # placeholder (issue #7) and must be retried via yfinance — but only while
+    # its DynamoDB encounter count is below the cap; past the cap the ticker is
+    # left for manual backlog triage.
+    existing = cache.get(ticker)
+    if existing is not None:
+        if existing.get("long_name"):
+            return existing, False
+        from src.api.db import has_exhausted_resolution_retries
+        if has_exhausted_resolution_retries(ticker):
+            return existing, False
 
     # Use yfinance to get ticker info
     try:
@@ -141,8 +150,15 @@ def add_zerodha_ticker_to_cache(ticker, cache_file='ticker_cache.json'):
     """
     cache = TickerCacheStore(cache_file).load()
 
-    if ticker in cache:
-        return cache[ticker], False
+    # Retry gate is identical to add_missing_ticker_to_cache: a real long_name
+    # short-circuits; an empty long_name retries only below the DDB cap.
+    existing = cache.get(ticker)
+    if existing is not None:
+        if existing.get("long_name"):
+            return existing, False
+        from src.api.db import has_exhausted_resolution_retries
+        if has_exhausted_resolution_retries(ticker):
+            return existing, False
 
     for suffix in ('.NS', '.BO'):
         symbol = f'{ticker}{suffix}'

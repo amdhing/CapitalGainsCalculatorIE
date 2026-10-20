@@ -64,8 +64,15 @@ def inject_test_tickers(calc, tickers):
     """
     Inject test tickers into calculator's cache.
     tickers: dict of ticker -> cache entry dict
+
+    Injected tickers are treated as resolved, so any entry without a
+    ``long_name`` gets a synthetic one. Under the issue #7 contract an empty
+    ``long_name`` means "unresolved" and falls through to yfinance, which the
+    integration tests must not depend on.
     """
     for ticker, info in tickers.items():
+        if not info.get("long_name"):
+            info = {**info, "long_name": f"Test {ticker}"}
         calc.ticker_cache[ticker] = info
 
 
@@ -658,7 +665,8 @@ class TestDividendTaxIntegration:
         calc.ticker_cache['IE_STOCK'] = {
             "type": "stock", "currency": "EUR", "active": True,
             "merged_into": None, "conversion_ratio": 1.0,
-            "withholding_tax_deducted": False, "domicile": "IE"
+            "withholding_tax_deducted": False, "domicile": "IE",
+            "long_name": "Irish Stock"
         }
         df = pd.DataFrame(data)
         # Override is_etf for VWCE to return True
@@ -946,7 +954,8 @@ class TestProcessMultipleFiles:
         calc.ticker_cache['STOCK_A'] = {
             "type": "stock", "currency": "EUR", "active": True,
             "merged_into": None, "conversion_ratio": 1.0,
-            "withholding_tax_deducted": False, "domicile": "IE"
+            "withholding_tax_deducted": False, "domicile": "IE",
+            "long_name": "Stock A"
         }
         results = calc.process_multiple_files([str(invalid_file), str(valid_file)])
         # The invalid file should be silently skipped, but valid file processed

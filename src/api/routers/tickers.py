@@ -10,7 +10,7 @@ from fastapi import APIRouter, HTTPException
 from src.api.models import TickerInfoResponse
 from src.api.db import is_backlogged, add_to_backlog_atomic, list_backlog, list_parse_errors
 from src.ticker_utils import add_missing_ticker_to_cache
-from src.ticker_cache import TickerCacheStore
+from src.ticker_cache import TickerCacheStore, is_placeholder_long_name
 
 router = APIRouter(prefix="/api", tags=["tickers"])
 
@@ -25,9 +25,12 @@ async def get_ticker_info(symbol: str, app_source: str = "manual"):
     symbol = symbol.upper().strip()
     cache = _load_cache()
 
-    # 1. Check local cache — if we have a long_name, return immediately
+    # 1. Check local cache — if we have a real long_name, return immediately.
+    # A legacy "Ticker info for ... coming soon..." sentinel is NOT a resolution
+    # and must fall through so the ticker is retried (issue #7).
     info = cache.get(symbol)
-    if info is not None and info.get("long_name"):
+    long_name = (info or {}).get("long_name") or ""
+    if long_name and not is_placeholder_long_name(long_name):
         return TickerInfoResponse(
             symbol=symbol,
             type=info.get("type", "stock"),
@@ -36,7 +39,7 @@ async def get_ticker_info(symbol: str, app_source: str = "manual"):
             domicile=info.get("domicile", "US"),
             withholding_tax_deducted=info.get("withholding_tax_deducted", False),
             merged_into=info.get("merged_into"),
-            long_name=info["long_name"],
+            long_name=long_name,
         )
 
     # 2. Check DynamoDB backlog (already known as unresolvable)

@@ -32,7 +32,7 @@ When a ticker lands in the backlog, it means:
 - The cache either has no entry, or has an entry with an empty `long_name`
 - The DynamoDB `ticker-backlog` table records it with an `encounter_count` (incremented each time the app hits it)
 
-**Important:** The backlog is populated from `get_ticker_info()` in `src/improved_calculator.py` — when a ticker can't be resolved, a placeholder entry (`type: "etf"`, `currency: "EUR"`, `domicile: "IE"`) is created in-memory and the ticker is added to DynamoDB. This ensures the ticker still appears in the UI (with "Ticker info for {symbol} coming soon...") rather than being silently dropped.
+**Important:** The backlog is populated from `get_ticker_info()` in `src/improved_calculator.py` — when a ticker can't be resolved, a placeholder entry (`type: "etf"`, `currency: "EUR"`, `domicile: "IE"`) is created in-memory with an **empty** `long_name`, and the ticker is added to DynamoDB. The empty `long_name` is the canonical "unresolved" signal: the frontend renders its own "unavailable" label, and the ticker keeps falling through to yfinance on future runs so it can be re-triaged. A legacy human-readable placeholder (`"Ticker info for {symbol} coming soon..."`) used to be written here, which *looked* resolved and permanently defeated retries; that sentinel is now banned and `scripts/normalize_ticker_cache.py` rejects it (see GitHub issue #7).
 
 ---
 

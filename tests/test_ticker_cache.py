@@ -16,6 +16,7 @@ from src.ticker_cache import (
     SplitEvent,
     build_entry,
     normalize_entry,
+    is_placeholder_long_name,
 )
 
 
@@ -123,6 +124,22 @@ class TestNormalizeEntry:
             }
         )
         assert out["splits"] == [{"date": "2020-01-01", "ratio": 3.0}]
+
+
+class TestIsPlaceholderLongName:
+    def test_legacy_sentinel_is_placeholder(self):
+        assert is_placeholder_long_name("Ticker info for NIFTYBEES coming soon...")
+
+    def test_real_name_is_not_placeholder(self):
+        assert not is_placeholder_long_name("Apple Inc.")
+        assert not is_placeholder_long_name("Nippon India ETF Nifty 50 BeES")
+
+    def test_empty_is_not_placeholder(self):
+        assert not is_placeholder_long_name("")
+
+    def test_non_string_is_not_placeholder(self):
+        assert not is_placeholder_long_name(None)
+        assert not is_placeholder_long_name(123)
 
 
 class TestTickerCacheStore:

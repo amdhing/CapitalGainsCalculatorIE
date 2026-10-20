@@ -22,7 +22,7 @@ import sys
 # ensure the project root (parent of scripts/) is importable for `src.*`.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.ticker_cache import TickerCacheStore, normalize_entry, DEFAULT_CACHE_PATH
+from src.ticker_cache import TickerCacheStore, normalize_entry, DEFAULT_CACHE_PATH, is_placeholder_long_name
 
 
 def main() -> int:
@@ -41,6 +41,14 @@ def main() -> int:
     for symbol, entry in raw.items():
         if entry is None:
             failures.append((symbol, "entry is null"))
+            continue
+        # Reject legacy placeholder sentinels: an empty long_name is the only
+        # allowed "unresolved" signal, so a preserved sentinel would defeat
+        # the backlog retry loop (see GitHub issue #7).
+        if entry.get("long_name") and is_placeholder_long_name(entry.get("long_name")):
+            failures.append(
+                (symbol, f"placeholder long_name {entry['long_name']!r}; use empty string")
+            )
             continue
         try:
             norm = normalize_entry(entry)

@@ -137,10 +137,13 @@ class ImprovedCapitalGainsCalculator:
         if ticker_str in ['NONE', 'NAN']:
             return None
         
-        # Check cache first — but if previously cached as None (unresolvable
-        # before the placeholder fix), fall through to re-create the placeholder.
-        if ticker_str in self.ticker_cache and self.ticker_cache[ticker_str] is not None:
-            return self.ticker_cache[ticker_str]
+        # Check cache first. A cached entry with a real long_name is a resolved
+        # hit. An entry with an empty long_name is an unresolved placeholder
+        # (issue #7) and must fall through so it can be retried via yfinance,
+        # subject to the DynamoDB encounter-count cap enforced in ticker_utils.
+        cached = self.ticker_cache.get(ticker_str)
+        if cached is not None and cached.get("long_name"):
+            return cached
         
         # Auto-add missing ticker
         # Zerodha symbols are Indian equities (NSE/BSE). The bare symbol is
@@ -168,7 +171,10 @@ class ImprovedCapitalGainsCalculator:
             currency=defaults["currency"],
             domicile=defaults["domicile"],
             withholding_tax_deducted=defaults["withholding_tax_deducted"],
-            long_name=f"Ticker info for {ticker_str} coming soon...",
+            # Unresolved tickers store an empty long_name, never a human-readable
+            # sentinel. Consumers test long_name for truthiness, so a sentinel
+            # looks "resolved" and permanently defeats backlog triage (issue #7).
+            long_name="",
         )
     
     def normalize_ticker(self, ticker):

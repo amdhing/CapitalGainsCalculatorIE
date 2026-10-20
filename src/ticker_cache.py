@@ -49,6 +49,27 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 DEFAULT_CACHE_PATH = "data/ticker_cache.json"
 
+# Human-readable placeholder that ``_build_placeholder_ticker`` used to write
+# into ``long_name`` for unresolvable tickers. It is now banned: an empty
+# ``long_name`` is the only allowed "unresolved" signal, because every consumer
+# tests ``long_name`` for truthiness and a sentinel looks like a real name,
+# permanently defeating backlog triage (see GitHub issue #7).
+PLACEHOLDER_PREFIX = "Ticker info for "
+PLACEHOLDER_SUFFIX = " coming soon..."
+
+
+def is_placeholder_long_name(long_name: Any) -> bool:
+    """Return True if ``long_name`` is the legacy unresolvable placeholder.
+
+    The historical placeholder is ``"Ticker info for {symbol} coming soon..."``.
+    Such a value must not be treated as a real resolution.
+    """
+    if not isinstance(long_name, str):
+        return False
+    return long_name.startswith(PLACEHOLDER_PREFIX) and long_name.endswith(
+        PLACEHOLDER_SUFFIX
+    )
+
 
 class SplitEvent(BaseModel):
     """A single stock-split event: date + ratio (e.g. ratio 2.0 = 2-for-1)."""
